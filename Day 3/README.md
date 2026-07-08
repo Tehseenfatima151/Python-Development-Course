@@ -165,6 +165,7 @@ else:
 ---
 
 ## 🔗 Practice Task
+- Island Treasure Game
 - User se uski age lo aur batao ke wo voter hai ya nahi (`age >= 18`)
 - User se do numbers lo aur `and`/`or` use karke check karo ke dono positive hain ya nahi
 - Ek simple login system banao jahan username aur password dono match hone chahiye (`and` operator use karke)
