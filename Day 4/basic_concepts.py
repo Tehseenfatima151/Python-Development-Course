@@ -25,3 +25,50 @@ print(picked)   # List mein se koi bhi ek random color
 cards = ["A", "K", "Q", "J", "10"]
 random.shuffle(cards)
 print(cards)   # Order har dafa alag hoga
+
+# 6
+
+numbers = [1, 2, 3, 9, 5]
+
+print(random.sample(numbers, 2))
+
+# 7
+print(random.uniform(1, 10))
+
+# 8 SMS
+print("Welcome to the Student Management System!")
+student_list = ["Tehseen", "Ali", "Adeel", "Asad", "Bilal", "Hamza", "Hammad", "Imran", "Junaid", "Kashif", "Muhammad", "Nadeem", "Omer", "Qasim", "Raza", "Salman", "Shahbaz", "Talha", "Usman"]
+choice = int(input("""
+Enter your choice (1-5): 
+1. Add Student
+2. Remove Student
+3. Search Student
+4. Show All Students
+5. Exit
+\n"""))
+
+if choice == 1:
+    name = input("Enter student name: ")
+    student_list.append(name)
+    print(f"Student {name} added successfully!")
+
+elif choice == 2:
+    name = input("Enter student name to remove: ")
+    if name in student_list:
+        student_list.remove(name)
+        print(f"Student {name} removed successfully!")
+    else:
+        print(f"Student {name} does not exist in the record!")
+elif choice == 3:
+    name = input("Enter student name to search: ")
+    if name in student_list:
+        print(f"Student {name} exists in the record!")
+    else:
+        print(f"Student {name} does not exist in the record.")
+elif choice == 4:
+    print(f"List of all students is: {student_list}")
+elif choice == 5:
+    print("Exiting the program. Goodbye!")
+else:
+    print("Invalid Choice")
+print("Thank you for using the Student Management System!")
