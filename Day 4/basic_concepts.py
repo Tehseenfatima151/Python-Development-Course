@@ -38,37 +38,41 @@ print(random.uniform(1, 10))
 # 8 SMS
 print("Welcome to the Student Management System!")
 student_list = ["Tehseen", "Ali", "Adeel", "Asad", "Bilal", "Hamza", "Hammad", "Imran", "Junaid", "Kashif", "Muhammad", "Nadeem", "Omer", "Qasim", "Raza", "Salman", "Shahbaz", "Talha", "Usman"]
-choice = int(input("""
-Enter your choice (1-5): 
-1. Add Student
-2. Remove Student
-3. Search Student
-4. Show All Students
-5. Exit
-\n"""))
+while True:
+    print("\nMenu:")
+    print("1. Add Student")
+    print("2. Remove Student")
+    print("3. Search Student")
+    print("4. Show All Students")
+    print("5. Exit")
 
-if choice == 1:
-    name = input("Enter student name: ")
-    student_list.append(name)
-    print(f"Student {name} added successfully!")
-
-elif choice == 2:
-    name = input("Enter student name to remove: ")
-    if name in student_list:
-        student_list.remove(name)
-        print(f"Student {name} removed successfully!")
+    choice = int(input("Enter your choice (1-5): "))
+    if choice == 1:
+        name = input("Enter student name: ")
+        student_list.append(name)
+        print(f"Student {name} added successfully!")
+    elif choice == 2:
+        name = input("Enter student name to remove: ")
+        if name in student_list:
+            student_list.remove(name)
+            print(f"Student {name} removed successfully!")
+        else:
+            print(f"Student {name} does not exist in the record.")
+    elif choice == 3:
+        name = input("Enter student name to search: ")
+        if name in student_list:
+            print(f"Student {name} exists in the record!")
+        else:
+            print(f"Student {name} does not exist in the record.")
+    elif choice == 4:
+        student_list= enumerate(student_list, start=1)
+        print("List of all students is:")
+        for i, name in student_list:
+            print(f"{i}. {name}")
+    elif choice == 5:
+        print("Exiting the program. Goodbye!")
+        break
     else:
-        print(f"Student {name} does not exist in the record!")
-elif choice == 3:
-    name = input("Enter student name to search: ")
-    if name in student_list:
-        print(f"Student {name} exists in the record!")
-    else:
-        print(f"Student {name} does not exist in the record.")
-elif choice == 4:
-    print(f"List of all students is: {student_list}")
-elif choice == 5:
-    print("Exiting the program. Goodbye!")
-else:
-    print("Invalid Choice")
+        print("Invalid Choice")
+    
 print("Thank you for using the Student Management System!")
