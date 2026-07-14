@@ -65,10 +65,9 @@ while True:
         else:
             print(f"Student {name} does not exist in the record.")
     elif choice == 4:
-        student_list= enumerate(student_list, start=1)
         print("List of all students is:")
-        for i, name in student_list:
-            print(f"{i}. {name}")
+        for index, name in enumerate(student_list, start=1):
+            print(f"{index}. {name}")
     elif choice == 5:
         print("Exiting the program. Goodbye!")
         break
