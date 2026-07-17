@@ -41,6 +41,7 @@ def calculator():
             num1 = answer
         else:
             should_continue = False
+            print("\n" * 200)
             calculator()
 
 calculator()
