@@ -291,6 +291,8 @@ while is_on:
     else:
         print("Sorry, that's not a valid option. Please try again.")
 ```
+## 1️⃣2️⃣ Screenshoot
+<img width="1205" height="730" alt="coffee" src="https://github.com/user-attachments/assets/ce69fe90-0a6f-49aa-b703-dadc9ba61386" />
 
 ---
 
