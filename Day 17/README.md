@@ -312,7 +312,8 @@ Your final score was: 4/6
 
 ## 📸 Screenshot
 
-<!-- Terminal output ka screenshot yahan drag & drop karo -->
+<img width="1209" height="728" alt="Capture" src="https://github.com/user-attachments/assets/f1dfbf87-7a90-4bfc-9f10-d79f72f24322" />
+
 
 ---
 
