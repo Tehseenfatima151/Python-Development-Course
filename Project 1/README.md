@@ -6,6 +6,7 @@ Ek **command-line Blackjack game** jo bilkul pure **Object-Oriented Programming*
 ---
 
 ## 🎯 Requirements Checklist
+<img width="1365" height="728" alt="1" src="https://github.com/user-attachments/assets/4d7563b3-a5ba-40b1-b83a-22e81f335457" />
 
 | # | Requirement | Status |
 |---|-------------|--------|
@@ -212,6 +213,7 @@ python blackjack_oop.py
 ## 📸 Screenshot
 
 <img width="1363" height="728" alt="ss" src="https://github.com/user-attachments/assets/23b19980-7a11-4445-8b86-d2955a4428bc" />
+<img width="1365" height="728" alt="1" src="https://github.com/user-attachments/assets/ba059c47-c2fa-44fc-90c1-9a53d2e4f0dc" />
 
 ---
 
