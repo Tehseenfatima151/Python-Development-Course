@@ -322,5 +322,4 @@ screen.exitonclick()
 ## 🔗 Practice Task
 - Dots ki number aur spacing change kar ke apni khud ki grid size banao (jaise 15x15)
 - `random_color()` function use kar ke poori tarah random colors wali painting banao (fixed palette ke bagair)
-- Turtle se apna khud ka naam ya koi simple shape (star, flower) draw karo loops use kar ke<img width="1202" height="722" alt="2" src="https://github.com/user-attachments/assets/71623dc3-6581-4cbe-97b4-0f312f56ab73" />
-<img width="1204" height="726" alt="1" src="https://github.com/user-attachments/assets/75f8fe9a-8073-4820-94ea-bdff66c0c661" />
+- Turtle se apna khud ka naam ya koi simple shape (star, flower) draw karo loops use kar ke
