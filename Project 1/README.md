@@ -6,7 +6,6 @@ Ek **command-line Blackjack game** jo bilkul pure **Object-Oriented Programming*
 ---
 
 ## 🎯 Requirements Checklist
-<img width="1365" height="728" alt="1" src="https://github.com/user-attachments/assets/4d7563b3-a5ba-40b1-b83a-22e81f335457" />
 
 | # | Requirement | Status |
 |---|-------------|--------|
