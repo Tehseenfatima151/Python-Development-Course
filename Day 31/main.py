@@ -7,7 +7,7 @@ BACKGROUND_COLOR = "#B1DDC6"
 try:
     current_words = pd.read_csv("data/words_to_learn.csv")
 except FileNotFoundError:
-    original_data = pd.read_csv("data/french_words.csv")
+    original_data = pd.read_csv("french_words.csv")
     word_dict = original_data.to_dict(orient="records")
 else:
     word_dict = current_words.to_dict(orient="records")
