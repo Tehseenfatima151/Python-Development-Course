@@ -184,11 +184,15 @@ python main.py
 The program will open Chrome and perform the configured LinkedIn job-search and automation tasks.
 
 ---
-##Screenshoot
+# Screenshoot
 <img width="1366" height="585" alt="image" src="https://github.com/user-attachments/assets/6fbed4ee-e8a9-4fc7-974a-77bf6d427a1a" />
+
 <img width="1366" height="581" alt="image" src="https://github.com/user-attachments/assets/af3e08a1-008b-4ed8-826c-0ba6e5f67590" />
+
 <img width="1364" height="582" alt="image" src="https://github.com/user-attachments/assets/eade3eec-5eed-4d25-acae-b60c029509fa" />
+
 <img width="1365" height="580" alt="image" src="https://github.com/user-attachments/assets/1bc7edae-aabb-4563-92da-468c81a8abde" />
+
 <img width="1366" height="577" alt="image" src="https://github.com/user-attachments/assets/042c9b3d-32d4-43ae-a4b3-1a1598693db2" />
 
 ## ⚠️ Important Note
