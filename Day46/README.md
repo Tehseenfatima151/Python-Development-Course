@@ -65,7 +65,8 @@ Day46/
 ## Screenshot
 
 <!-- Add your screenshot here -->
-<img src="./screenshots/day46_output.png" width="500" alt="Day 46 Musical Time Machine">
+<img width="1179" height="697" alt="image" src="https://github.com/user-attachments/assets/cad5e659-04b3-4b41-a28d-9f6e5d3ffd0b" />
+
 
 ## What I Learned
 
