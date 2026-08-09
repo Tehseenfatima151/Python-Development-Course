@@ -1,0 +1,12 @@
+Day 46 - Musical Time Machine
+================================
+
+This file will be automatically filled with Billboard songs when you run main.py.
+
+Run:
+python main.py
+
+Then enter a date such as:
+2010-08-09
+
+The program will save the Billboard Top 100 songs and Spotify search links here.
