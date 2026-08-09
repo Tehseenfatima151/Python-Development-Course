@@ -35,6 +35,10 @@ The bot automatically opens the Cookie Clicker game, repeatedly clicks the cooki
 
 Instead of manually clicking the cookie thousands of times, Selenium allows Python to control the browser and perform these actions automatically.
 
+##📸 Screenshot
+<!-- Add your project screenshot here -->
+
+<img width="1031" height="589" alt="image" src="https://github.com/user-attachments/assets/e4cf0654-b06f-41f0-b9b0-eaded8863cb3" />
 ---
 
 ## 🔄 Project Workflow
@@ -55,12 +59,6 @@ Purchase Upgrade
 Continue Clicking
         ↓
 Repeat Automatically
-
-##📸 Screenshot
-<!-- Add your project screenshot here -->
-
-<img width="1031" height="589" alt="image" src="https://github.com/user-attachments/assets/e4cf0654-b06f-41f0-b9b0-eaded8863cb3" />
-
 
 ##🛠️ Technologies Used
 🐍 Python
