@@ -1,4 +1,4 @@
-# Day 42 – Intermediate CSS & Color Game Project
+# Day 44 – Intermediate CSS & Color Game Project
 
 ## 📌 Overview
 Is session mein humne **Intermediate CSS** concepts seekhe — positioning, pseudo-classes, transitions, aur responsive units. Iske baad humne ye concepts use kar ke ek **Color Game** banaya — jisme user ko diye gaye RGB value ke sath match karne wala sahi color box dhoondhna hota hai, aur click karne pe feedback milta hai.
