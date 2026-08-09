@@ -56,6 +56,12 @@ Continue Clicking
         ↓
 Repeat Automatically
 
+##📸 Screenshot
+<!-- Add your project screenshot here -->
+
+<img width="1031" height="589" alt="image" src="https://github.com/user-attachments/assets/e4cf0654-b06f-41f0-b9b0-eaded8863cb3" />
+
+
 ##🛠️ Technologies Used
 🐍 Python
 🌐 Selenium
