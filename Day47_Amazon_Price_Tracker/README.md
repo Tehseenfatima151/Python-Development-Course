@@ -210,17 +210,11 @@ Through this project, I learned:
 
 <!-- Add your project screenshot here -->
 
-<img src="./screenshots/day47_output.png" width="500" alt="Day 47 - Amazon Price Tracker">
+
+<img width="1186" height="714" alt="image" src="https://github.com/user-attachments/assets/9a09b8b7-4bbc-4ab2-bfa8-55c66bc269a4" />
 
 ---
 
-## ⚠️ Note
-
-Amazon pages can change their HTML structure and may apply anti-bot protections. If the price selector stops working, the HTML selectors may need to be updated.
-
-Use web scraping responsibly and respect the website's terms and applicable policies.
-
----
 
 ## 🚀 Key Takeaway
 
