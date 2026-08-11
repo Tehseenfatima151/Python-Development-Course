@@ -1,0 +1,297 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="dashboard-page py-4">
+  <div class="container">
+
+    <!-- ================================================================
+         1. DASHBOARD HEADER BANNER
+         ================================================================ -->
+    <div class="profile-header mb-4 rounded-4" style="background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%); color: #fff; padding: 2.25rem 2rem;">
+      <div class="d-flex align-items-center gap-4 flex-wrap">
+        <div class="profile-avatar-wrap flex-shrink-0" style="width: 84px; height: 84px;">
+          <img src="{{ current_user.avatar_url }}"
+               alt="{{ current_user.name }}"
+               class="profile-avatar"
+               style="width: 84px; height: 84px; min-width: 84px; min-height: 84px; aspect-ratio: 1/1; border-radius: 50%; object-fit: cover; flex-shrink: 0; border: 3px solid rgba(255,255,255,0.2);" />
+        </div>
+        <div>
+          <div class="d-flex align-items-center gap-2 flex-wrap mb-1">
+            <h1 class="h2 fw-bold text-white mb-0">{{ current_user.name }}</h1>
+            <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-2 py-1" style="font-size:0.75rem; border-radius: 99px;">
+              <i class="bi bi-speedometer2 me-1"></i>User Dashboard
+            </span>
+          </div>
+          <p class="mb-0 text-white-50" style="font-size: 0.95rem;">
+            Welcome back! Here is an overview of your activity and performance across FlaskBlog.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================================================================
+         2. STATISTICS CARDS
+         ================================================================ -->
+    <div class="row g-3 mb-5">
+      <!-- Total Articles -->
+      <div class="col-6 col-md-3">
+        <div class="card h-100 border-0 shadow-sm rounded-3 p-3 position-relative overflow-hidden">
+          <div class="d-flex align-items-center justify-content-between">
+            <div>
+              <p class="text-muted fw-semibold mb-1" style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: .03em;">Articles Published</p>
+              <h2 class="fw-bold mb-0 text-dark">{{ total_articles }}</h2>
+            </div>
+            <div class="stat-icon bg-primary-subtle text-primary rounded-3 d-flex align-items-center justify-content-center" style="width: 46px; height: 46px; font-size: 1.35rem;">
+              <i class="bi bi-file-earmark-post"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Comments Received -->
+      <div class="col-6 col-md-3">
+        <div class="card h-100 border-0 shadow-sm rounded-3 p-3 position-relative overflow-hidden">
+          <div class="d-flex align-items-center justify-content-between">
+            <div>
+              <p class="text-muted fw-semibold mb-1" style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: .03em;">Comments Received</p>
+              <h2 class="fw-bold mb-0 text-dark">{{ total_comments_received }}</h2>
+            </div>
+            <div class="stat-icon bg-success-subtle text-success rounded-3 d-flex align-items-center justify-content-center" style="width: 46px; height: 46px; font-size: 1.35rem;">
+              <i class="bi bi-chat-left-text"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Comments Written -->
+      <div class="col-6 col-md-3">
+        <div class="card h-100 border-0 shadow-sm rounded-3 p-3 position-relative overflow-hidden">
+          <div class="d-flex align-items-center justify-content-between">
+            <div>
+              <p class="text-muted fw-semibold mb-1" style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: .03em;">Comments Written</p>
+              <h2 class="fw-bold mb-0 text-dark">{{ total_comments_written }}</h2>
+            </div>
+            <div class="stat-icon bg-info-subtle text-info rounded-3 d-flex align-items-center justify-content-center" style="width: 46px; height: 46px; font-size: 1.35rem;">
+              <i class="bi bi-pencil-square"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Total Reactions -->
+      <div class="col-6 col-md-3">
+        <div class="card h-100 border-0 shadow-sm rounded-3 p-3 position-relative overflow-hidden">
+          <div class="d-flex align-items-center justify-content-between">
+            <div>
+              <p class="text-muted fw-semibold mb-1" style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: .03em;">Total Reactions</p>
+              <h2 class="fw-bold mb-0 text-dark">{{ total_reactions }}</h2>
+            </div>
+            <div class="stat-icon bg-warning-subtle text-warning-emphasis rounded-3 d-flex align-items-center justify-content-center" style="width: 46px; height: 46px; font-size: 1.35rem;">
+              <i class="bi bi-heart"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================================================================
+         3. MY ARTICLES SECTION
+         ================================================================ -->
+    <div class="mb-5">
+      <div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">
+        <div>
+          <h3 class="h4 fw-bold text-dark mb-0"><i class="bi bi-journal-text me-2 text-primary"></i>My Articles</h3>
+          <p class="text-muted mb-0" style="font-size:.875rem;">Manage and review all your published blog articles.</p>
+        </div>
+        <a href="{{ url_for('create_post') }}" class="btn btn-primary btn-sm rounded-pill px-3">
+          <i class="bi bi-plus-circle me-1"></i>New Article
+        </a>
+      </div>
+
+      {% if posts %}
+      <div class="row g-4">
+        {% for post in posts %}
+        <div class="col-12 col-sm-6 col-lg-4">
+          <article class="post-card h-100 shadow-sm rounded-3 overflow-hidden border">
+            <div class="post-card-img-wrap" style="height:170px;">
+              <img src="{{ post.image_url }}" alt="{{ post.title }}" class="post-card-img" loading="lazy" />
+            </div>
+            <div class="post-card-body p-3 d-flex flex-column">
+              {% if post.category %}
+              <div class="mb-2">
+                <span class="tag tag-primary"><i class="bi bi-tag me-1"></i>{{ post.category.name }}</span>
+              </div>
+              {% endif %}
+
+              <h4 class="post-card-title h6 fw-bold text-dark mb-2" style="line-height:1.4;">{{ post.title }}</h4>
+              
+              <div class="text-muted mb-3" style="font-size: .8rem;">
+                <i class="bi bi-calendar3 me-1"></i>{{ post.created_at.strftime('%b %d, %Y') }}
+              </div>
+
+              <!-- Reactions & Comments Summary Badges -->
+              <div class="d-flex align-items-center gap-2 mb-3 flex-wrap" style="font-size: 0.8rem;">
+                <span class="badge bg-light text-dark border fw-normal px-2 py-1">
+                  👍 {{ post.likes_count or 0 }} &nbsp;👎 {{ post.dislikes_count or 0 }} &nbsp;❤️ {{ post.hearts_count or 0 }} &nbsp;🎉 {{ post.congratulations_count or 0 }}
+                </span>
+                <span class="badge bg-light text-dark border fw-normal px-2 py-1">
+                  <i class="bi bi-chat-dots me-1 text-primary"></i>{{ post.comments | length }}
+                </span>
+              </div>
+
+              <!-- Actions row -->
+              <div class="card-actions-row mt-auto pt-2 border-top d-flex gap-2">
+                <a href="{{ url_for('view_post', post_id=post.id) }}" class="card-action-btn card-action-view btn btn-sm btn-light border flex-fill text-center">
+                  <i class="bi bi-eye me-1"></i>View
+                </a>
+                <a href="{{ url_for('edit_post', post_id=post.id) }}" class="card-action-btn card-action-edit btn btn-sm btn-light border flex-fill text-center">
+                  <i class="bi bi-pencil me-1"></i>Edit
+                </a>
+                <form method="POST" action="{{ url_for('delete_post', post_id=post.id) }}" onsubmit="return confirm('Delete article &ldquo;' + {{ post.title | tojson }} + '&rdquo;? This cannot be undone.');" class="d-inline flex-fill">
+                  {{ form.hidden_tag() }}
+                  <button type="submit" class="card-action-btn card-action-delete btn btn-sm btn-outline-danger w-100">
+                    <i class="bi bi-trash me-1"></i>Delete
+                  </button>
+                </form>
+              </div>
+
+            </div>
+          </article>
+        </div>
+        {% endfor %}
+      </div>
+      {% else %}
+      <div class="card border-0 shadow-sm p-4 text-center rounded-3 my-3">
+        <div style="font-size:2.5rem;margin-bottom:.5rem;">📝</div>
+        <h5 class="fw-bold text-dark mb-1">You haven't published any articles yet.</h5>
+        <p class="text-muted mb-3" style="font-size:.9rem;">Share your knowledge and ideas with the developer community!</p>
+        <div>
+          <a href="{{ url_for('create_post') }}" class="btn btn-primary btn-sm rounded-pill px-4">
+            <i class="bi bi-plus-circle me-1"></i>Create Your First Post
+          </a>
+        </div>
+      </div>
+      {% endif %}
+    </div>
+
+    <!-- ================================================================
+         4. RECENT COMMENTS & 5. RECENT REACTIONS (2 COLUMNS)
+         ================================================================ -->
+    <div class="row g-4">
+      
+      <!-- RECENT COMMENTS -->
+      <div class="col-12 col-lg-6">
+        <div class="card border-0 shadow-sm rounded-3 p-4 h-100">
+          <div class="d-flex align-items-center justify-content-between mb-3 border-bottom pb-2">
+            <h3 class="h5 fw-bold text-dark mb-0">
+              <i class="bi bi-chat-left-dots text-success me-2"></i>Recent Comments Received
+            </h3>
+            <span class="badge bg-success-subtle text-success rounded-pill px-2 py-1" style="font-size:.75rem;">
+              {{ total_comments_received }} Total
+            </span>
+          </div>
+
+          {% if recent_comments %}
+          <div class="list-group list-group-flush">
+            {% for comment in recent_comments %}
+            <div class="list-group-item px-0 py-3 border-bottom">
+              <div class="d-flex align-items-start gap-3">
+                <a href="{{ url_for('public_profile', user_id=comment.author.id) }}" class="flex-shrink-0" style="display:inline-block; width:42px; height:42px;">
+                  <img src="{{ comment.author.avatar_url }}" alt="{{ comment.author.name }}" class="rounded-circle" style="width:42px; height:42px; min-width:42px; min-height:42px; aspect-ratio:1/1; object-fit:cover; flex-shrink:0; border:1px solid #e2e8f0; display:block;" />
+                </a>
+                <div class="flex-grow-1">
+                  <div class="d-flex align-items-center justify-content-between flex-wrap gap-1 mb-1">
+                    <a href="{{ url_for('public_profile', user_id=comment.author.id) }}" class="fw-semibold text-dark text-decoration-none" style="font-size:.875rem;">
+                      {{ comment.author.name }}
+                    </a>
+                    <span class="text-muted" style="font-size:.75rem;">
+                      {{ comment.created_at.strftime('%b %d, %Y') }}
+                    </span>
+                  </div>
+                  <p class="text-secondary mb-2" style="font-size:.85rem;line-height:1.5;">
+                    &ldquo;{{ comment.text }}&rdquo;
+                  </p>
+                  <div style="font-size:.78rem;">
+                    <span class="text-muted me-1">On article:</span>
+                    <a href="{{ url_for('view_post', post_id=comment.post.id) }}#comment-{{ comment.id }}" class="fw-semibold text-primary text-decoration-none">
+                      {{ comment.post.title }}
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+          {% else %}
+          <div class="py-4 text-center">
+            <div style="font-size:2rem;margin-bottom:.5rem;">💬</div>
+            <p class="text-muted mb-0" style="font-size:.9rem;">No comments on your articles yet.</p>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- RECENT REACTIONS -->
+      <div class="col-12 col-lg-6">
+        <div class="card border-0 shadow-sm rounded-3 p-4 h-100">
+          <div class="d-flex align-items-center justify-content-between mb-3 border-bottom pb-2">
+            <h3 class="h5 fw-bold text-dark mb-0">
+              <i class="bi bi-heart-pulse text-danger me-2"></i>Article Reactions Summary
+            </h3>
+            <span class="badge bg-warning-subtle text-warning-emphasis rounded-pill px-2 py-1" style="font-size:.75rem;">
+              {{ total_reactions }} Total
+            </span>
+          </div>
+
+          {% if reacted_posts %}
+          <div class="list-group list-group-flush">
+            {% for post in reacted_posts %}
+            <div class="list-group-item px-0 py-3 border-bottom">
+              <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-2">
+                <a href="{{ url_for('view_post', post_id=post.id) }}" class="fw-semibold text-dark text-decoration-none" style="font-size:.9rem;">
+                  <i class="bi bi-journal-text me-1 text-primary"></i>{{ post.title }}
+                </a>
+                <span class="text-muted" style="font-size:.75rem;">
+                  {{ post.updated_at.strftime('%b %d, %Y') if post.updated_at else post.created_at.strftime('%b %d, %Y') }}
+                </span>
+              </div>
+              <div class="d-flex align-items-center gap-2 flex-wrap" style="font-size:.825rem;">
+                {% if post.likes_count %}
+                <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-2 py-1">
+                  👍 {{ post.likes_count }} Like{{ 's' if post.likes_count != 1 else '' }}
+                </span>
+                {% endif %}
+                {% if post.dislikes_count %}
+                <span class="badge bg-danger-subtle text-danger border border-danger-subtle px-2 py-1">
+                  👎 {{ post.dislikes_count }} Dislike{{ 's' if post.dislikes_count != 1 else '' }}
+                </span>
+                {% endif %}
+                {% if post.hearts_count %}
+                <span class="badge bg-danger-subtle text-danger border border-danger-subtle px-2 py-1">
+                  ❤️ {{ post.hearts_count }} Heart{{ 's' if post.hearts_count != 1 else '' }}
+                </span>
+                {% endif %}
+                {% if post.congratulations_count %}
+                <span class="badge bg-success-subtle text-success border border-success-subtle px-2 py-1">
+                  🎉 {{ post.congratulations_count }} Congrats
+                </span>
+                {% endif %}
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+          {% else %}
+          <div class="py-4 text-center">
+            <div style="font-size:2rem;margin-bottom:.5rem;">❤️</div>
+            <p class="text-muted mb-0" style="font-size:.9rem;">No reactions yet.</p>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+{% endblock %}

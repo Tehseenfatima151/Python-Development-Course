@@ -1,0 +1,228 @@
+{% extends "base.html" %}
+{% block title %}My Profile{% endblock %}
+
+{% block content %}
+
+<!-- ================================================================
+     PROFILE HEADER
+     ================================================================ -->
+<div class="profile-header">
+  <div class="container profile-header-content">
+    <div class="d-flex align-items-end gap-4 flex-wrap">
+      <div class="profile-avatar-wrap">
+        <img src="{{ current_user.avatar_url }}"
+             alt="{{ current_user.name }}"
+             class="profile-avatar" />
+      </div>
+      <div class="pb-1">
+        <h1 class="profile-name">{{ current_user.name }}</h1>
+        <p class="profile-email">{{ current_user.email }}</p>
+        <div class="d-flex flex-wrap gap-2">
+          <span class="profile-meta-badge">
+            <i class="bi bi-calendar3"></i>
+            Member since {{ current_user.created_at.strftime('%B %Y') }}
+          </span>
+          <span class="profile-meta-badge">
+            <i class="bi bi-file-text"></i>
+            {{ posts | length }} article{{ 's' if posts|length != 1 else '' }}
+          </span>
+          <span class="profile-meta-badge">
+            <i class="bi bi-chat-dots"></i>
+            {{ current_user.comments | length }} comment{{ 's' if current_user.comments|length != 1 else '' }}
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================================================================
+     PROFILE BODY
+     ================================================================ -->
+<div class="profile-body">
+  <div class="container">
+    <div class="row g-4 g-lg-5">
+
+      <!-- ── Sidebar: edit form ── -->
+      <div class="col-12 col-lg-4 col-xl-3">
+
+        <!-- sticky so the form stays visible while scrolling posts -->
+        <div style="position: sticky; top: 80px;">
+
+        <div class="profile-sidebar-card mb-4">
+          <div class="psc-header">
+            <i class="bi bi-gear text-primary"></i>Edit Profile
+          </div>
+          <div class="psc-body">
+            <form method="POST" enctype="multipart/form-data" novalidate>
+              {{ form.hidden_tag() }}
+
+              <div class="mb-3">
+                {{ form.name.label(class="form-label") }}
+                {{ form.name(class="form-control" + (" is-invalid" if form.name.errors else "")) }}
+                {% for e in form.name.errors %}
+                <div class="invalid-feedback">{{ e }}</div>
+                {% endfor %}
+              </div>
+
+              <div class="mb-3">
+                {{ form.profile_image.label(class="form-label") }}
+                <div class="upload-area" style="padding:1rem;"
+                     onclick="document.getElementById('profileImgInput').click();">
+                  <i class="bi bi-person-circle"
+                     style="font-size:1.5rem;color:var(--primary);display:block;margin-bottom:.35rem;"></i>
+                  <div style="font-size:.8rem;font-weight:600;color:var(--text);">
+                    Change avatar
+                  </div>
+                  <div id="profileImgName"
+                       style="font-size:.75rem;color:var(--primary);margin-top:.2rem;display:none;"></div>
+                </div>
+                {{ form.profile_image(
+                    class="d-none",
+                    id="profileImgInput",
+                    accept=".png,.jpg,.jpeg,.webp",
+                    onchange="document.getElementById('profileImgName').textContent='✓ '+this.files[0].name;document.getElementById('profileImgName').style.display='block';"
+                ) }}
+                {% for e in form.profile_image.errors %}
+                <div class="text-danger" style="font-size:.8rem;">{{ e }}</div>
+                {% endfor %}
+              </div>
+
+              <div class="divider"></div>
+              <p style="font-size:.8rem;color:var(--muted);margin-bottom:.75rem;">
+                <i class="bi bi-shield-lock me-1"></i>
+                Leave blank to keep current password.
+              </p>
+
+              <div class="mb-3">
+                {{ form.current_password.label(class="form-label") }}
+                {{ form.current_password(
+                    class="form-control" + (" is-invalid" if form.current_password.errors else ""),
+                    placeholder="Current password"
+                ) }}
+              </div>
+
+              <div class="mb-3">
+                {{ form.new_password.label(class="form-label") }}
+                {{ form.new_password(
+                    class="form-control" + (" is-invalid" if form.new_password.errors else ""),
+                    placeholder="New password (min 6)"
+                ) }}
+              </div>
+
+              <div class="mb-4">
+                {{ form.confirm_new_password.label(class="form-label") }}
+                {{ form.confirm_new_password(
+                    class="form-control" + (" is-invalid" if form.confirm_new_password.errors else ""),
+                    placeholder="Confirm new password"
+                ) }}
+                {% for e in form.confirm_new_password.errors %}
+                <div class="invalid-feedback">{{ e }}</div>
+                {% endfor %}
+              </div>
+
+              {{ form.submit(class="btn btn-primary w-100") }}
+            </form>
+          </div>
+        </div>
+
+      </div><!-- /sticky wrapper -->
+      </div><!-- /sidebar -->
+
+      <!-- ── Main: posts ── -->
+      <div class="col-12 col-lg-8 col-xl-9">
+        <div class="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-2">
+          <div>
+            <p class="section-label mb-0"><i class="bi bi-journal-text me-1"></i>My Articles</p>
+            <h2 class="section-title mb-0">{{ posts | length }} published</h2>
+          </div>
+          <a href="{{ url_for('create_post') }}" class="btn btn-primary btn-sm">
+            <i class="bi bi-plus-circle"></i>New Article
+          </a>
+        </div>
+
+        {% if posts %}
+          <div class="row g-4">
+            {% for post in posts %}
+            <div class="col-12 col-sm-6 col-xl-4">
+              <article class="post-card h-100">
+                <div class="post-card-img-wrap">
+                  <img src="{{ post.image_url }}"
+                       alt="{{ post.title }}"
+                       class="post-card-img" loading="lazy" />
+                </div>
+                <div class="post-card-body">
+                  <h3 class="post-card-title">{{ post.title }}</h3>
+                  {% if post.subtitle %}
+                  <p class="post-card-subtitle">{{ post.subtitle }}</p>
+                  {% endif %}
+                  <p class="post-card-excerpt" style="-webkit-line-clamp:2;">
+                    {{ post.preview }}
+                  </p>
+              <div class="post-reactions" data-post-id="{{ post.id }}">
+                <button type="button" class="reaction-btn" data-reaction="like" title="Like">
+                  👍 <span class="count">{{ post.likes_count or 0 }}</span>
+                </button>
+                <button type="button" class="reaction-btn" data-reaction="dislike" title="Dislike">
+                  👎 <span class="count">{{ post.dislikes_count or 0 }}</span>
+                </button>
+                <button type="button" class="reaction-btn" data-reaction="heart" title="Heart">
+                  ❤️ <span class="count">{{ post.hearts_count or 0 }}</span>
+                </button>
+                <button type="button" class="reaction-btn" data-reaction="congratulations" title="Congratulations">
+                  🎉 <span class="count">{{ post.congratulations_count or 0 }}</span>
+                </button>
+              </div>
+                  <div class="post-card-footer mt-2 pt-2">
+                    <span class="post-card-date"
+                          style="font-size:.8rem;color:var(--muted);">
+                      <i class="bi bi-calendar3 me-1"></i>
+                      {{ post.created_at.strftime('%b %d, %Y') }}
+                    </span>
+                  </div>
+                  <div class="card-actions-row">
+                      <a href="{{ url_for('view_post', post_id=post.id) }}"
+                         class="card-action-btn card-action-view">
+                        <i class="bi bi-eye"></i> View
+                      </a>
+                      <a href="{{ url_for('edit_post', post_id=post.id) }}"
+                         class="card-action-btn card-action-edit">
+                        <i class="bi bi-pencil"></i> Edit
+                      </a>
+                      <form method="POST"
+                            action="{{ url_for('delete_post', post_id=post.id) }}"
+                            onsubmit="return confirm('Delete ' + {{ post.title | tojson }} + '? This cannot be undone.');"
+                            style="margin:0;padding:0;">
+                        {{ form.hidden_tag() }}
+                        <button type="submit" class="card-action-btn card-action-delete">
+                          <i class="bi bi-trash"></i> Delete
+                        </button>
+                      </form>
+                  </div>
+                </div>
+              </article>
+            </div>
+            {% endfor %}
+          </div>
+        {% else %}
+          <div class="empty-state">
+            <div class="empty-state-icon">
+              <i class="bi bi-journal-x"></i>
+            </div>
+            <h3 class="empty-state-title">No articles yet</h3>
+            <p class="empty-state-desc">
+              You haven't published anything yet. Start writing and share
+              your ideas with the world.
+            </p>
+            <a href="{{ url_for('create_post') }}" class="btn btn-primary">
+              <i class="bi bi-plus-circle"></i>Write Your First Article
+            </a>
+          </div>
+        {% endif %}
+
+      </div><!-- /main -->
+    </div><!-- /row -->
+  </div>
+</div>
+
+{% endblock %}

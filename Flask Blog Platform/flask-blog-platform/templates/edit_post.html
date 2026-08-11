@@ -1,0 +1,175 @@
+{% extends "base.html" %}
+{% block title %}Edit Article{% endblock %}
+
+{% block content %}
+<div class="editor-page">
+  <div class="container" style="max-width:820px;">
+
+    <div class="editor-header">
+      <h1 class="editor-title">
+        <i class="bi bi-pencil text-primary me-2"></i>{{ legend }}
+      </h1>
+      <p class="editor-subtitle">
+        Update your article. Changes are saved immediately.
+      </p>
+    </div>
+
+    <div class="editor-card">
+      <form method="POST" enctype="multipart/form-data" novalidate>
+        {{ form.hidden_tag() }}
+
+        <!-- Title -->
+        <div class="mb-4">
+          {{ form.title.label(class="form-label") }}
+          {{ form.title(
+              class="form-control form-control-lg" + (" is-invalid" if form.title.errors else ""),
+              placeholder="Article title",
+              style="font-size:1.25rem;font-weight:700;letter-spacing:-.01em;"
+          ) }}
+          {% for e in form.title.errors %}
+          <div class="invalid-feedback">{{ e }}</div>
+          {% endfor %}
+        </div>
+
+        <!-- Subtitle -->
+        <div class="mb-4">
+          {{ form.subtitle.label(class="form-label") }}
+          {{ form.subtitle(
+              class="form-control" + (" is-invalid" if form.subtitle.errors else ""),
+              placeholder="Short subtitle or teaser (optional)"
+          ) }}
+          {% for e in form.subtitle.errors %}
+          <div class="invalid-feedback">{{ e }}</div>
+          {% endfor %}
+        </div>
+
+        <!-- Category -->
+        <div class="mb-4">
+          {{ form.category_id.label(class="form-label") }}
+          {{ form.category_id(
+              class="form-select" + (" is-invalid" if form.category_id.errors else ""),
+              id="categorySelect",
+              onchange="toggleNewCategory(this)"
+          ) }}
+          {% for e in form.category_id.errors %}
+          <div class="invalid-feedback">{{ e }}</div>
+          {% endfor %}
+
+          <!-- New category input — shown only when "Create New" is selected -->
+          <div id="newCategoryBox" class="mt-2" style="display:none;">
+            {{ form.new_category(
+                class="form-control" + (" is-invalid" if form.new_category.errors else ""),
+                placeholder="Enter new category name, e.g. Flask",
+                id="newCategoryInput"
+            ) }}
+            {% for e in form.new_category.errors %}
+            <div class="invalid-feedback">{{ e }}</div>
+            {% endfor %}
+          </div>
+        </div>
+
+        <!-- Content -->
+        <div class="mb-4">
+          {{ form.body.label(class="form-label") }}
+          {{ form.body(
+              class="form-control" + (" is-invalid" if form.body.errors else ""),
+              rows=16,
+              style="font-size:.9375rem;line-height:1.75;"
+          ) }}
+          {% for e in form.body.errors %}
+          <div class="invalid-feedback">{{ e }}</div>
+          {% endfor %}
+        </div>
+
+        <!-- Current image -->
+        {% if post.image %}
+        <div class="mb-3">
+          <p class="form-label mb-2">Current Featured Image</p>
+          <img src="{{ post.image_url }}" alt="Current featured image"
+               style="max-height:180px;border-radius:var(--radius);
+                      border:1px solid var(--border);object-fit:cover;" />
+        </div>
+        {% endif %}
+
+        <!-- New image upload -->
+        <div class="mb-4">
+          {{ form.image.label(class="form-label") }}
+          <div class="form-text mb-2">Leave blank to keep the current image.</div>
+          <div class="upload-area" id="uploadArea"
+               onclick="document.getElementById('postImg').click();">
+            <i class="bi bi-arrow-repeat"
+               style="font-size:1.75rem;color:var(--primary);display:block;margin-bottom:.5rem;"></i>
+            <div style="font-size:.875rem;font-weight:600;color:var(--text);">
+              Click to replace featured image
+            </div>
+            <div style="font-size:.8rem;color:var(--muted);margin-top:.25rem;">
+              PNG, JPG, WEBP — max 2 MB
+            </div>
+          </div>
+          {{ form.image(
+              class="d-none",
+              id="postImg",
+              accept=".png,.jpg,.jpeg,.webp",
+              onchange="previewImage(this)"
+          ) }}
+          {% for e in form.image.errors %}
+          <div class="text-danger" style="font-size:.8rem;margin-top:.3rem;">{{ e }}</div>
+          {% endfor %}
+          <div id="previewBox" class="mt-3" style="display:none;">
+            <img id="imgPreview" src="#" alt="New image preview"
+                 style="max-height:220px;border-radius:var(--radius);
+                        border:1px solid var(--border);object-fit:cover;" />
+            <div style="font-size:.8rem;color:var(--muted);margin-top:.4rem;">
+              <i class="bi bi-check-circle text-success me-1"></i>
+              New image selected.
+            </div>
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="d-flex align-items-center gap-3 flex-wrap mt-2">
+          {{ form.submit(
+              class="btn btn-primary",
+              style="padding:.7rem 2rem;font-size:.9375rem;"
+          ) }}
+          <a href="{{ url_for('view_post', post_id=post.id) }}"
+             class="btn btn-ghost">Cancel</a>
+        </div>
+
+      </form>
+    </div>
+
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function toggleNewCategory(sel) {
+  var box = document.getElementById('newCategoryBox');
+  if (sel.value === '__new__') {
+    box.style.display = 'block';
+    document.getElementById('newCategoryInput').required = true;
+  } else {
+    box.style.display = 'none';
+    document.getElementById('newCategoryInput').required = false;
+  }
+}
+// On page load, show the box if __new__ was previously selected (e.g. validation error)
+document.addEventListener('DOMContentLoaded', function() {
+  var sel = document.getElementById('categorySelect');
+  if (sel) toggleNewCategory(sel);
+});
+
+function previewImage(input) {
+  if (input.files && input.files[0]) {
+    const reader = new FileReader();
+    reader.onload = e => {
+      document.getElementById('imgPreview').src = e.target.result;
+      document.getElementById('previewBox').style.display = 'block';
+    };
+    reader.readAsDataURL(input.files[0]);
+  }
+}
+</script>
+{% endblock %}

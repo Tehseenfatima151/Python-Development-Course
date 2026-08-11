@@ -1,0 +1,277 @@
+{% extends "base.html" %}
+{% block title %}{{ post.title }}{% endblock %}
+
+{% block content %}
+<div class="container" style="padding-top:2.5rem;padding-bottom:4rem;">
+
+  <!-- ============================================================
+       ARTICLE HEADER  (centered, max-width 760px)
+       ============================================================ -->
+  <div class="article-header">
+
+    <!-- Tag / label -->
+    <div class="mb-3 d-flex gap-2 flex-wrap">
+      {% if post.category %}
+      <span class="tag tag-primary">
+        <i class="bi bi-tag"></i>{{ post.category.name }}
+      </span>
+      {% endif %}
+      <span class="tag tag-muted">
+        <i class="bi bi-file-text"></i>Article
+      </span>
+    </div>
+
+    <!-- Title -->
+    <h1 class="article-title">{{ post.title }}</h1>
+
+    <!-- Subtitle -->
+    {% if post.subtitle %}
+    <p class="article-subtitle">{{ post.subtitle }}</p>
+    {% endif %}
+
+    <!-- Meta row -->
+    <div class="article-meta">
+      <!-- Author avatar + info -->
+      <a href="{{ url_for('public_profile', user_id=post.author.id) }}"
+         class="d-flex align-items-center gap-2 text-decoration-none">
+        <img src="{{ post.author.avatar_url }}"
+             alt="{{ post.author.name }}"
+             style="width:40px;height:40px;border-radius:50%;object-fit:cover;border:2px solid var(--border);" />
+        <div>
+          <div style="font-size:.875rem;font-weight:700;color:var(--dark);">
+            {{ post.author.name }}
+          </div>
+          <div style="font-size:.775rem;color:var(--muted);">Author</div>
+        </div>
+      </a>
+
+      <span class="sep" aria-hidden="true">·</span>
+
+      <div style="font-size:.875rem;color:var(--muted);">
+        <i class="bi bi-calendar3 me-1"></i>
+        {{ post.created_at.strftime('%B %d, %Y') }}
+      </div>
+
+      {% if post.updated_at and post.updated_at.date() != post.created_at.date() %}
+      <span class="sep" aria-hidden="true">·</span>
+      <div style="font-size:.8rem;color:var(--muted);">
+        <i class="bi bi-pencil me-1"></i>Updated {{ post.updated_at.strftime('%b %d, %Y') }}
+      </div>
+      {% endif %}
+
+      <span class="sep" aria-hidden="true">·</span>
+
+      <div class="reading-time">
+        <i class="bi bi-clock"></i>
+        {% set words = post.body.split()|length %}
+        {{ (words // 200) + 1 }} min read
+      </div>
+
+      <!-- Edit / Delete for author -->
+      {% if current_user.is_authenticated and current_user.id == post.author_id %}
+      <div class="article-actions">
+        <a href="{{ url_for('edit_post', post_id=post.id) }}"
+           class="btn btn-ghost btn-sm">
+          <i class="bi bi-pencil"></i>Edit
+        </a>
+        <button type="button" class="btn btn-outline-danger btn-sm"
+                data-bs-toggle="modal" data-bs-target="#deletePostModal">
+          <i class="bi bi-trash"></i>Delete
+        </button>
+      </div>
+      {% endif %}
+    </div>
+  </div><!-- /article-header -->
+
+  <!-- ============================================================
+       FEATURED IMAGE
+       ============================================================ -->
+  <div style="max-width:860px;margin:0 auto 2.5rem;">
+    <img src="{{ post.image_url }}"
+         alt="{{ post.title }}"
+         class="article-hero-img" />
+  </div>
+
+  <!-- ============================================================
+       ARTICLE BODY
+       ============================================================ -->
+    <!-- ARTICLE BODY -->
+  <div class="article-body markdown-body">
+    {{ post.body | render_markdown }}
+  </div>
+
+  <!-- ARTICLE REACTIONS -->
+  <div class="d-flex align-items-center justify-content-between p-3 my-4 rounded-3" style="background:#f8fafc;border:1px solid #e2e8f0;">
+    <span class="fw-semibold text-secondary" style="font-size:.9rem;"><i class="bi bi-heart me-1"></i>Reactions:</span>
+    <div class="post-reactions ms-2 mb-0" data-post-id="{{ post.id }}">
+      <button type="button" class="reaction-btn" data-reaction="like" title="Like">
+        👍 <span class="count">{{ post.likes_count or 0 }}</span>
+      </button>
+      <button type="button" class="reaction-btn" data-reaction="dislike" title="Dislike">
+        👎 <span class="count">{{ post.dislikes_count or 0 }}</span>
+      </button>
+      <button type="button" class="reaction-btn" data-reaction="heart" title="Heart">
+        ❤️ <span class="count">{{ post.hearts_count or 0 }}</span>
+      </button>
+      <button type="button" class="reaction-btn" data-reaction="congratulations" title="Congratulations">
+        🎉 <span class="count">{{ post.congratulations_count or 0 }}</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       AUTHOR CARD
+       ============================================================ -->
+  <div class="author-card">
+    <a href="{{ url_for('public_profile', user_id=post.author.id) }}">
+      <img src="{{ post.author.avatar_url }}" alt="{{ post.author.name }}" />
+    </a>
+    <div>
+      <div class="author-card-label">Written by</div>
+      <div class="author-card-name">
+        <a href="{{ url_for('public_profile', user_id=post.author.id) }}"
+           class="text-decoration-none" style="color:inherit;">
+          {{ post.author.name }}
+        </a>
+      </div>
+      <div class="author-card-bio">
+        Member since {{ post.author.created_at.strftime('%B %Y') }}
+        &nbsp;·&nbsp;
+        {{ post.author.posts | length }} article{{ 's' if post.author.posts|length != 1 else '' }}
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       COMMENTS
+       ============================================================ -->
+  <section class="comments-section" id="comments" aria-label="Comments">
+    <h2 class="comments-title">
+      <i class="bi bi-chat-dots text-primary"></i>
+      Comments
+      <span class="comment-count-badge">{{ comments | length }}</span>
+    </h2>
+
+    <!-- Comment list -->
+    {% if comments %}
+      {% for comment in comments %}
+      <div class="comment-item">
+        <a href="{{ url_for('public_profile', user_id=comment.author.id) }}" class="flex-shrink-0" style="display:inline-block; width:42px; height:42px;">
+          <img src="{{ comment.author.avatar_url }}"
+               alt="{{ comment.author.name }}"
+               class="rounded-circle"
+               style="width:42px; height:42px; min-width:42px; min-height:42px; aspect-ratio:1/1; object-fit:cover; flex-shrink:0; border:1px solid #e2e8f0; display:block;" />
+        </a>
+        <div style="flex:1;">
+          <div class="comment-bubble">
+            <div class="comment-header">
+              <a href="{{ url_for('public_profile', user_id=comment.author.id) }}"
+                 class="comment-author-name">
+                {{ comment.author.name }}
+              </a>
+              <span class="comment-date">
+                {{ comment.created_at.strftime('%b %d, %Y at %H:%M') }}
+              </span>
+              {% if current_user.is_authenticated and current_user.id == comment.user_id %}
+              <form method="POST"
+                    action="{{ url_for('delete_comment', comment_id=comment.id) }}"
+                    class="ms-auto"
+                    onsubmit="return confirm('Delete this comment?');">
+                {{ form.hidden_tag() }}
+                <button type="submit" class="comment-delete-btn" aria-label="Delete comment">
+                  <i class="bi bi-trash"></i>Delete
+                </button>
+              </form>
+              {% endif %}
+            </div>
+            <p class="comment-text">{{ comment.text }}</p>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    {% else %}
+      <div style="text-align:center;padding:2.5rem;color:var(--muted);">
+        <i class="bi bi-chat-square-text"
+           style="font-size:2rem;opacity:.4;display:block;margin-bottom:.75rem;"></i>
+        No comments yet — be the first to share your thoughts!
+      </div>
+    {% endif %}
+
+    <!-- Add comment / guest notice -->
+    <div class="comment-form-wrap">
+      {% if current_user.is_authenticated %}
+        <div class="comment-form-title">Leave a comment</div>
+        <div class="d-flex gap-3 align-items-start">
+          <img src="{{ current_user.avatar_url }}"
+               alt="{{ current_user.name }}"
+               style="width:38px;height:38px;border-radius:50%;object-fit:cover;border:2px solid var(--border);flex-shrink:0;margin-top:.15rem;" />
+          <form method="POST"
+                action="{{ url_for('add_comment', post_id=post.id) }}"
+                class="flex-grow-1">
+            {{ form.hidden_tag() }}
+            <div class="mb-3">
+              {{ form.text(
+                  class="form-control" + (" is-invalid" if form.text.errors else ""),
+                  rows=3,
+                  placeholder="Share your thoughts…"
+              ) }}
+              {% for error in form.text.errors %}
+              <div class="invalid-feedback">{{ error }}</div>
+              {% endfor %}
+            </div>
+            {{ form.submit(class="btn btn-primary btn-sm") }}
+          </form>
+        </div>
+      {% else %}
+        <div class="guest-comment-banner">
+          <i class="bi bi-lock-fill flex-shrink-0" style="font-size:1.25rem;"></i>
+          <div>
+            <strong>Join the conversation.</strong><br>
+            <a href="{{ url_for('login', next=request.url) }}" class="fw-semibold">Sign in</a>
+            or
+            <a href="{{ url_for('register') }}" class="fw-semibold">create an account</a>
+            to leave a comment.
+          </div>
+        </div>
+      {% endif %}
+    </div>
+  </section>
+
+</div><!-- /container -->
+
+<!-- ============================================================
+     DELETE MODAL
+     ============================================================ -->
+{% if current_user.is_authenticated and current_user.id == post.author_id %}
+<div class="modal fade" id="deletePostModal" tabindex="-1"
+     aria-labelledby="deleteModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title fw-bold text-danger" id="deleteModalLabel">
+          <i class="bi bi-exclamation-triangle-fill me-2"></i>Delete Article
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                aria-label="Close"></button>
+      </div>
+      <div class="modal-body" style="font-size:.9375rem;color:var(--muted);line-height:1.65;">
+        Are you sure you want to permanently delete
+        <strong style="color:var(--dark);">"{{ post.title }}"</strong>?
+        All comments will also be removed. This action <strong>cannot be undone</strong>.
+      </div>
+      <div class="modal-footer gap-2">
+        <button type="button" class="btn btn-secondary"
+                data-bs-dismiss="modal">Cancel</button>
+        <form method="POST" action="{{ url_for('delete_post', post_id=post.id) }}">
+          {{ form.hidden_tag() }}
+          <button type="submit" class="btn btn-danger">
+            <i class="bi bi-trash"></i>Delete Permanently
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+
+{% endblock %}

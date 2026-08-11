@@ -1,0 +1,40 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Virtual environments
+venv/
+.venv/
+env/
+ENV/
+
+# Flask / SQLite
+instance/
+*.db
+*.sqlite3
+
+# Environment variables — NEVER commit this
+.env
+
+# Uploads (user-generated content)
+static/uploads/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Helper scripts used during setup
+create_placeholders.py

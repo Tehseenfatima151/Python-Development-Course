@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}FlaskBlog{% endblock %} — FlaskBlog</title>
+
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+        crossorigin="anonymous" />
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+        rel="stylesheet"
+        integrity="sha384-tViUnnbplMdV8hkdOeirxoNu6YNONahFMeMr4S5sPsttjRFtTFgL6fGmtOPxiMpl"
+        crossorigin="anonymous" />
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}" />
+</head>
+<body>
+
+<!-- ================================================================
+     NAVBAR
+     ================================================================ -->
+<nav class="navbar navbar-expand-lg sticky-top" aria-label="Main navigation">
+  <div class="container-fluid navbar-inner">
+
+    <!-- Brand -->
+    <a class="navbar-brand" href="{{ url_for('index') }}" aria-label="FlaskBlog home">
+      <img src="{{ url_for('static', filename='img/blog-logo.png') }}"
+           alt="FlaskBlog logo"
+           class="navbar-logo-img" />
+      FlaskBlog
+    </a>
+
+    <!-- Mobile toggle -->
+    <button class="navbar-toggler" type="button"
+            data-bs-toggle="collapse" data-bs-target="#mainNav"
+            aria-controls="mainNav" aria-expanded="false"
+            aria-label="Toggle navigation">
+      <i class="bi bi-list" style="font-size:1.25rem;color:var(--text);"></i>
+    </button>
+
+    <div class="collapse navbar-collapse" id="mainNav">
+      <!-- Left links -->
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0 gap-1">
+        <li class="nav-item">
+          <a class="nav-link {% if request.endpoint == 'index' %}active{% endif %}"
+             href="{{ url_for('index') }}">
+            <i class="bi bi-house me-1"></i>Home
+          </a>
+        </li>
+        {% if current_user.is_authenticated %}
+        <li class="nav-item">
+          <a class="nav-link {% if request.endpoint == 'dashboard' %}active{% endif %}"
+             href="{{ url_for('dashboard') }}">
+            <i class="bi bi-speedometer2 me-1"></i>Dashboard
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {% if request.endpoint == 'create_post' %}active{% endif %}"
+             href="{{ url_for('create_post') }}">
+            <i class="bi bi-plus-circle me-1"></i>New Post
+          </a>
+        </li>
+        {% endif %}
+      </ul>
+
+      {% if request.endpoint not in ['login', 'register', 'create_post', 'edit_post', 'profile', 'dashboard'] %}
+      <div class="navbar-search-wrap">
+        <form class="navbar-search" action="{{ url_for('index') }}" method="get" role="search">
+          <label class="visually-hidden" for="navbarSearch">Search articles</label>
+          <input id="navbarSearch" type="search" name="q" class="form-control"
+                 value="{{ request.args.get('q', '') }}"
+                 placeholder="Search articles..." />
+          {% if request.endpoint == 'index' and request.args.get('category') %}
+          <input type="hidden" name="category" value="{{ request.args.get('category') }}" />
+          {% endif %}
+          {% if request.endpoint == 'index' and (request.args.get('q') or request.args.get('category')) %}
+          <a href="{{ url_for('index') }}" class="navbar-search-clear" aria-label="Clear search and filter">
+            <i class="bi bi-x-lg"></i><span>Clear</span>
+          </a>
+          {% endif %}
+          <button class="navbar-search-submit" type="submit" aria-label="Search articles">
+            <i class="bi bi-search"></i><span>Search</span>
+          </button>
+        </form>
+
+        <div class="search-category-popover" aria-label="Filter articles by category">
+          <p class="search-category-title">Filter by category</p>
+          <div class="search-category-options">
+            <a href="{{ url_for('index') }}"
+               class="search-category-option {% if not request.args.get('category') %}active{% endif %}">
+              <i class="bi bi-grid me-1"></i>All Categories
+            </a>
+            {% for category in search_categories %}
+            <a href="{{ url_for('index', category=category.id) }}"
+               class="search-category-option {% if request.args.get('category') == category.id|string %}active{% endif %}">
+              {{ category.name }}
+            </a>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+      {% endif %}
+
+      <!-- Right items -->
+      <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-lg-center gap-2">
+        {% if current_user.is_authenticated %}
+          <li class="nav-item">
+            <a href="{{ url_for('profile') }}"
+               class="user-menu-toggle text-decoration-none"
+               aria-label="Profile menu">
+              <img src="{{ current_user.avatar_url }}"
+                   alt="{{ current_user.name }}"
+                   class="navbar-avatar"
+                   style="width: 32px; height: 32px; min-width: 32px; min-height: 32px; max-width: 32px; max-height: 32px; object-fit: cover; border-radius: 50%; flex-shrink: 0;" />
+              <span class="user-name">{{ current_user.name.split()[0] }}</span>
+              <i class="bi bi-chevron-down" style="font-size:.7rem;color:var(--muted);"></i>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="{{ url_for('logout') }}"
+               class="nav-link text-danger fw-semibold"
+               style="font-size:.8125rem;">
+              <i class="bi bi-box-arrow-right me-1"></i>Logout
+            </a>
+          </li>
+        {% else %}
+          <li class="nav-item">
+            <a href="{{ url_for('login') }}"
+               class="nav-btn-ghost nav-link">
+              Sign in
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="{{ url_for('register') }}"
+               class="nav-btn-primary nav-link">
+              <i class="bi bi-person-plus me-1"></i>Get Started
+            </a>
+          </li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- ================================================================
+     TOAST NOTIFICATIONS
+     ================================================================ -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+  <div class="toast-container" id="toastContainer" aria-live="polite" aria-atomic="true">
+    {% for category, message in messages %}
+    <div class="app-toast app-toast-{{ category }}" role="alert">
+      <span class="app-toast-icon">
+        {% if category == 'success' %}<i class="bi bi-check-circle-fill"></i>
+        {% elif category == 'danger'  %}<i class="bi bi-x-circle-fill"></i>
+        {% elif category == 'warning' %}<i class="bi bi-exclamation-triangle-fill"></i>
+        {% else %}<i class="bi bi-info-circle-fill"></i>{% endif %}
+      </span>
+      <span class="app-toast-msg">{{ message }}</span>
+      <button class="app-toast-close" onclick="this.closest('.app-toast').remove()"
+              aria-label="Dismiss">&times;</button>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+{% endwith %}
+
+<!-- ================================================================
+     MAIN CONTENT
+     ================================================================ -->
+<main>{% block content %}{% endblock %}</main>
+
+<!-- ================================================================
+     FOOTER
+     ================================================================ -->
+<footer class="site-footer">
+  <div class="container-fluid page-inner">
+    <div class="row g-4">
+
+      <!-- Brand column -->
+      <div class="col-12 col-md-4">
+        <div class="footer-brand">
+          <img src="{{ url_for('static', filename='img/blog-logo.png') }}"
+               alt="FlaskBlog"
+               class="footer-logo-img" />
+          FlaskBlog
+        </div>
+        <p class="footer-desc">
+          Share ideas. Write. Inspire.<br>
+          A modern blogging platform built for developers and writers.
+        </p>
+      </div>
+
+      <!-- Navigation -->
+      <div class="col-6 col-md-2 offset-md-2">
+        <p class="footer-heading">Navigate</p>
+        <ul class="footer-links">
+          <li><a href="{{ url_for('index') }}">Home</a></li>
+          {% if current_user.is_authenticated %}
+          <li><a href="{{ url_for('create_post') }}">New Post</a></li>
+          <li><a href="{{ url_for('profile') }}">My Profile</a></li>
+          {% endif %}
+        </ul>
+      </div>
+
+      <!-- Account -->
+      <div class="col-6 col-md-2">
+        <p class="footer-heading">Account</p>
+        <ul class="footer-links">
+          {% if current_user.is_authenticated %}
+          <li><a href="{{ url_for('logout') }}">Logout</a></li>
+          {% else %}
+          <li><a href="{{ url_for('login') }}">Login</a></li>
+          <li><a href="{{ url_for('register') }}">Register</a></li>
+          {% endif %}
+        </ul>
+      </div>
+
+      <!-- Built with -->
+      <div class="col-12 col-md-2">
+        <p class="footer-heading">Built With</p>
+        <ul class="footer-links">
+          <li><a href="https://flask.palletsprojects.com" target="_blank" rel="noopener">Flask</a></li>
+          <li><a href="https://getbootstrap.com" target="_blank" rel="noopener">Bootstrap 5</a></li>
+          <li><a href="https://www.sqlalchemy.org" target="_blank" rel="noopener">SQLAlchemy</a></li>
+        </ul>
+      </div>
+
+    </div>
+
+    <hr class="footer-divider" />
+
+    <div class="footer-bottom">
+      <span>&copy; 2026 FlaskBlog. All rights reserved.</span>
+      <span>Made with <i class="bi bi-heart-fill text-danger"></i> using Python &amp; Flask</span>
+    </div>
+  </div>
+</footer>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+
+<!-- Auto-dismiss toasts after 4 seconds -->
+<script>
+(function () {
+  function dismissToasts() {
+    document.querySelectorAll('.app-toast').forEach(function (toast) {
+      setTimeout(function () {
+        toast.classList.add('app-toast-hiding');
+        setTimeout(function () { toast.remove(); }, 350);
+      }, 4000);
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', dismissToasts);
+  } else {
+    dismissToasts();
+  }
+})();
+</script>
+
+<!-- Interactive Post Reactions Script -->
+<script>
+(function() {
+  function initReactions() {
+    document.querySelectorAll('.post-reactions').forEach(function(wrap) {
+      var postId = wrap.getAttribute('data-post-id');
+      if (!postId) return;
+      
+      var key = 'post_reactions_' + postId;
+      var userReactions = {};
+      try {
+        userReactions = JSON.parse(localStorage.getItem(key) || '{}');
+      } catch(e) {}
+      
+      wrap.querySelectorAll('.reaction-btn').forEach(function(btn) {
+        var rx = btn.getAttribute('data-reaction');
+        if (userReactions[rx]) {
+          btn.classList.add('active');
+        }
+      });
+    });
+
+    document.body.addEventListener('click', function(e) {
+      var btn = e.target.closest('.reaction-btn');
+      if (!btn) return;
+      
+      var wrap = btn.closest('.post-reactions');
+      if (!wrap) return;
+      
+      var postId = wrap.getAttribute('data-post-id');
+      var rxType = btn.getAttribute('data-reaction');
+      if (!postId || !rxType) return;
+      
+      var key = 'post_reactions_' + postId;
+      var userReactions = {};
+      try {
+        userReactions = JSON.parse(localStorage.getItem(key) || '{}');
+      } catch(err) {}
+      
+      var isCurrentlyActive = btn.classList.contains('active');
+      var action = isCurrentlyActive ? 'remove' : 'add';
+      
+      if (action === 'add') {
+        btn.classList.add('active');
+        userReactions[rxType] = true;
+      } else {
+        btn.classList.remove('active');
+        delete userReactions[rxType];
+      }
+      
+      try {
+        localStorage.setItem(key, JSON.stringify(userReactions));
+      } catch(err) {}
+
+      fetch('/post/' + postId + '/react', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ reaction: rxType, action: action })
+      })
+      .then(function(res) { return res.json(); })
+      .then(function(data) {
+        if (data.success) {
+          document.querySelectorAll('.post-reactions[data-post-id="' + postId + '"]').forEach(function(w) {
+            var likeBtn = w.querySelector('[data-reaction="like"] .count');
+            var dislikeBtn = w.querySelector('[data-reaction="dislike"] .count');
+            var heartBtn = w.querySelector('[data-reaction="heart"] .count');
+            var congratsBtn = w.querySelector('[data-reaction="congratulations"] .count');
+            
+            if (likeBtn) likeBtn.textContent = data.likes;
+            if (dislikeBtn) dislikeBtn.textContent = data.dislikes;
+            if (heartBtn) heartBtn.textContent = data.hearts;
+            if (congratsBtn) congratsBtn.textContent = data.congratulations;
+          });
+        }
+      })
+      .catch(function(err) {
+        console.error('Reaction update failed:', err);
+      });
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initReactions);
+  } else {
+    initReactions();
+  }
+})();
+</script>
+
+{% block scripts %}{% endblock %}
+</body>
+</html>

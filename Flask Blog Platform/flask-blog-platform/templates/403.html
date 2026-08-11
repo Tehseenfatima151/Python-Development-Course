@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Access Denied{% endblock %}
+
+{% block content %}
+<div class="error-page">
+  <div>
+    <div class="error-code" style="color:#fee2e2;">403</div>
+    <h1 class="error-title">Access Denied</h1>
+    <p class="error-desc">
+      You don't have permission to access this page.
+      This action is not allowed for your account.
+    </p>
+    <div class="d-flex gap-3 justify-content-center">
+      <a href="{{ url_for('index') }}" class="btn btn-primary">
+        <i class="bi bi-house"></i>Back to Home
+      </a>
+      {% if not current_user.is_authenticated %}
+      <a href="{{ url_for('login') }}" class="btn btn-ghost">
+        Sign In
+      </a>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

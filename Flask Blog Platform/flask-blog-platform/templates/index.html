@@ -1,0 +1,427 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+
+{% block content %}
+
+{% if search_active %}
+  <!-- ================================================================
+       SEARCH RESULTS
+       ================================================================ -->
+  <section class="posts-section search-results-section">
+    <div class="container">
+      <div class="d-flex align-items-end justify-content-between mb-4 flex-wrap gap-2">
+        <div>
+          <p class="section-label mb-1"><i class="bi bi-search me-1"></i>Search Results</p>
+          {% if search_query and selected_category %}
+          <h1 class="section-title mb-1">Results for &ldquo;{{ search_query }}&rdquo; in {{ selected_category.name }}</h1>
+          {% elif search_query %}
+          <h1 class="section-title mb-1">Results for &ldquo;{{ search_query }}&rdquo;</h1>
+          {% else %}
+          <h1 class="section-title mb-1">Articles in {{ selected_category.name if selected_category else 'this category' }}</h1>
+          {% endif %}
+          {% if posts %}
+          <p class="section-subtitle mb-0">
+            {{ posts | length }} article{{ '' if posts|length == 1 else 's' }} found.
+          </p>
+          {% endif %}
+        </div>
+        <a href="{{ url_for('index') }}" class="btn btn-ghost btn-sm">
+          <i class="bi bi-x-circle me-1"></i>Clear Search &amp; Filter
+        </a>
+      </div>
+
+      {% if posts %}
+      <div class="row g-4">
+        {% for post in posts %}
+        <div class="col-12 col-sm-6 col-lg-4">
+          <article class="post-card" aria-label="{{ post.title }}">
+            <div class="post-card-img-wrap">
+              <img src="{{ post.image_url }}"
+                   alt="{{ post.title }}"
+                   class="post-card-img"
+                   loading="lazy" />
+            </div>
+            <div class="post-card-body">
+              <div class="mb-2 d-flex gap-1 flex-wrap">
+                {% if post.category %}
+                <span class="tag tag-primary">
+                  <i class="bi bi-tag"></i>{{ post.category.name }}
+                </span>
+                {% endif %}
+                <span class="tag tag-muted">
+                  <i class="bi bi-person"></i>{{ post.author.name }}
+                </span>
+              </div>
+              <h3 class="post-card-title">{{ post.title }}</h3>
+              {% if post.subtitle %}
+              <p class="post-card-subtitle">{{ post.subtitle }}</p>
+              {% endif %}
+              <p class="post-card-excerpt">{{ post.preview }}</p>
+              <div class="post-reactions" data-post-id="{{ post.id }}">
+                <button type="button" class="reaction-btn" data-reaction="like" title="Like">
+                  👍 <span class="count">{{ post.likes_count or 0 }}</span>
+                </button>
+                <button type="button" class="reaction-btn" data-reaction="dislike" title="Dislike">
+                  👎 <span class="count">{{ post.dislikes_count or 0 }}</span>
+                </button>
+                <button type="button" class="reaction-btn" data-reaction="heart" title="Heart">
+                  ❤️ <span class="count">{{ post.hearts_count or 0 }}</span>
+                </button>
+                <button type="button" class="reaction-btn" data-reaction="congratulations" title="Congratulations">
+                  🎉 <span class="count">{{ post.congratulations_count or 0 }}</span>
+                </button>
+              </div>
+              <div class="post-card-footer">
+                <a href="{{ url_for('public_profile', user_id=post.author.id) }}"
+                   class="post-card-author">
+                  <img src="{{ post.author.avatar_url }}"
+                       alt="{{ post.author.name }}" />
+                  <div>
+                    <div class="post-card-author-name">{{ post.author.name }}</div>
+                    <div class="post-card-date">{{ post.created_at.strftime('%b %d, %Y') }}</div>
+                  </div>
+                </a>
+                <a href="{{ url_for('view_post', post_id=post.id) }}"
+                   class="post-card-read-btn"
+                   aria-label="Read {{ post.title }}">
+                  Read <i class="bi bi-arrow-right"></i>
+                </a>
+              </div>
+            </div>
+          </article>
+        </div>
+        {% endfor %}
+      </div>
+      {% else %}
+      <div class="empty-state">
+        <div class="empty-state-icon">
+          <i class="bi bi-search"></i>
+        </div>
+        <h2 class="empty-state-title">No articles found</h2>
+        <p class="empty-state-desc">
+          Try a different title, topic, category, or keyword.
+        </p>
+        <a href="{{ url_for('index') }}" class="btn btn-primary">
+          View All Articles
+        </a>
+      </div>
+      {% endif %}
+    </div>
+  </section>
+
+{% elif posts %}
+
+<!-- ================================================================
+     HERO
+     ================================================================ -->
+<section class="hero">
+  <div class="hero-blob hero-blob-1" aria-hidden="true"></div>
+  <div class="hero-blob hero-blob-2" aria-hidden="true"></div>
+
+  <div class="container">
+    <div class="row align-items-center g-4">
+
+      <div class="col-12 col-lg-6 hero-content">
+        <div class="hero-eyebrow">
+          <i class="bi bi-stars"></i>
+          The modern blog for developers
+        </div>
+
+        <h1 class="hero-title">
+          Share ideas.<br>
+          Build <span class="accent">knowledge.</span><br>
+          Inspire others.
+        </h1>
+
+        <p class="hero-desc">
+          Discover insightful articles, share your knowledge, and connect
+          with developers through ideas that matter.
+        </p>
+
+        <div class="hero-actions">
+          {% if current_user.is_authenticated %}
+            <a href="{{ url_for('create_post') }}" class="btn btn-primary btn-lg">
+              <i class="bi bi-plus-circle"></i>Start Writing
+            </a>
+            <a href="#latest" class="btn btn-ghost btn-lg">
+              Explore Articles <i class="bi bi-arrow-down"></i>
+            </a>
+          {% else %}
+            <a href="{{ url_for('register') }}" class="btn btn-primary btn-lg">
+              <i class="bi bi-pen"></i>Start Writing
+            </a>
+            <a href="{{ url_for('login') }}" class="btn btn-ghost btn-lg">
+              Sign In <i class="bi bi-arrow-right"></i>
+            </a>
+          {% endif %}
+        </div>
+
+        {% if posts %}
+        <div class="hero-stats">
+          <div>
+            <div class="hero-stat-num">{{ posts | length }}</div>
+            <div class="hero-stat-label">Articles published</div>
+          </div>
+          <div>
+            <div class="hero-stat-num">
+              {% set ns = namespace(ids=[]) %}
+              {% for p in posts %}{% if p.author_id not in ns.ids %}{% set ns.ids = ns.ids + [p.author_id] %}{% endif %}{% endfor %}
+              {{ ns.ids | length }}
+            </div>
+            <div class="hero-stat-label">Authors</div>
+          </div>
+          <div>
+            <div class="hero-stat-num">
+              {% set total = namespace(n=0) %}
+              {% for p in posts %}{% set total.n = total.n + p.comments|length %}{% endfor %}
+              {{ total.n }}
+            </div>
+            <div class="hero-stat-label">Comments</div>
+          </div>
+        </div>
+        {% endif %}
+      </div>
+
+      <div class="col-12 col-lg-6 hero-visual" aria-hidden="true">
+        {% if posts %}
+          {% set fp = posts[0] %}
+          <div class="hero-card-float">
+            <div class="floating-badge floating-badge-1">
+              <i class="bi bi-circle-fill" style="font-size:.5rem;"></i>
+              Live
+            </div>
+            <img src="{{ fp.image_url }}" alt="" class="hcf-image" />
+            <div class="hcf-tag">
+              <span class="tag tag-primary">Latest</span>
+            </div>
+            <div class="hcf-title">{{ fp.title }}</div>
+            <div class="hcf-author">
+              <img src="{{ fp.author.avatar_url }}" alt="{{ fp.author.name }}" />
+              <span>{{ fp.author.name }}</span>
+              <span style="color:#e5e7eb;">·</span>
+              <span>{{ fp.created_at.strftime('%b %d') }}</span>
+            </div>
+            <div class="floating-badge floating-badge-2">
+              <i class="bi bi-chat-dots"></i>
+              {{ fp.comments | length }} comment{{ 's' if fp.comments|length != 1 else '' }}
+            </div>
+          </div>
+        {% else %}
+          <div class="hero-card-float text-center py-4">
+            <div style="font-size:3rem;margin-bottom:.75rem;">✍️</div>
+            <div style="font-weight:700;color:var(--dark);margin-bottom:.35rem;">No articles yet</div>
+            <div style="font-size:.875rem;color:var(--muted);">Be the first to publish!</div>
+          </div>
+        {% endif %}
+      </div>
+
+    </div>
+  </div>
+</section>
+
+  {% set featured = posts[0] %}
+
+  <!-- ================================================================
+       FEATURED ARTICLE
+       ================================================================ -->
+  <section class="featured-section" id="featured">
+    <div class="container">
+      <div class="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-2">
+        <div>
+          <p class="section-label mb-1"><i class="bi bi-bookmark-star me-1"></i>Featured Article</p>
+          <h2 class="section-title mb-0">Editor's Pick</h2>
+        </div>
+        <a href="#latest" class="btn btn-ghost btn-sm">
+          More Articles <i class="bi bi-arrow-down ms-1"></i>
+        </a>
+      </div>
+
+      <div class="featured-card">
+        <div class="row g-0">
+          <div class="col-12 col-md-5">
+            <div class="featured-img-wrap h-100">
+              <img src="{{ featured.image_url }}"
+                   alt="{{ featured.title }}"
+                   class="featured-img" />
+            </div>
+          </div>
+          <div class="col-12 col-md-7">
+            <div class="featured-body">
+              <div class="mb-3 d-flex gap-2 flex-wrap">
+                <span class="tag tag-dark">
+                  <i class="bi bi-bookmark-fill"></i>Featured
+                </span>
+                {% if featured.category %}
+                <span class="tag tag-primary">
+                  <i class="bi bi-tag"></i>{{ featured.category.name }}
+                </span>
+                {% endif %}
+              </div>
+              <h3 class="featured-title">
+                <a href="{{ url_for('view_post', post_id=featured.id) }}"
+                   class="text-decoration-none"
+                   style="color:inherit;">
+                  {{ featured.title }}
+                </a>
+              </h3>
+              {% if featured.subtitle %}
+              <p class="featured-subtitle">{{ featured.subtitle }}</p>
+              {% else %}
+              <p class="featured-subtitle">{{ featured.preview }}</p>
+              {% endif %}
+              <div class="post-reactions" data-post-id="{{ featured.id }}">
+                <button type="button" class="reaction-btn" data-reaction="like" title="Like">
+                  👍 <span class="count">{{ featured.likes_count or 0 }}</span>
+                </button>
+                <button type="button" class="reaction-btn" data-reaction="dislike" title="Dislike">
+                  👎 <span class="count">{{ featured.dislikes_count or 0 }}</span>
+                </button>
+                <button type="button" class="reaction-btn" data-reaction="heart" title="Heart">
+                  ❤️ <span class="count">{{ featured.hearts_count or 0 }}</span>
+                </button>
+                <button type="button" class="reaction-btn" data-reaction="congratulations" title="Congratulations">
+                  🎉 <span class="count">{{ featured.congratulations_count or 0 }}</span>
+                </button>
+              </div>
+              <div class="author-row">
+                <a href="{{ url_for('public_profile', user_id=featured.author.id) }}">
+                  <img src="{{ featured.author.avatar_url }}"
+                       alt="{{ featured.author.name }}" />
+                </a>
+                <div>
+                  <div class="author-name">
+                    <a href="{{ url_for('public_profile', user_id=featured.author.id) }}"
+                       class="text-decoration-none fw-semibold"
+                       style="font-size:.875rem;color:var(--dark);">
+                      {{ featured.author.name }}
+                    </a>
+                  </div>
+                  <div class="author-date">
+                    {{ featured.created_at.strftime('%B %d, %Y') }}
+                    &nbsp;·&nbsp;
+                    <i class="bi bi-chat-dots"></i>
+                    {{ featured.comments | length }}
+                  </div>
+                </div>
+              </div>
+              <a href="{{ url_for('view_post', post_id=featured.id) }}"
+                 class="btn btn-primary">
+                Read Article <i class="bi bi-arrow-right"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================================
+       ALL POSTS GRID
+       ================================================================ -->
+  <section class="posts-section" id="latest">
+    <div class="container">
+      <div class="d-flex align-items-end justify-content-between mb-4 flex-wrap gap-2">
+        <div>
+          <p class="section-label mb-1"><i class="bi bi-grid me-1"></i>Latest Articles</p>
+          <h2 class="section-title mb-1">Fresh from the community</h2>
+          <p class="section-subtitle mb-0">
+            Explore the latest thoughts, tutorials and ideas.
+          </p>
+        </div>
+      </div>
+
+      <div class="row g-4">
+        {% for post in posts %}
+        <div class="col-12 col-sm-6 col-lg-4">
+          <article class="post-card" aria-label="{{ post.title }}">
+            <div class="post-card-img-wrap">
+              <img src="{{ post.image_url }}"
+                   alt="{{ post.title }}"
+                   class="post-card-img"
+                   loading="lazy" />
+            </div>
+            <div class="post-card-body">
+              <div class="mb-2 d-flex gap-1 flex-wrap">
+                {% if post.category %}
+                <span class="tag tag-primary">
+                  <i class="bi bi-tag"></i>{{ post.category.name }}
+                </span>
+                {% endif %}
+                <span class="tag tag-muted">
+                  <i class="bi bi-person"></i>{{ post.author.name }}
+                </span>
+              </div>
+              <h3 class="post-card-title">{{ post.title }}</h3>
+              {% if post.subtitle %}
+              <p class="post-card-subtitle">{{ post.subtitle }}</p>
+              {% endif %}
+              <p class="post-card-excerpt">{{ post.preview }}</p>
+              <div class="post-reactions" data-post-id="{{ post.id }}">
+                <button type="button" class="reaction-btn" data-reaction="like" title="Like">
+                  👍 <span class="count">{{ post.likes_count or 0 }}</span>
+                </button>
+                <button type="button" class="reaction-btn" data-reaction="dislike" title="Dislike">
+                  👎 <span class="count">{{ post.dislikes_count or 0 }}</span>
+                </button>
+                <button type="button" class="reaction-btn" data-reaction="heart" title="Heart">
+                  ❤️ <span class="count">{{ post.hearts_count or 0 }}</span>
+                </button>
+                <button type="button" class="reaction-btn" data-reaction="congratulations" title="Congratulations">
+                  🎉 <span class="count">{{ post.congratulations_count or 0 }}</span>
+                </button>
+              </div>
+              <div class="post-card-footer">
+                <a href="{{ url_for('public_profile', user_id=post.author.id) }}"
+                   class="post-card-author">
+                  <img src="{{ post.author.avatar_url }}"
+                       alt="{{ post.author.name }}" />
+                  <div>
+                    <div class="post-card-author-name">{{ post.author.name }}</div>
+                    <div class="post-card-date">{{ post.created_at.strftime('%b %d, %Y') }}</div>
+                  </div>
+                </a>
+                <a href="{{ url_for('view_post', post_id=post.id) }}"
+                   class="post-card-read-btn"
+                   aria-label="Read {{ post.title }}">
+                  Read <i class="bi bi-arrow-right"></i>
+                </a>
+              </div>
+            </div>
+          </article>
+        </div>
+        {% endfor %}
+      </div>
+
+    </div>
+  </section>
+
+{% else %}
+  <!-- ================================================================
+       EMPTY STATE
+       ================================================================ -->
+  <section class="py-5">
+    <div class="container">
+      <div class="empty-state">
+        <div class="empty-state-icon">
+          <i class="bi bi-journals"></i>
+        </div>
+        <h2 class="empty-state-title">No articles yet</h2>
+        <p class="empty-state-desc">
+          Be the first person to share an idea with the community.
+          Write something amazing.
+        </p>
+        {% if current_user.is_authenticated %}
+          <a href="{{ url_for('create_post') }}" class="btn btn-primary">
+            <i class="bi bi-plus-circle"></i>Write the First Post
+          </a>
+        {% else %}
+          <a href="{{ url_for('register') }}" class="btn btn-primary">
+            <i class="bi bi-person-plus"></i>Get Started
+          </a>
+        {% endif %}
+      </div>
+    </div>
+  </section>
+{% endif %}
+
+{% endblock %}

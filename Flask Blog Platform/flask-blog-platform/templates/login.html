@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+{% block title %}Sign In{% endblock %}
+
+{% block content %}
+<div class="auth-page row g-0">
+
+  <!-- ── Left branding panel ── -->
+  <div class="col-lg-5 auth-left d-none d-lg-flex">
+    <div class="auth-left-content">
+      <div class="auth-brand">
+        <img src="{{ url_for('static', filename='img/blog-logo.png') }}"
+             alt="FlaskBlog" class="auth-logo-img" />
+        FlaskBlog
+      </div>
+      <h2 class="auth-left-title">
+        Every great idea<br>starts with a<br>single word.
+      </h2>
+      <p class="auth-left-desc">
+        Join thousands of developers sharing knowledge,
+        tutorials, and ideas every day.
+      </p>
+
+      <ul class="auth-feature-list mt-4">
+        <li>
+          <span class="fi-check"><i class="bi bi-check text-white"></i></span>
+          Write and publish articles instantly
+        </li>
+        <li>
+          <span class="fi-check"><i class="bi bi-check text-white"></i></span>
+          Engage with a developer community
+        </li>
+        <li>
+          <span class="fi-check"><i class="bi bi-check text-white"></i></span>
+          Build your personal knowledge base
+        </li>
+      </ul>
+    </div>
+
+    <div class="auth-left-quote">
+      <p>"The best time to start writing was yesterday. The second best time is now."</p>
+      <span>— FlaskBlog Community</span>
+    </div>
+  </div>
+
+  <!-- ── Right form panel ── -->
+  <div class="col-12 col-lg-7 auth-right">
+    <div class="auth-form-box">
+
+      <!-- Mobile logo -->
+      <div class="d-flex d-lg-none align-items-center gap-2 mb-4 fw-bold"
+           style="font-size:1.1rem;color:var(--dark);">
+        <img src="{{ url_for('static', filename='img/blog-logo.png') }}"
+             alt="FlaskBlog" style="height:28px;width:auto;" />
+        FlaskBlog
+      </div>
+
+      <div class="auth-form-header">
+        <h1 class="auth-form-title">Welcome back</h1>
+        <p class="auth-form-subtitle">Sign in to continue to FlaskBlog.</p>
+      </div>
+
+      <form method="POST" novalidate>
+        {{ form.hidden_tag() }}
+
+        <div class="mb-3">
+          {{ form.email.label(class="form-label") }}
+          {{ form.email(
+              class="form-control" + (" is-invalid" if form.email.errors else ""),
+              placeholder="you@example.com",
+              autocomplete="email"
+          ) }}
+          {% for e in form.email.errors %}
+          <div class="invalid-feedback">{{ e }}</div>
+          {% endfor %}
+        </div>
+
+        <div class="mb-3">
+          {{ form.password.label(class="form-label") }}
+          <div class="position-relative">
+            {{ form.password(
+                class="form-control" + (" is-invalid" if form.password.errors else ""),
+                placeholder="Your password",
+                id="loginPassword",
+                autocomplete="current-password"
+            ) }}
+            <button type="button"
+                    class="btn btn-link position-absolute end-0 top-50 translate-middle-y pe-3"
+                    style="color:var(--muted);font-size:.9rem;text-decoration:none;"
+                    onclick="togglePwd('loginPassword', this)"
+                    aria-label="Toggle password visibility">
+              <i class="bi bi-eye"></i>
+            </button>
+          </div>
+          {% for e in form.password.errors %}
+          <div class="invalid-feedback d-block">{{ e }}</div>
+          {% endfor %}
+        </div>
+
+        <div class="mb-4 form-check">
+          {{ form.remember(class="form-check-input") }}
+          {{ form.remember.label(class="form-check-label",
+              style="font-size:.875rem;color:var(--muted);") }}
+        </div>
+
+        {{ form.submit(class="btn btn-primary w-100",
+            style="padding:.75rem;font-size:.9375rem;border-radius:var(--radius-sm);") }}
+      </form>
+
+      <p class="text-center mt-4 mb-0" style="font-size:.875rem;color:var(--muted);">
+        Don't have an account?
+        <a href="{{ url_for('register') }}" class="fw-semibold">Create one free</a>
+      </p>
+
+    </div>
+  </div>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function togglePwd(id, btn) {
+  const input = document.getElementById(id);
+  const icon = btn.querySelector('i');
+  if (input.type === 'password') {
+    input.type = 'text';
+    icon.className = 'bi bi-eye-slash';
+  } else {
+    input.type = 'password';
+    icon.className = 'bi bi-eye';
+  }
+}
+</script>
+{% endblock %}

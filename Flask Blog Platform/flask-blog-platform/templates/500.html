@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Server Error{% endblock %}
+
+{% block content %}
+<div class="error-page">
+  <div>
+    <div class="error-code" style="color:#fef3c7;">500</div>
+    <h1 class="error-title">Something Went Wrong</h1>
+    <p class="error-desc">
+      We hit an unexpected error on our end. Our team has been notified.
+      Please try again in a moment.
+    </p>
+    <a href="{{ url_for('index') }}" class="btn btn-primary">
+      <i class="bi bi-arrow-clockwise"></i>Try Again
+    </a>
+  </div>
+</div>
+{% endblock %}

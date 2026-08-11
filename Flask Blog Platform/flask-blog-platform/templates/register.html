@@ -1,0 +1,185 @@
+{% extends "base.html" %}
+{% block title %}Create Account{% endblock %}
+
+{% block content %}
+<div class="auth-page row g-0">
+
+  <!-- ── Left branding panel ── -->
+  <div class="col-lg-5 auth-left d-none d-lg-flex">
+    <div class="auth-left-content">
+      <div class="auth-brand">
+        <img src="{{ url_for('static', filename='img/blog-logo.png') }}"
+             alt="FlaskBlog" class="auth-logo-img" />
+        FlaskBlog
+      </div>
+      <h2 class="auth-left-title">
+        Start your<br>writing journey<br>today.
+      </h2>
+      <p class="auth-left-desc">
+        Create your free account and join a community
+        of developers sharing ideas every day.
+      </p>
+
+      <ul class="auth-feature-list mt-4">
+        <li>
+          <span class="fi-check"><i class="bi bi-check text-white"></i></span>
+          Free forever — no credit card needed
+        </li>
+        <li>
+          <span class="fi-check"><i class="bi bi-check text-white"></i></span>
+          Publish your first article in minutes
+        </li>
+        <li>
+          <span class="fi-check"><i class="bi bi-check text-white"></i></span>
+          Custom profile &amp; avatar
+        </li>
+      </ul>
+    </div>
+
+    <div class="auth-left-quote">
+      <p>"Writing is the best way to sharpen your thinking and share it with the world."</p>
+      <span>— FlaskBlog Community</span>
+    </div>
+  </div>
+
+  <!-- ── Right form panel ── -->
+  <div class="col-12 col-lg-7 auth-right" style="padding-top:2rem;padding-bottom:2rem;">
+    <div class="auth-form-box">
+
+      <!-- Mobile logo -->
+      <div class="d-flex d-lg-none align-items-center gap-2 mb-4 fw-bold"
+           style="font-size:1.1rem;color:var(--dark);">
+        <img src="{{ url_for('static', filename='img/blog-logo.png') }}"
+             alt="FlaskBlog" style="height:28px;width:auto;" />
+        FlaskBlog
+      </div>
+
+      <div class="auth-form-header">
+        <h1 class="auth-form-title">Create your account</h1>
+        <p class="auth-form-subtitle">Join FlaskBlog and start writing.</p>
+      </div>
+
+      <form method="POST" enctype="multipart/form-data" novalidate>
+        {{ form.hidden_tag() }}
+
+        <div class="mb-3">
+          {{ form.name.label(class="form-label") }}
+          {{ form.name(
+              class="form-control" + (" is-invalid" if form.name.errors else ""),
+              placeholder="Your full name",
+              autocomplete="name"
+          ) }}
+          {% for e in form.name.errors %}
+          <div class="invalid-feedback">{{ e }}</div>
+          {% endfor %}
+        </div>
+
+        <div class="mb-3">
+          {{ form.email.label(class="form-label") }}
+          {{ form.email(
+              class="form-control" + (" is-invalid" if form.email.errors else ""),
+              placeholder="you@example.com",
+              autocomplete="email"
+          ) }}
+          {% for e in form.email.errors %}
+          <div class="invalid-feedback">{{ e }}</div>
+          {% endfor %}
+        </div>
+
+        <div class="row g-3 mb-3">
+          <div class="col-12 col-sm-6">
+            {{ form.password.label(class="form-label") }}
+            <div class="position-relative">
+              {{ form.password(
+                  class="form-control" + (" is-invalid" if form.password.errors else ""),
+                  placeholder="Min. 6 characters",
+                  id="regPassword",
+                  autocomplete="new-password"
+              ) }}
+              <button type="button"
+                      class="btn btn-link position-absolute end-0 top-50 translate-middle-y pe-3"
+                      style="color:var(--muted);font-size:.9rem;text-decoration:none;"
+                      onclick="togglePwd('regPassword', this)"
+                      aria-label="Show/hide password">
+                <i class="bi bi-eye"></i>
+              </button>
+            </div>
+            {% for e in form.password.errors %}
+            <div class="invalid-feedback d-block">{{ e }}</div>
+            {% endfor %}
+          </div>
+          <div class="col-12 col-sm-6">
+            {{ form.confirm_password.label(class="form-label") }}
+            {{ form.confirm_password(
+                class="form-control" + (" is-invalid" if form.confirm_password.errors else ""),
+                placeholder="Repeat password",
+                autocomplete="new-password"
+            ) }}
+            {% for e in form.confirm_password.errors %}
+            <div class="invalid-feedback">{{ e }}</div>
+            {% endfor %}
+          </div>
+        </div>
+
+        <div class="mb-4">
+          {{ form.profile_image.label(class="form-label") }}
+          <div class="upload-area" id="uploadArea" onclick="document.getElementById('profileImg').click();">
+            <i class="bi bi-cloud-arrow-up"
+               style="font-size:1.75rem;color:var(--primary);display:block;margin-bottom:.5rem;"></i>
+            <div style="font-size:.875rem;font-weight:600;color:var(--text);">
+              Click to upload profile picture
+            </div>
+            <div style="font-size:.8rem;color:var(--muted);margin-top:.25rem;">
+              PNG, JPG, WEBP — max 2 MB (optional)
+            </div>
+            <div id="imgFileName" class="mt-2"
+                 style="font-size:.8rem;color:var(--primary);display:none;"></div>
+          </div>
+          {{ form.profile_image(
+              class="d-none" + (" is-invalid" if form.profile_image.errors else ""),
+              id="profileImg",
+              accept=".png,.jpg,.jpeg,.webp",
+              onchange="showFileName(this)"
+          ) }}
+          {% for e in form.profile_image.errors %}
+          <div class="invalid-feedback d-block">{{ e }}</div>
+          {% endfor %}
+        </div>
+
+        {{ form.submit(class="btn btn-primary w-100",
+            style="padding:.75rem;font-size:.9375rem;border-radius:var(--radius-sm);") }}
+      </form>
+
+      <p class="text-center mt-4 mb-0" style="font-size:.875rem;color:var(--muted);">
+        Already have an account?
+        <a href="{{ url_for('login') }}" class="fw-semibold">Sign in</a>
+      </p>
+
+    </div>
+  </div>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function togglePwd(id, btn) {
+  const input = document.getElementById(id);
+  const icon = btn.querySelector('i');
+  if (input.type === 'password') {
+    input.type = 'text';
+    icon.className = 'bi bi-eye-slash';
+  } else {
+    input.type = 'password';
+    icon.className = 'bi bi-eye';
+  }
+}
+function showFileName(input) {
+  const el = document.getElementById('imgFileName');
+  if (input.files && input.files[0]) {
+    el.textContent = '✓ ' + input.files[0].name;
+    el.style.display = 'block';
+  }
+}
+</script>
+{% endblock %}
