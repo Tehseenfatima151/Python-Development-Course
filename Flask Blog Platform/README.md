@@ -239,3 +239,103 @@ Every mutating route (edit, delete post/comment, profile update) checks `current
 
 ### Bootstrap UI
 The layout is fully responsive using Bootstrap 5's grid system. The navbar collapses on mobile. Cards, modals, badges, alerts, and Bootstrap Icons are used throughout.
+
+📊 Dashboard
+
+The dashboard gives each logged-in user an overview of their blogging activity.
+
+Dashboard includes:
+📄 Published Articles
+💬 Comments Received
+💭 Comments Written
+❤️ Reactions
+📝 My Articles
+💬 Recent Comments
+❤️ Recent Reactions
+
+Each user can only access their own dashboard data.
+
+🔎 Article Search
+
+The navbar includes an article search feature.
+
+Users can search using keywords such as:
+
+Python
+Flask
+AI
+Web Development
+Career
+
+They can also filter articles by category.
+
+Example:
+
+AI & Machine Learning
+        ↓
+Only AI/ML articles
+        ↓
+Clear Filter
+        ↓
+All Articles
+🖼️ File Uploads
+
+The platform supports:
+
+Profile picture uploads
+Blog featured image uploads
+
+Uploaded files are handled through Flask's file upload functionality with appropriate validation.
+
+🔒 Security
+
+Security considerations implemented in the application include:
+
+Password hashing
+Login-required routes
+User authorization
+Protected post editing/deletion
+Safe file upload handling
+XSS-safe content rendering
+Safe redirect handling
+Upload size protection
+CSRF protection through Flask-WTF
+📱 Responsive Design
+
+The interface is designed to work across:
+
+💻 Desktop
+📱 Mobile
+📲 Tablet
+
+Bootstrap's responsive grid and custom CSS are used to maintain a clean layout across different screen sizes.
+
+🎯 Learning Objectives
+
+This project helped strengthen practical knowledge of:
+
+Flask application development
+REST-style backend concepts
+SQLAlchemy ORM
+SQLite databases
+Authentication & authorization
+CRUD operations
+Database relationships
+Form validation
+File uploads
+Jinja2 templates
+Bootstrap UI
+Search & filtering
+User dashboards
+Comments & reactions
+Full-stack application architecture
+🎥 Project Demo
+
+Demo Video:
+
+https://drive.google.com/file/d/1tZTyxkW8_0dq8N3z8AZamsBPdl0H885X/view?usp=sharing
+
+💻 GitHub Repository
+
+Repository:
+https://github.com/Tehseenfatima151/Python-Development-Course/tree/main/Flask%20Blog%20Platform
