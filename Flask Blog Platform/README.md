@@ -131,3 +131,111 @@ Flask Blog Platform/
 │
 └── instance/
     └── blog.db
+
+## Installation
+
+### 1. Clone the repository
+
+```bash
+git clone <repository-url>
+cd flask-blog-platform
+```
+
+### 2. Create and activate a virtual environment
+
+```bash
+python -m venv venv
+```
+
+**Windows:**
+```bash
+venv\Scripts\activate
+```
+
+**macOS / Linux:**
+```bash
+source venv/bin/activate
+```
+
+### 3. Install dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+## Environment Variables
+
+Create a `.env` file in the project root (copy from `.env.example`):
+
+```bash
+copy .env.example .env      # Windows
+cp .env.example .env        # macOS/Linux
+```
+
+Edit `.env` and set a strong secret key:
+
+```
+SECRET_KEY=your-very-long-random-secret-key
+```
+
+The secret key is used by Flask to sign session cookies and CSRF tokens. Never expose it or commit it to version control.
+
+---
+
+## Database
+
+The project uses **SQLite** via **Flask-SQLAlchemy**. The database file (`instance/blog.db`) is created **automatically** the first time you run the application — no manual setup needed.
+
+Three tables are created:
+- `users` — registered accounts
+- `posts` — blog articles
+- `comments` — comments on posts
+
+Cascade deletes are configured so that deleting a user removes their posts and comments, and deleting a post removes its comments.
+
+---
+
+## Running the Application
+
+```bash
+python main.py
+```
+
+Then open your browser and navigate to:
+
+```
+http://127.0.0.1:5000
+```
+
+---
+
+## Features Explanation
+
+### Authentication
+Passwords are hashed with Werkzeug's `generate_password_hash()` before being stored. `check_password_hash()` is used at login. Plain-text passwords are never saved. Flask-Login manages session state and the `@login_required` decorator protects private routes.
+
+### CRUD
+- **Create** — `/create-post` (login required)
+- **Read** — `/` and `/post/<id>` (public)
+- **Update** — `/edit-post/<id>` (author only, checked server-side)
+- **Delete** — `/delete-post/<id>` via POST (author only, confirmed via modal)
+
+### Comments
+Submitted via POST to `/post/<id>/comment`. Deleted via POST to `/delete-comment/<id>`. Both routes verify ownership server-side.
+
+### File Uploads
+Uploaded files are renamed to a `uuid4` hex string to prevent collisions and path-traversal attacks. `secure_filename()` sanitises the name. Only PNG, JPG, JPEG, and WEBP are accepted. The 2 MB size limit is enforced by Flask's `MAX_CONTENT_LENGTH`.
+
+### Database Relationships
+```
+User ──< Post ──< Comment
+User ──< Comment
+```
+
+### Authorization
+Every mutating route (edit, delete post/comment, profile update) checks `current_user.id` against the resource's owner ID. Mismatches return HTTP 403 via `abort(403)`.
+
+### Bootstrap UI
+The layout is fully responsive using Bootstrap 5's grid system. The navbar collapses on mobile. Cards, modals, badges, alerts, and Bootstrap Icons are used throughout.
