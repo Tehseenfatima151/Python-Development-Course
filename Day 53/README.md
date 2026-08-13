@@ -170,24 +170,22 @@ The Selenium WebDriver will open the browser and start performing the automated 
 ## 📸 Screenshots
 
 ### 🖥️ Project Running
-```
+
 <img width="1060" height="681" alt="image" src="https://github.com/user-attachments/assets/04d8c447-e197-4a44-8ffb-4c1a5e982c6f" />
 
-```
+
 
 ### 🌐 Automated Data Entry Form
 
 *Add a screenshot showing the form being automatically filled.*
-```
+
 <img width="1345" height="598" alt="image" src="https://github.com/user-attachments/assets/4a347652-0ab1-41a0-b7d2-caaaf301f166" />
-```
+
 
 ### ✅ Submitted Data
 
 *Add a screenshot showing the successfully submitted/entered data.*
-```
 <img width="1300" height="594" alt="image" src="https://github.com/user-attachments/assets/00ee8603-0327-49f6-8f13-de1cc1f143d2" />
-```
 
 ---
 
