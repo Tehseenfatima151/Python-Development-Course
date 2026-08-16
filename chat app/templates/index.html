@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LiveChat — Real-Time Collaboration & Chat Platform</title>
+    <meta name="description" content="A real-time, responsive collaboration platform built with Flask-SocketIO, SQLite, and Redis.">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Custom Stylesheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div id="app-container" class="app-wrapper">
+        
+        <!-- Toast Notification Container -->
+        <div id="toast-container" class="toast-container" aria-live="polite" aria-atomic="true"></div>
+
+        <!-- ========================================== -->
+        <!-- SCREEN 1: LANDING / ROOM SELECTION SCREEN  -->
+        <!-- ========================================== -->
+        <main id="join-screen" class="join-screen-container">
+            <div class="join-card glassmorphism">
+                <div class="brand-header">
+                    <div class="logo-circle">
+                        <i class="fa-solid fa-comments"></i>
+                    </div>
+                    <h1 class="brand-title">LiveChat</h1>
+                    <p class="brand-tagline">Real-time conversations. One room. Everyone connected.</p>
+                </div>
+
+                <!-- Global Form Alert -->
+                <div id="join-error-box" class="alert-box alert-error hidden" role="alert">
+                    <i class="fa-solid fa-circle-exclamation"></i>
+                    <span id="join-error-text"></span>
+                </div>
+
+                <form id="join-form" class="join-form" novalidate>
+                    <!-- Username Input -->
+                    <div class="form-group">
+                        <label for="username-input" class="form-label">
+                            <span>Username</span>
+                            <span class="required">*</span>
+                        </label>
+                        <div class="input-wrapper">
+                            <i class="fa-solid fa-user input-icon"></i>
+                            <input 
+                                type="text" 
+                                id="username-input" 
+                                name="username" 
+                                class="form-input" 
+                                placeholder="Enter your display name (e.g. Alex)"
+                                maxlength="{{ max_username_len }}" 
+                                required 
+                                autocomplete="nickname"
+                                value="{{ initial_username }}"
+                            >
+                        </div>
+                        <span id="username-error" class="field-error-text"></span>
+                    </div>
+
+                    <!-- Room Input -->
+                    <div class="form-group">
+                        <label for="room-input" class="form-label">
+                            <span>Room Name</span>
+                            <span class="required">*</span>
+                        </label>
+                        <div class="input-wrapper">
+                            <i class="fa-solid fa-hashtag input-icon"></i>
+                            <input 
+                                type="text" 
+                                id="room-input" 
+                                name="room" 
+                                class="form-input" 
+                                placeholder="Enter or select a room (e.g. general)"
+                                maxlength="{{ max_room_len }}" 
+                                required 
+                                autocomplete="off"
+                                value="{{ initial_room or 'general' }}"
+                            >
+                        </div>
+                        <span id="room-error" class="field-error-text"></span>
+                    </div>
+
+                    <!-- Quick Preset Rooms -->
+                    <div class="preset-rooms-container">
+                        <span class="preset-label">Popular rooms:</span>
+                        <div class="preset-pills">
+                            <button type="button" class="room-pill active" data-room="general">#general</button>
+                            <button type="button" class="room-pill" data-room="developers">#developers</button>
+                            <button type="button" class="room-pill" data-room="design">#design</button>
+                            <button type="button" class="room-pill" data-room="random">#random</button>
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" id="join-btn" class="btn btn-primary btn-block">
+                        <span class="btn-text">Join Room</span>
+                        <i class="fa-solid fa-arrow-right-to-bracket btn-icon"></i>
+                    </button>
+                </form>
+
+                <div class="join-footer">
+                    <div class="feature-item"><i class="fa-solid fa-bolt"></i> Real-time WebSocket</div>
+                    <div class="feature-item"><i class="fa-solid fa-database"></i> SQLite Persistent</div>
+                    <div class="feature-item"><i class="fa-solid fa-layer-group"></i> Redis Coordinated</div>
+                </div>
+            </div>
+        </main>
+
+        <!-- ========================================== -->
+        <!-- SCREEN 2: ACTIVE CHAT SCREEN              -->
+        <!-- ========================================== -->
+        <div id="chat-screen" class="chat-screen-container hidden">
+            
+            <!-- Top App Navigation Bar -->
+            <header class="chat-header">
+                <div class="header-left">
+                    <button id="sidebar-toggle-btn" class="btn-icon-only mobile-only" aria-label="Toggle user list">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                    <div class="logo-mini">
+                        <i class="fa-solid fa-comments"></i>
+                    </div>
+                    <div class="room-info">
+                        <div class="room-title-wrapper">
+                            <span class="room-prefix">#</span>
+                            <h2 id="current-room-title" class="room-title">general</h2>
+                        </div>
+                        <span id="room-members-count" class="room-subtitle">1 online</span>
+                    </div>
+                </div>
+
+                <div class="header-right">
+                    <!-- Connection Status Badge -->
+                    <div id="connection-badge" class="connection-status-pill status-connecting" title="Connection status">
+                        <span class="status-indicator-dot"></span>
+                        <span id="connection-status-text" class="status-text">Connecting...</span>
+                    </div>
+
+                    <!-- In-Room Search Button -->
+                    <button id="open-msg-search-btn" class="btn btn-secondary btn-sm" title="Search messages in room">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <span class="btn-label-desktop">Search</span>
+                    </button>
+
+                    <!-- Room Info & Pinned Messages Button -->
+                    <button id="room-info-btn" class="btn btn-secondary btn-sm" title="Room info & pinned messages">
+                        <i class="fa-solid fa-circle-info"></i>
+                        <span class="btn-label-desktop">Info</span>
+                    </button>
+
+                    <!-- Leave Room Button -->
+                    <button id="leave-room-btn" class="btn btn-secondary btn-sm" title="Leave room">
+                        <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                        <span class="btn-label-desktop">Leave Room</span>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Main Split Body -->
+            <div class="chat-body-layout">
+                
+                <!-- Left Sidebar: Channels & Online Room Members -->
+                <aside id="online-users-sidebar" class="users-sidebar">
+
+                    <!-- Mobile-only Sidebar Header (close button) -->
+                    <div class="sidebar-mobile-header mobile-only">
+                        <div class="sidebar-mobile-brand">
+                            <i class="fa-solid fa-comments"></i>
+                            <span>LiveChat</span>
+                        </div>
+                        <button id="sidebar-close-btn" class="btn-close-sidebar" aria-label="Close sidebar">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                    </div>
+                    
+                    <!-- Search Channels / Members -->
+                    <div class="search-box-wrapper">
+                        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                        <input type="text" id="channel-search-input" class="search-input" placeholder="Search channels...">
+                    </div>
+
+                    <!-- Scrollable Sidebar Content -->
+                    <div class="sidebar-scrollable-content">
+                        
+                        <!-- Channels Section -->
+                        <div class="sidebar-group-header">
+                            <span>CHANNELS</span>
+                            <button type="button" id="open-create-room-modal-btn" class="btn-new-room" title="Create a new channel">
+                                <i class="fa-solid fa-plus"></i> New
+                            </button>
+                        </div>
+                        <ul id="default-rooms-list" class="rooms-nav-list" role="list">
+                            <!-- Populated dynamically -->
+                        </ul>
+                        <ul id="custom-rooms-list" class="rooms-nav-list" role="list">
+                            <!-- Populated dynamically -->
+                        </ul>
+
+                        <!-- Members Section -->
+                        <div class="sidebar-group-header">
+                            <span>MEMBERS</span>
+                            <span id="online-count-badge" class="badge">1</span>
+                        </div>
+                        <ul id="online-users-list" class="users-list" role="list">
+                            <!-- Populated dynamically -->
+                        </ul>
+                    </div>
+
+                    <!-- Current User Footer with Status Toggle -->
+                    <div class="sidebar-user-footer">
+                        <div id="current-user-avatar" class="user-avatar-circle">?</div>
+                        <div class="user-footer-meta">
+                            <span id="current-user-name" class="user-footer-username">You</span>
+                            <button type="button" id="user-status-pill" class="user-status-toggle status-online" title="Click to toggle Online / Away">
+                                <span class="status-indicator-dot"></span>
+                                <span id="user-status-text">Online</span>
+                            </button>
+                        </div>
+                    </div>
+                </aside>
+
+                <!-- Mobile Backdrop Overlay -->
+                <div id="sidebar-backdrop" class="sidebar-backdrop hidden"></div>
+
+                <!-- Right Main: Messages & Input -->
+                <section class="messages-section">
+                    
+                    <!-- Messages Viewport -->
+                    <div id="messages-container" class="messages-container" role="log" aria-live="polite">
+                        
+                        <!-- Loading State -->
+                        <div id="messages-loading" class="messages-loading-state hidden">
+                            <div class="spinner"></div>
+                            <span>Loading messages...</span>
+                        </div>
+
+                        <!-- Empty State -->
+                        <div id="empty-chat-state" class="empty-chat-state hidden">
+                            <div class="empty-icon"><i class="fa-regular fa-comments"></i></div>
+                            <h3>Welcome to #<span id="empty-room-name">general</span></h3>
+                            <p>No messages here yet. Be the first to start the conversation!</p>
+                        </div>
+
+                        <!-- Messages Feed -->
+                        <div id="messages-feed" class="messages-feed">
+                            <!-- Populated dynamically -->
+                        </div>
+                    </div>
+
+                    <!-- Floating Jump-to-Bottom Button -->
+                    <button id="scroll-bottom-btn" class="scroll-bottom-btn hidden" aria-label="Scroll to bottom">
+                        <i class="fa-solid fa-arrow-down"></i>
+                        <span id="unread-counter" class="unread-counter hidden">0</span>
+                    </button>
+
+                    <!-- Real-Time Typing Indicator -->
+                    <div id="typing-indicator-bar" class="typing-indicator-bar hidden" aria-live="polite">
+                        <div class="typing-dots">
+                            <span></span><span></span><span></span>
+                        </div>
+                        <span id="typing-text" class="typing-text">Someone is typing...</span>
+                    </div>
+
+                    <!-- Replying Banner Above Input -->
+                    <div id="replying-banner" class="replying-banner hidden">
+                        <div class="replying-meta">
+                            <i class="fa-solid fa-reply"></i>
+                            <span>Replying to <strong id="replying-to-user">User</strong>:</span>
+                            <span id="replying-snippet" class="replying-snippet">Snippet...</span>
+                        </div>
+                        <button type="button" id="cancel-reply-btn" class="btn-cancel-reply" aria-label="Cancel reply">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                    </div>
+
+                    <!-- Message Input Area -->
+                    <div class="chat-input-container">
+                        <form id="message-form" class="message-form">
+                            <div class="input-actions-wrapper">
+                                <textarea 
+                                    id="message-input" 
+                                    class="message-textarea" 
+                                    placeholder="Type a message..." 
+                                    rows="1" 
+                                    maxlength="{{ max_message_len }}" 
+                                    autocomplete="off"
+                                    aria-label="Message content"
+                                ></textarea>
+                                
+                                <button type="submit" id="send-msg-btn" class="send-btn" disabled aria-label="Send message">
+                                    <i class="fa-solid fa-paper-plane"></i>
+                                </button>
+                            </div>
+                            
+                            <div class="input-meta">
+                                <div class="quick-reactions-tray">
+                                    <button type="button" class="quick-emoji-btn" data-emoji="👍">👍</button>
+                                    <button type="button" class="quick-emoji-btn" data-emoji="❤️">❤️</button>
+                                    <button type="button" class="quick-emoji-btn" data-emoji="😂">😂</button>
+                                    <button type="button" class="quick-emoji-btn" data-emoji="🔥">🔥</button>
+                                    <button type="button" class="quick-emoji-btn" data-emoji="👏">👏</button>
+                                </div>
+                                <div class="input-meta-right">
+                                    <span class="input-hint">Shift + Enter for new line</span>
+                                    <span id="char-counter" class="char-counter">0 / {{ max_message_len }}</span>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                </section>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ========================================== -->
+    <!-- MODALS                                     -->
+    <!-- ========================================== -->
+
+    <!-- 1. CREATE ROOM MODAL -->
+    <div id="create-room-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="create-room-title">
+        <div class="modal-card">
+            <div class="modal-header">
+                <div class="modal-title-wrapper">
+                    <i class="fa-solid fa-folder-plus modal-icon"></i>
+                    <h3 id="create-room-title">Create New Channel</h3>
+                </div>
+                <button type="button" id="close-create-room-modal-btn" class="btn-close-modal"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+
+            <div id="create-room-error-box" class="alert-box alert-error hidden">
+                <i class="fa-solid fa-circle-exclamation"></i>
+                <span id="create-room-error-text"></span>
+            </div>
+
+            <form id="create-room-form" class="modal-form" novalidate>
+                <div class="form-group">
+                    <label for="new-room-name" class="form-label"><span>Channel Name</span><span class="required">*</span></label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-hashtag input-icon"></i>
+                        <input type="text" id="new-room-name" class="form-input" placeholder="e.g. ai-lab, python, frontend" maxlength="{{ max_room_len }}" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="new-room-desc" class="form-label"><span>Description</span></label>
+                    <textarea id="new-room-desc" class="form-textarea" rows="2" placeholder="What is this channel about?" maxlength="255"></textarea>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" id="cancel-create-room-btn" class="btn btn-secondary">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Create Channel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 2. ROOM INFO & PINNED MESSAGES MODAL -->
+    <div id="room-info-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="room-info-title">
+        <div class="modal-card modal-card-wide">
+            <div class="modal-header">
+                <div class="modal-title-wrapper">
+                    <i class="fa-solid fa-circle-info modal-icon"></i>
+                    <h3 id="room-info-title">Channel Information</h3>
+                </div>
+                <button type="button" id="close-room-info-modal-btn" class="btn-close-modal"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+
+            <div class="modal-body-scrollable">
+                <div class="info-grid">
+                    <div class="info-stat-card">
+                        <span class="stat-label">Channel</span>
+                        <span id="info-room-name" class="stat-value">#general</span>
+                    </div>
+                    <div class="info-stat-card">
+                        <span class="stat-label">Active Members</span>
+                        <span id="info-room-members-count" class="stat-value">0</span>
+                    </div>
+                    <div class="info-stat-card">
+                        <span class="stat-label">Pinned Messages</span>
+                        <span id="info-room-pins-count" class="stat-value">0</span>
+                    </div>
+                    <div class="info-stat-card">
+                        <span class="stat-label">Created By</span>
+                        <span id="info-room-creator" class="stat-value">system</span>
+                    </div>
+                </div>
+
+                <div class="info-block">
+                    <span class="info-block-title">Description</span>
+                    <p id="info-room-description" class="info-block-desc">Main collaboration space</p>
+                </div>
+
+                <div class="info-block">
+                    <span class="info-block-title"><i class="fa-solid fa-thumbtack"></i> Pinned Messages</span>
+                    <div id="pinned-messages-list" class="pinned-list">
+                        <!-- Populated dynamically -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. IN-ROOM MESSAGE SEARCH MODAL -->
+    <div id="msg-search-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="msg-search-title">
+        <div class="modal-card modal-card-wide">
+            <div class="modal-header">
+                <div class="modal-title-wrapper">
+                    <i class="fa-solid fa-magnifying-glass modal-icon"></i>
+                    <h3 id="msg-search-title">Search in #<span id="search-current-room-name">general</span></h3>
+                </div>
+                <button type="button" id="close-msg-search-modal-btn" class="btn-close-modal"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+
+            <div class="modal-body-scrollable">
+                <div class="search-input-wrapper">
+                    <i class="fa-solid fa-magnifying-glass search-modal-icon"></i>
+                    <input type="text" id="in-room-search-input" class="search-modal-input" placeholder="Type keywords or username to search..." autocomplete="off">
+                </div>
+
+                <div id="search-results-container" class="search-results-list">
+                    <!-- Populated dynamically -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Global App Configuration -->
+    <script>
+        window.LIVECHAT_CONFIG = {
+            maxMessageLen: {{ max_message_len }},
+            maxUsernameLen: {{ max_username_len }},
+            maxRoomLen: {{ max_room_len }},
+            allowedReactions: ["👍", "❤️", "😂", "🔥", "👏"]
+        };
+    </script>
+    
+    <!-- Socket.IO Client Library -->
+    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+    
+    <!-- LiveChat Client Logic -->
+    <script src="{{ url_for('static', filename='js/chat.js') }}"></script>
+</body>
+</html>
