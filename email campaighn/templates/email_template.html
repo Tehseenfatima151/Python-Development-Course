@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exclusive Campaign Notification</title>
+    <style>
+        /* Mobile-responsive styles */
+        @media only screen and (max-width: 600px) {
+            .email-container {
+                width: 100% !important;
+                padding: 10px !important;
+            }
+            .content-cell {
+                padding: 24px 16px !important;
+            }
+            .header-cell {
+                padding: 24px 16px !important;
+            }
+            .cta-button {
+                display: block !important;
+                width: 85% !important;
+                text-align: center !important;
+                margin: 0 auto !important;
+            }
+        }
+    </style>
+</head>
+<body style="margin: 0; padding: 0; background-color: #f4f6f9; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; color: #333333;">
+    <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #f4f6f9; padding: 30px 0;">
+        <tr>
+            <td align="center">
+                <!-- Main Container -->
+                <table role="presentation" class="email-container" border="0" cellpadding="0" cellspacing="0" width="600" style="background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); border: 1px solid #e5e7eb;">
+                    
+                    <!-- Header Section -->
+                    <tr>
+                        <td class="header-cell" style="background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%); padding: 36px 40px; text-align: center;">
+                            <h1 style="margin: 0; color: #ffffff; font-size: 26px; font-weight: 700; letter-spacing: -0.5px;">Apex Marketing Solutions</h1>
+                            <p style="margin: 6px 0 0 0; color: #dbeafe; font-size: 14px; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 500;">Strategic Growth & Digital Excellence</p>
+                        </td>
+                    </tr>
+
+                    <!-- Main Content Section -->
+                    <tr>
+                        <td class="content-cell" style="padding: 40px; background-color: #ffffff;">
+                            <h2 style="margin: 0 0 16px 0; color: #111827; font-size: 20px; font-weight: 600;">
+                                Hello {{name}},
+                            </h2>
+                            <p style="margin: 0 0 18px 0; font-size: 16px; line-height: 1.6; color: #4b5563;">
+                                We are thrilled to share an exclusive update tailored specifically for your business growth. At Apex, we have been developing innovative marketing strategies designed to amplify engagement and deliver measurable ROI.
+                            </p>
+                            
+                            <p style="margin: 0 0 24px 0; font-size: 16px; line-height: 1.6; color: #4b5563;">
+                                Whether you're aiming to streamline customer acquisition or enhance brand authority, our customized growth campaigns are crafted to give your team a decisive competitive edge.
+                            </p>
+
+                            <!-- Feature Highlight Box -->
+                            <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #f8fafc; border-left: 4px solid #3b82f6; border-radius: 4px; margin-bottom: 28px;">
+                                <tr>
+                                    <td style="padding: 16px 20px;">
+                                        <p style="margin: 0; font-size: 15px; font-weight: 600; color: #1e293b;">Key Campaign Highlights:</p>
+                                        <ul style="margin: 8px 0 0 0; padding-left: 20px; font-size: 14px; line-height: 1.6; color: #64748b;">
+                                            <li>Targeted audience segmentation and high-conversion copy</li>
+                                            <li>Automated real-time analytics and deliverability tracking</li>
+                                            <li>Dedicated account strategist and priority onboarding</li>
+                                        </ul>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <!-- Call-to-Action Button -->
+                            <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="margin-top: 10px; margin-bottom: 24px;">
+                                <tr>
+                                    <td align="center">
+                                        <a href="https://example.com/campaign-details" class="cta-button" target="_blank" style="background-color: #2563eb; color: #ffffff; font-size: 16px; font-weight: 600; text-decoration: none; padding: 14px 32px; border-radius: 6px; display: inline-block; box-shadow: 0 2px 4px rgba(37, 99, 235, 0.2);">
+                                            Claim Your Exclusive Strategy
+                                        </a>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <p style="margin: 0 0 8px 0; font-size: 15px; line-height: 1.5; color: #4b5563;">
+                                Warm regards,
+                            </p>
+                            <p style="margin: 0; font-size: 15px; font-weight: 600; color: #111827;">
+                                The Apex Marketing Team
+                            </p>
+                        </td>
+                    </tr>
+
+                    <!-- Footer Section -->
+                    <tr>
+                        <td style="background-color: #f9fafb; padding: 24px 40px; border-top: 1px solid #e5e7eb; text-align: center;">
+                            <p style="margin: 0 0 8px 0; font-size: 13px; color: #6b7280; line-height: 1.5;">
+                                &copy; 2026 Apex Marketing Solutions Inc. All rights reserved.<br>
+                                100 Innovation Boulevard, Suite 500, Tech City, TC 94016
+                            </p>
+                            <p style="margin: 0; font-size: 12px; color: #9ca3af; line-height: 1.5;">
+                                You are receiving this email because you subscribed to updates from Apex Marketing.<br>
+                                <a href="https://example.com/unsubscribe?email={{email}}" style="color: #6b7280; text-decoration: underline;">Unsubscribe</a> | 
+                                <a href="https://example.com/preferences" style="color: #6b7280; text-decoration: underline;">Manage Preferences</a> | 
+                                <a href="https://example.com/privacy" style="color: #6b7280; text-decoration: underline;">Privacy Policy</a>
+                            </p>
+                        </td>
+                    </tr>
+
+                </table>
+                <!-- End Main Container -->
+            </td>
+        </tr>
+    </table>
+</body>
+</html>
