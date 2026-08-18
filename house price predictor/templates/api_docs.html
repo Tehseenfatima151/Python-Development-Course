@@ -1,0 +1,127 @@
+{% extends "base.html" %}
+
+{% block title %}Developer REST API Documentation | PropVal.AI{% endblock %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 space-y-12">
+
+    <!-- Page Header -->
+    <div class="border-b border-slate-800/80 pb-6 space-y-2.5">
+        <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
+            <i class="fa-solid fa-code"></i> Developer Integration Docs
+        </span>
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">PropVal.AI REST API</h1>
+        <p class="text-xs sm:text-sm text-slate-400 max-w-3xl leading-relaxed">
+            Programmatically calculate property valuations in PKR using our serialized machine learning inference pipeline.
+        </p>
+    </div>
+
+    <!-- Endpoint Overview -->
+    <div class="calculator-card p-6 sm:p-8 rounded-3xl border border-slate-800/80 bg-slate-900/80 space-y-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800/80 pb-5">
+            <div>
+                <span class="text-xs font-bold uppercase tracking-wider text-indigo-400">Primary Endpoint</span>
+                <h2 class="text-xl font-extrabold text-white mt-1">Predict Property Price</h2>
+            </div>
+            <div>
+                <span class="px-4 py-2 rounded-xl bg-emerald-500/15 text-emerald-400 text-sm font-mono font-bold border border-emerald-500/30">
+                    POST /api/predict
+                </span>
+            </div>
+        </div>
+
+        <!-- Request Specs -->
+        <div class="space-y-3">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400">Request Parameters</h3>
+            <div class="overflow-x-auto rounded-xl border border-slate-800/80">
+                <table class="data-table font-mono text-xs">
+                    <thead class="font-sans">
+                        <tr>
+                            <th style="width: 18%;">Parameter</th>
+                            <th style="width: 18%;">Type</th>
+                            <th style="width: 16%;">Required</th>
+                            <th style="width: 48%;">Validation Bounds / Values</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="font-bold text-emerald-400">sqft</td>
+                            <td class="text-slate-400">Number / Float</td>
+                            <td class="text-emerald-400 font-sans font-bold">
+                                <span class="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[11px]">Required</span>
+                            </td>
+                            <td class="text-slate-300">Min: 100 sqft, Max: 25,000 sqft</td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold text-emerald-400">bedrooms</td>
+                            <td class="text-slate-400">Integer</td>
+                            <td class="text-emerald-400 font-sans font-bold">
+                                <span class="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[11px]">Required</span>
+                            </td>
+                            <td class="text-slate-300">Min: 1, Max: 15</td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold text-emerald-400">bathrooms</td>
+                            <td class="text-slate-400">Integer</td>
+                            <td class="text-emerald-400 font-sans font-bold">
+                                <span class="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[11px]">Required</span>
+                            </td>
+                            <td class="text-slate-300">Min: 1, Max: 15</td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold text-emerald-400">location</td>
+                            <td class="text-slate-400">String</td>
+                            <td class="text-emerald-400 font-sans font-bold">
+                                <span class="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[11px]">Required</span>
+                            </td>
+                            <td class="text-slate-300">Islamabad, Lahore, Karachi, Rawalpindi, Peshawar, Faisalabad, Multan, Gujranwala</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Request / Response Code Snippets -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 pt-2">
+            
+            <div class="space-y-2">
+                <span class="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center gap-2">
+                    <i class="fa-solid fa-arrow-right-to-bracket text-emerald-400"></i> Sample JSON Request Body
+                </span>
+                <pre class="bg-slate-950 p-4 rounded-xl text-xs font-mono text-slate-300 border border-slate-800 overflow-x-auto"><code>{
+  "sqft": 1800,
+  "bedrooms": 3,
+  "bathrooms": 2,
+  "location": "Lahore"
+}</code></pre>
+            </div>
+
+            <div class="space-y-2">
+                <span class="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center gap-2">
+                    <i class="fa-solid fa-arrow-right-from-bracket text-cyan-400"></i> Sample JSON Response (200 OK)
+                </span>
+                <pre class="bg-slate-950 p-4 rounded-xl text-xs font-mono text-emerald-400 border border-slate-800 overflow-x-auto"><code>{
+  "success": true,
+  "predicted_price": 18500000.0,
+  "formatted_price": "PKR 18,500,000",
+  "formatted_crore": "PKR 1.85 Crore",
+  "currency": "PKR",
+  "price_per_sqft": 10277.78,
+  "model": "{{ best_model }}",
+  "r2_score": {{ r2_raw }}
+}</code></pre>
+            </div>
+
+        </div>
+
+        <!-- cURL Example -->
+        <div class="space-y-2 pt-2">
+            <span class="text-xs font-bold uppercase tracking-wider text-slate-400">cURL Example Command</span>
+            <pre class="bg-slate-950 p-4 rounded-xl text-xs font-mono text-cyan-300 border border-slate-800 overflow-x-auto"><code>curl -X POST http://localhost:5000/api/predict \
+  -H "Content-Type: application/json" \
+  -d '{"sqft": 1800, "bedrooms": 3, "bathrooms": 2, "location": "Lahore"}'</code></pre>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}Server Error | PropVal.AI{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto px-4 py-20 text-center space-y-6">
+    <div class="w-20 h-20 rounded-3xl bg-amber-500/10 text-amber-400 border border-amber-500/20 flex items-center justify-center text-3xl mx-auto shadow-xl shadow-amber-500/10">
+        <i class="fa-solid fa-server"></i>
+    </div>
+    
+    <h1 class="text-4xl font-extrabold text-white">500 - Internal Server Error</h1>
+    <p class="text-slate-400 text-sm max-w-md mx-auto">
+        An unexpected error occurred while processing your request. Please verify the ML model pipeline or try again shortly.
+    </p>
+
+    <div class="pt-4">
+        <a href="{{ url_for('index') }}" class="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-xs font-bold uppercase tracking-wider bg-emerald-500 hover:bg-emerald-400 text-white shadow-lg shadow-emerald-500/20 transition-all">
+            <i class="fa-solid fa-house"></i> Return to Valuation Home
+        </a>
+    </div>
+</div>
+{% endblock %}

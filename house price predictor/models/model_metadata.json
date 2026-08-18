@@ -1,0 +1,56 @@
+{
+    "dataset_records": 3500,
+    "train_samples": 2800,
+    "test_samples": 700,
+    "features": [
+        "sqft",
+        "bedrooms",
+        "bathrooms",
+        "location"
+    ],
+    "numerical_features": [
+        "sqft",
+        "bedrooms",
+        "bathrooms"
+    ],
+    "categorical_features": [
+        "location"
+    ],
+    "locations": [
+        "Faisalabad",
+        "Gujranwala",
+        "Islamabad",
+        "Karachi",
+        "Lahore",
+        "Multan",
+        "Peshawar",
+        "Rawalpindi"
+    ],
+    "best_model_name": "Random Forest",
+    "best_model_metrics": {
+        "r2": 0.9858164442791897,
+        "mae": 1368815.9046524456,
+        "rmse": 2179529.7473134855
+    },
+    "models_comparison": {
+        "Linear Regression": {
+            "r2": 0.9399817737221701,
+            "mae": 2847212.0138489795,
+            "rmse": 4483444.7219897425
+        },
+        "Random Forest": {
+            "r2": 0.9858164442791897,
+            "mae": 1368815.9046524456,
+            "rmse": 2179529.7473134855
+        }
+    },
+    "summary_stats": {
+        "min_price": 4040000.0,
+        "max_price": 127850000.0,
+        "mean_price": 24445422.85714286,
+        "median_price": 18640000.0,
+        "min_sqft": 500,
+        "max_sqft": 9500,
+        "avg_sqft": 2290.428
+    }
+}

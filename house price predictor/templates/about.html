@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block title %}About PropVal.AI | AI Real Estate Technology Platform{% endblock %}
+
+{% block content %}
+<div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 space-y-12">
+
+    <!-- Page Header -->
+    <div class="border-b border-slate-800/80 pb-6 space-y-2.5">
+        <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
+            <i class="fa-solid fa-circle-info"></i> Platform Overview
+        </span>
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">The Intelligence Behind PropVal.AI</h1>
+        <p class="text-xs sm:text-sm text-slate-400 max-w-3xl leading-relaxed">
+            Learn about our machine learning valuation architecture, technological stack, and engineering methodologies.
+        </p>
+    </div>
+
+    <!-- Synthetic Dataset Disclosure -->
+    <div class="calculator-card p-6 rounded-2xl border border-amber-500/30 bg-amber-950/30 text-amber-200 text-xs sm:text-sm space-y-2">
+        <div class="flex items-center gap-2 font-bold text-amber-400">
+            <i class="fa-solid fa-triangle-exclamation text-lg"></i> Synthetic Dataset Disclosure
+        </div>
+        <p class="text-slate-300 leading-relaxed">
+            The dataset (<code class="text-amber-400 font-mono">data/housing_data.csv</code>) is synthetically generated to model realistic Pakistani urban housing dynamics for educational, demonstration, and machine-learning benchmarking purposes. It should not be interpreted as official financial real-estate market data.
+        </p>
+    </div>
+
+    <!-- Tech Stack Grid -->
+    <div class="calculator-card p-6 sm:p-8 rounded-3xl border border-slate-800/80 bg-slate-900/80 space-y-6">
+        <h2 class="text-xl font-bold text-white flex items-center gap-2">
+            <i class="fa-solid fa-layer-group text-emerald-400"></i> Technology Stack & Engineering Architecture
+        </h2>
+
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            <div class="p-4 rounded-xl bg-slate-950/60 border border-slate-800 text-center">
+                <i class="fa-brands fa-python text-2xl text-amber-400 mb-2"></i>
+                <span class="text-xs font-bold text-white block">Python 3.14+</span>
+                <span class="text-[10px] text-slate-400">Core Runtime</span>
+            </div>
+
+            <div class="p-4 rounded-xl bg-slate-950/60 border border-slate-800 text-center">
+                <i class="fa-solid fa-server text-2xl text-emerald-400 mb-2"></i>
+                <span class="text-xs font-bold text-white block">Flask 3.0+</span>
+                <span class="text-[10px] text-slate-400">Web Backend & REST</span>
+            </div>
+
+            <div class="p-4 rounded-xl bg-slate-950/60 border border-slate-800 text-center">
+                <i class="fa-solid fa-gears text-2xl text-cyan-400 mb-2"></i>
+                <span class="text-xs font-bold text-white block">Scikit-Learn</span>
+                <span class="text-[10px] text-slate-400">Pipeline Preprocessing</span>
+            </div>
+
+            <div class="p-4 rounded-xl bg-slate-950/60 border border-slate-800 text-center">
+                <i class="fa-solid fa-table text-2xl text-indigo-400 mb-2"></i>
+                <span class="text-xs font-bold text-white block">Pandas & NumPy</span>
+                <span class="text-[10px] text-slate-400">Data Analytics</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Model Details -->
+    <div class="calculator-card p-6 sm:p-8 rounded-3xl border border-slate-800/80 bg-slate-900/80 space-y-4">
+        <h2 class="text-xl font-bold text-white flex items-center gap-2">
+            <i class="fa-solid fa-trophy text-amber-400"></i> Machine Learning Model Architecture
+        </h2>
+        <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+            PropVal.AI evaluates candidate regressors on an 80/20 train/test partition. The deployed ensemble <strong>Random Forest Regressor</strong> outperforms baseline Linear Regression with an empirical accuracy benchmark of <code class="text-emerald-400 font-mono">R² ≈ 98.5%</code>.
+        </p>
+        <div class="pt-2">
+            <a href="{{ url_for('insights') }}" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider bg-slate-800 hover:bg-slate-700 text-white border border-slate-700 transition-all">
+                <span>View Full Model Insights Dashboard</span>
+                <i class="fa-solid fa-arrow-right text-[10px]"></i>
+            </a>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
