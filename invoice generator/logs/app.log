@@ -80,3 +80,8 @@
 2026-08-19 22:28:01,202 [INFO] app.services.pdf_service: Successfully generated invoice PDF at: C:\Users\HP\Desktop\invoice generator\exports\Invoice_INV-471.pdf
 2026-08-19 22:28:01,209 [WARNING] app.utils.helpers: Direct print failed (No module named 'win32api'). Falling back to opening file viewer.
 2026-08-19 22:29:41,289 [INFO] app.services.backup_service: Database backup created at C:\Users\HP\Desktop\invoice generator\backups\invoicepro_backup_20260819_222941.zip
+2026-08-20 12:41:02,945 [INFO] InvoicePro: Starting InvoicePro v1.0.0
+2026-08-20 12:41:03,129 [INFO] InvoicePro: Loaded custom stylesheet theme.qss.
+2026-08-20 12:41:03,200 [INFO] InvoicePro: Database initialized successfully.
+2026-08-20 12:41:45,364 [ERROR] app.utils.helpers: File not found for viewing: C:\Users\HP\Desktop\invoice generator\exports\Invoice_INV-471.pdf
+2026-08-20 12:41:45,738 [INFO] app.services.pdf_service: Successfully generated invoice PDF at: C:\Users\HP\Documents\GitHub\Python-Development-Course\invoice generator\exports\Invoice_INV-471.pdf
