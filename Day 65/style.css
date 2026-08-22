@@ -1,0 +1,254 @@
+/* ============================================
+   COLOR PALETTE (Color Theory)
+   - Primary: deep navy (headings, nav)
+   - Accent: teal (used sparingly, for CTAs only)
+   - Neutrals: whites/grays for backgrounds & body text
+   ============================================ */
+:root {
+    --color-primary: #14213D;
+    --color-accent: #2A9D8F;
+    --color-bg: #FAFAFA;
+    --color-text: #333333;
+    --color-muted: #6B7280;
+    --color-border: #E5E7EB;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    color: var(--color-text);
+    background-color: var(--color-bg);
+    line-height: 1.6; /* readability for body text */
+}
+
+h1, h2, h3 {
+    font-family: 'Poppins', sans-serif; /* separate font for headings = typography pairing */
+    color: var(--color-primary);
+}
+
+/* ============================================
+   NAVIGATION — Jakob's Law: familiar pattern
+   (logo left, links center, CTA right)
+   ============================================ */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px 60px; /* generous whitespace */
+    background: white;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.logo {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    font-size: 1.4rem;
+    color: var(--color-primary);
+}
+
+.nav-links {
+    display: flex;
+    gap: 40px;
+    list-style: none;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: var(--color-text);
+    font-weight: 500;
+}
+
+.nav-links a:hover {
+    color: var(--color-accent);
+}
+
+/* ============================================
+   BUTTONS — Fitts's Law: large, easy-to-click targets
+   ============================================ */
+.btn {
+    display: inline-block;
+    text-decoration: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.btn-primary {
+    background-color: var(--color-accent);
+    color: white;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(42, 157, 143, 0.35);
+}
+
+.btn-large {
+    padding: 16px 36px;
+    font-size: 1.05rem;
+}
+
+/* ============================================
+   HERO SECTION — Whitespace as a design tool
+   ============================================ */
+.hero {
+    text-align: center;
+    padding: 120px 20px 100px; /* generous top/bottom space */
+    max-width: 720px;
+    margin: 0 auto;
+}
+
+.hero h1 {
+    font-size: 2.75rem;
+    line-height: 1.25;
+    margin-bottom: 20px;
+}
+
+.accent {
+    color: var(--color-accent);
+}
+
+.subtitle {
+    color: var(--color-muted);
+    font-size: 1.1rem;
+    margin-bottom: 36px;
+}
+
+/* ============================================
+   GRID LAYOUT — 3-column aligned grid
+   ============================================ */
+.features {
+    padding: 80px 60px;
+    text-align: center;
+}
+
+.features h2 {
+    margin-bottom: 50px;
+    font-size: 1.8rem;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.card {
+    background: white;
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+    padding: 36px 28px;
+    text-align: left;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04); /* subtle line/shadow groups content */
+    transition: box-shadow 0.2s ease;
+}
+
+.card:hover {
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+}
+
+.icon {
+    font-size: 1.8rem;
+    margin-bottom: 14px;
+}
+
+.card h3 {
+    font-size: 1.15rem;
+    margin-bottom: 10px;
+}
+
+.card p {
+    color: var(--color-muted);
+    font-size: 0.95rem;
+}
+
+/* ============================================
+   TRUST SECTION
+   ============================================ */
+.trust {
+    background: var(--color-primary);
+    color: white;
+    text-align: center;
+    padding: 80px 20px;
+}
+
+.trust h2 {
+    color: white;
+    margin-bottom: 30px;
+}
+
+blockquote {
+    max-width: 600px;
+    margin: 0 auto 36px;
+    font-size: 1.15rem;
+    font-style: italic;
+    color: #D1D5DB;
+}
+
+.badges {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.badge {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    padding: 8px 18px;
+    border-radius: 30px;
+    font-size: 0.9rem;
+}
+
+/* ============================================
+   FOOTER
+   ============================================ */
+footer {
+    text-align: center;
+    padding: 30px 20px;
+    color: var(--color-muted);
+    font-size: 0.9rem;
+    background: white;
+    border-top: 1px solid var(--color-border);
+}
+
+/* ============================================
+   RESPONSIVE — mobile-friendly grid & nav
+   ============================================ */
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        gap: 16px;
+        padding: 20px;
+    }
+
+    .nav-links {
+        gap: 20px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .hero {
+        padding: 80px 20px 60px;
+    }
+
+    .hero h1 {
+        font-size: 2rem;
+    }
+
+    .grid {
+        grid-template-columns: 1fr;
+    }
+
+    .features, .trust {
+        padding: 60px 20px;
+    }
+}

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Design Principles Demo — Day 65</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- NAVIGATION: consistent, limited items (Hick's Law), Jakob's Law (logo left, CTA right) -->
+    <nav class="navbar">
+        <div class="logo">Studioform</div>
+        <ul class="nav-links">
+            <li><a href="#work">Work</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#pricing">Pricing</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+        <a href="#contact" class="btn btn-primary">Get Started</a>
+    </nav>
+
+    <!-- HERO: whitespace, typography pairing, big Fitts's-Law-friendly CTA -->
+    <section class="hero">
+        <h1>Design that people <span class="accent">actually</span> enjoy using.</h1>
+        <p class="subtitle">
+            A small demo page built to apply core web design principles:
+            whitespace, color theory, typography, grids, navigation, and trust.
+        </p>
+        <a href="#work" class="btn btn-primary btn-large">See the Work</a>
+    </section>
+
+    <!-- GRID LAYOUT: cards aligned to a 3-column grid, using lines/shadows to group content -->
+    <section class="features" id="work">
+        <h2>Why this layout works</h2>
+        <div class="grid">
+            <div class="card">
+                <div class="icon">🎨</div>
+                <h3>Color Theory</h3>
+                <p>One primary color, one accent, and neutral grays — nothing competes for attention.</p>
+            </div>
+            <div class="card">
+                <div class="icon">🔤</div>
+                <h3>Typography</h3>
+                <p>Poppins for headings, Inter for body text. Two fonts, clear hierarchy.</p>
+            </div>
+            <div class="card">
+                <div class="icon">📐</div>
+                <h3>Grid Alignment</h3>
+                <p>Every card lines up on an invisible grid — nothing feels randomly placed.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- TRUST SIGNALS: testimonial + simple badges -->
+    <section class="trust" id="about">
+        <h2>Trusted by people learning to build better</h2>
+        <blockquote>
+            "Small, consistent design choices — spacing, color, alignment — are what separate
+            an amateur page from a professional one."
+        </blockquote>
+        <div class="badges">
+            <span class="badge">✓ Accessible</span>
+            <span class="badge">✓ Mobile-friendly</span>
+            <span class="badge">✓ Fast-loading</span>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer id="contact">
+        <p>Built for Day 65 — 100 Days of Code (Python Bootcamp) · Web Design School</p>
+    </footer>
+
+</body>
+</html>
