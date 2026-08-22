@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Cafe & Wifi API</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 700px; margin: 60px auto; color: #222; line-height: 1.6; }
+        h1 { color: #14213D; }
+        code { background: #f4f4f4; padding: 2px 6px; border-radius: 4px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { text-align: left; padding: 10px; border-bottom: 1px solid #eee; }
+        th { color: #6B7280; font-size: 0.9rem; text-transform: uppercase; }
+    </style>
+</head>
+<body>
+    <h1>☕ Cafe & Wifi REST API</h1>
+    <p>A simple RESTful API for browsing and managing cafe data. All responses are returned as JSON.</p>
+
+    <table>
+        <tr><th>Method</th><th>Endpoint</th><th>Description</th></tr>
+        <tr><td>GET</td><td><code>/random</code></td><td>Returns one random cafe</td></tr>
+        <tr><td>GET</td><td><code>/all</code></td><td>Returns all cafes</td></tr>
+        <tr><td>GET</td><td><code>/search?loc=London</code></td><td>Returns cafes matching a location</td></tr>
+        <tr><td>POST</td><td><code>/add</code></td><td>Adds a new cafe (form data)</td></tr>
+        <tr><td>PATCH</td><td><code>/update-price/&lt;id&gt;?new_price=£3.50</code></td><td>Updates a cafe's coffee price</td></tr>
+        <tr><td>DELETE</td><td><code>/report-closed/&lt;id&gt;?api-key=TopSecretAPIKey</code></td><td>Deletes a cafe (requires API key)</td></tr>
+    </table>
+</body>
+</html>
