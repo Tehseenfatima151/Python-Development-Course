@@ -152,7 +152,8 @@ Visit `http://127.0.0.1:5000/` → register a normal account (won't have admin r
 ---
 
 ## 🖼️ Output
-![Uploading image.png…]()
+
+<img width="1345" height="643" alt="image" src="https://github.com/user-attachments/assets/b1aab1e6-30f9-4360-9d82-01f4c00f142a" />
 
 
 ---
