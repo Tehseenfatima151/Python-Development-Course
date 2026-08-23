@@ -1,124 +1,110 @@
-# Day 76 — Computation with NumPy and N-Dimensional Arrays
+# Day 76— Beautiful Plotly Charts & Analysing the Android App Store
 
 Part of my [100 Days of Code — Python Bootcamp](https://github.com/Tehseenfatima151) journey (Angela Yu).
 
-## 📌 Project: NumPy Fundamentals — Arrays, Vectorization & Broadcasting
+## 📌 Project: Google Play Store Data Analysis
 
-A hands-on script covering NumPy's core building blocks — the foundation that Pandas, Matplotlib, and virtually every other Python data science library is built on top of. All 10 sections were run and verified locally before writing this README.
+Analyzing a dataset of Android apps (category, rating, installs, size, price) using Pandas and advanced **Plotly** chart types — going beyond Day 74's basics into donut charts, box plots, bubble charts, and color-scaled bar charts. All 7 charts were generated and verified locally before writing this README.
 
 ---
 
 ## 🧠 Concepts Covered
 
-### 1. Creating arrays
+### 1. Donut chart — Free vs Paid apps
 ```python
-np.array([1, 2, 3])            # from a Python list
-np.zeros((2, 3))                 # 2x3 array of zeros
-np.ones((3, 2))                  # 3x2 array of ones
-np.arange(0, 20, 2)               # like range(), but returns an array
-np.linspace(0, 1, 5)              # 5 evenly spaced values between 0 and 1
+fig = px.pie(df, names="Type", hole=0.4)   # hole=0.4 turns a pie into a donut
+fig.update_traces(textinfo="percent+label")
 ```
+A donut chart is just a pie chart with a `hole` — often considered more readable since the center space can hold a label/total.
 
-### 2. Shape, dimensions, and reshaping
-Every array has a `.shape` (size along each dimension) and `.ndim` (number of dimensions).
+### 2. Sorted horizontal bar chart with a color scale
 ```python
-matrix = np.arange(1, 13)         # shape (12,), ndim 1
-matrix.reshape(3, 4)               # shape (3, 4), ndim 2
-matrix.reshape(2, 2, 3)            # shape (2, 2, 3), ndim 3 — an "N-dimensional array"
+fig = px.bar(
+    x=category_counts.values, y=category_counts.index,
+    orientation="h", color=category_counts.values,
+    color_continuous_scale="Teal"
+)
+fig.update_layout(yaxis={"categoryorder": "total ascending"})
 ```
-`reshape()` doesn't change the data — it just changes how the same 12 numbers are organized/viewed. The total element count must stay the same (3×4=12, 2×2×3=12).
+`color=` mapped to the same values being plotted adds a visual gradient — bars representing bigger numbers are automatically shaded darker/lighter, reinforcing the comparison at a glance. `categoryorder: "total ascending"` guarantees bars are sorted by size, not alphabetically.
 
-### 3. Indexing and slicing (row, column style)
+### 3. Box plot — comparing distributions across categories
 ```python
-grid[1, 2]        # single element: row 1, column 2
-grid[0, :]         # entire row 0
-grid[:, 1]         # entire column 1
-grid[0:2, 1:3]      # sub-grid: rows 0-1, columns 1-2
+fig = px.box(df, x="Category", y="Rating", color="Category")
 ```
-This `[row, column]` syntax is a big upgrade over Python's nested-list indexing (`grid[1][2]`) — much closer to how math notation describes matrices.
+Unlike a bar chart (which shows only one number per category, like an average), a **box plot** shows the full spread: median, quartiles, and outliers — revealing that two categories with the same *average* rating can have very different consistency.
 
-### 4. Vectorized operations — no loops needed
+### 4. Bubble chart — visualizing 3+ variables at once
 ```python
-a + b     # element-wise addition
-a * b     # element-wise multiplication
-a ** 2    # element-wise power
+fig = px.scatter(
+    df, x="Size_MB", y="Rating",
+    size="Installs", color="Type",
+    hover_name="App"
+)
 ```
-These apply the operation to *every element at once* — this is the core idea behind "vectorization."
+A bubble chart is a scatter plot where a **third variable controls dot size** — here, app size (x), rating (y), and install count (bubble size) are all visible in a single chart. `hover_name` makes each point show the app name on hover, essential for exploratory analysis with many data points.
 
-### 5. Why NumPy is faster than plain Python loops
-Squaring 1,000,000 numbers:
+### 5. Color-scaled bar chart using a secondary metric
 ```python
-squared_list = [x ** 2 for x in python_list]   # pure Python loop
-squared_array = numpy_array ** 2                 # NumPy vectorized
+fig = px.bar(
+    top_reviewed, x="Reviews", y="App", orientation="h",
+    color="Rating", color_continuous_scale="Viridis"
+)
 ```
-**Measured result on this run: NumPy was ~6.6x faster.** NumPy arrays are stored as contiguous blocks of a single data type in memory (unlike Python lists, which store pointers to separate objects) and operations run in optimized, compiled C code under the hood — not Python's slower interpreted loop.
+This packs **two metrics into one chart**: bar length shows review count, while color shows rating — so you can spot, for example, a heavily-reviewed app with a mediocre rating at a glance.
 
-### 6. Boolean indexing — filtering without loops
+### 6. Filtering before visualizing
 ```python
-temps[temps > 25]                    # only values matching the condition
-np.sum(temps > 25)                    # count of matches (True counts as 1)
-np.where(temps > 25, "Hot", "Mild")    # conditional labeling, element-wise
+paid_apps = df[df["Type"] == "Paid"]
+fig = px.scatter(paid_apps, x="Price", y="Rating", size="Installs", color="Category")
 ```
-`temps > 25` itself returns an array of `True`/`False` values — that boolean array is then used to filter the original array.
+Not every chart needs the full dataset — filtering to just paid apps first makes the price-vs-rating relationship visible without free apps (`Price = 0`) cluttering the x-axis.
 
-### 7. Aggregate/statistical functions
+### 7. Checking data quality before analysis
 ```python
-np.mean(scores)
-np.median(scores)
-np.std(scores)     # standard deviation
-np.min(scores) / np.max(scores)
-np.argmax(scores)   # INDEX of the maximum value (not the value itself)
+df.isna().sum()
+df.duplicated(subset="App").sum()
 ```
-
-### 8. Axis-based aggregation on 2D arrays
-The `axis` parameter controls whether you aggregate **across rows** or **across columns**:
-```python
-sales.sum(axis=1)   # one total PER ROW (sum across columns)
-sales.sum(axis=0)   # one total PER COLUMN (sum across rows)
-```
-This trips up most beginners at first — `axis=0` moves *down* the rows (collapsing them into one row of column totals), `axis=1` moves *across* the columns (collapsing them into one column of row totals).
-
-### 9. Broadcasting
-```python
-prices - (prices * 10 / 100)
-```
-NumPy automatically "stretches" the smaller value (`10`) to match the shape of `prices` and applies the operation element-wise — no manual loop or repeating the number into an array first. This is called **broadcasting**, and it's one of NumPy's most powerful features.
-
-### 10. Random number generation
-```python
-rng = np.random.default_rng(seed=42)   # modern, recommended way (vs np.random.seed())
-rng.integers(1, 100, size=5)
-rng.random(5)
-```
-Using a `seed` makes random output **reproducible** — the same seed always produces the same "random" numbers, useful for debugging and sharing reproducible examples.
+Real Play Store exports often have missing ratings (new apps) or duplicate entries (an app listed under two categories) — always verify before drawing conclusions from category-level averages.
 
 ---
 
 ## 📂 Project Structure
 ```
-day76/
-└── numpy_computation.py
+day77/
+├── play_store_analysis.py
+├── apps.csv
+├── chart_1_free_vs_paid.html
+├── chart_2_apps_per_category.html
+├── chart_3_avg_installs_by_category.html
+├── chart_4_rating_boxplot.html
+├── chart_5_bubble_size_rating_installs.html
+├── chart_6_top10_reviewed.html
+├── chart_7_paid_price_vs_rating.html
+└── README.md
 ```
 
 ## ▶️ How to Run
 ```bash
-pip install numpy
-python numpy_computation.py
+pip install pandas plotly
+python play_store_analysis.py
 ```
-Runs all 10 sections in order, printing labeled output for each — including a live timing comparison between a Python loop and the equivalent NumPy operation.
+Prints each analysis step to the terminal and generates 7 interactive `.html` charts — open any of them in a browser to hover, zoom, and explore individual apps.
+
+> **Note on the dataset:** `apps.csv` here is a realistic 30-app sample built in the same structure as the real Google Play Store dataset used for this project (commonly sourced from Kaggle: *Google Play Store Apps*). Swap in the real CSV and the script's column names/logic stay the same — the real dataset just has ~10,000 rows instead of 30.
 
 ---
 
 ## ✅ Key Takeaways
-- NumPy arrays are faster than Python lists for numeric work because they store data in a fixed, contiguous block and run operations in compiled code, not the Python interpreter.
-- `reshape()` reorganizes the *same* data into new dimensions — the total number of elements must match before and after.
-- `axis=0` aggregates down columns (one result per column); `axis=1` aggregates across rows (one result per row) — worth double-checking every time, since it's easy to mix up.
-- Boolean indexing (`arr[arr > x]`) replaces manual filtering loops entirely.
-- Broadcasting lets NumPy apply a single value (or smaller array) across a larger array automatically, without writing a loop.
-- `np.random.default_rng(seed=...)` is the modern, recommended way to generate reproducible random numbers (over the older `np.random.seed()`).
+- A donut chart (`hole=` parameter) is a simple, effective variation on a pie chart.
+- Box plots reveal the *spread* of data, not just the average — two categories can tie on mean rating while differing wildly in consistency.
+- Bubble charts (`size=`) let you visualize a third numeric dimension without needing a 3D plot.
+- Mapping `color=` to a numeric column (not just a category) turns a simple bar/scatter chart into a two-metric visualization.
+- Filter data *before* charting when the full dataset would clutter or distort the relationship you're trying to show (e.g. excluding free apps from a price analysis).
+- Always run `isna().sum()` and `duplicated().sum()` before trusting category-level aggregates on a real-world dataset.
 
 ## 📝 Practice Tasks
-1. Create a 4x4 matrix using `np.arange(16).reshape(4, 4)` and extract just its diagonal using `np.diag()`.
-2. Time squaring 5,000,000 numbers instead of 1,000,000 — does NumPy's speed advantage grow or shrink?
-3. Use boolean indexing to replace every negative number in `np.array([3, -2, 5, -8, 1])` with `0`.
-4. Create two 3x3 matrices and try both `@` (matrix multiplication) and `*` (element-wise multiplication) — print both results and explain the difference.
+1. Add a chart showing the correlation between `Reviews` and `Installs` — do heavily-reviewed apps also have the most installs?
+2. Filter to just the `GAME` category and build a bubble chart comparing size, rating, and reviews within games only.
+3. Add a `content_rating` breakdown — which content ratings (Everyone, Teen, Mature 17+) dominate the dataset?
+4. Try `px.sunburst()` with `Category` and `Genre` as hierarchy levels for a nested category breakdown.
