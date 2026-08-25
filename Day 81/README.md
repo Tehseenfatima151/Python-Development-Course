@@ -1,74 +1,333 @@
-# AI-Powered House Price Predictor (Pakistan - PKR) 🏡🤖
+# 🚀 Day 81 — House Price Prediction
 
-A production-grade, portfolio-ready Machine Learning web application and REST API designed to provide instant property valuations across major Pakistani real estate markets (Lahore, Islamabad, Karachi, Rawalpindi, Peshawar, Faisalabad, Multan, and Gujranwala).
+> **Python Development Journey | 100 Days of Code 🐍**
 
-Built with **Python, Flask, Scikit-learn, Pandas, NumPy, Matplotlib, Seaborn, and a modern responsive UI**.
+Welcome to **Day 81** of my Python Development Journey!
+
+For Day 81, I built **PropVal.AI — an AI-Powered House Price Predictor**, a complete Machine Learning and Flask-based web application that predicts house prices based on property features such as area, bedrooms, bathrooms, and location.
+
+This project helped me move from simply training ML models to building a **complete end-to-end Machine Learning application** with a web interface, REST API, model evaluation, data visualization, and persistent model deployment.
 
 ---
 
-## 🌟 Key Features
+## 🏠 Project Overview
 
-- **End-to-End Scikit-Learn Pipeline**: Integrated preprocessing (`ColumnTransformer`, `StandardScaler`, and `OneHotEncoder`) serialized with `joblib` for identical transformations during inference and training.
-- **Empirical Multi-Model Benchmarking**: Trains and compares **Linear Regression** and **Random Forest Regressor** on an 80/20 train-test split, automatically selecting and deploying the superior model ($R^2 \approx 0.9858$).
-- **Pakistani Market Calibration (PKR)**: Native support for Pakistani property metrics, including square footage, Marla / Kanal conversions, and dual denomination formatting (**PKR 18,500,000** & **PKR 1.85 Crore**).
-- **Interactive Modern UI**: Built with a luxury dark glassmorphic SaaS aesthetic, ambient background lighting, quick-select Marla presets, and responsive layout across mobile and desktop.
-- **Instant REST API (`POST /api/predict`)**: Production-ready endpoint with backend payload validation, precise error codes, and JSON responses.
-- **Model Insights Dashboard**: Transparent data science portal showcasing live performance metrics ($R^2$, MAE, RMSE), sample volumes, and embedded analytical visualizations.
+**PropVal.AI** is a Pakistani real-estate price prediction platform powered by Machine Learning.
+
+Users can enter:
+
+* 📍 Location
+* 📐 Property Area
+* 🛏️ Number of Bedrooms
+* 🛁 Number of Bathrooms
+
+and receive an estimated property value in **PKR**.
+
+The application uses a trained **Random Forest Regressor** selected after benchmarking it against Linear Regression.
+
+> ⚠️ **Dataset Note:** The housing dataset used in this project is synthetically generated for educational and Machine Learning demonstration purposes. It does not represent official live Pakistani real-estate market data.
+
+---
+
+## 🎯 What I Learned
+
+Through this project, I practiced:
+
+* Loading and processing datasets with Pandas
+* Data preprocessing
+* One-Hot Encoding
+* Feature transformation
+* Train/Test splitting
+* Regression Machine Learning
+* Model comparison
+* Model evaluation
+* R², MAE and RMSE
+* Scikit-learn Pipelines
+* Saving models with Joblib
+* Building Flask applications
+* Creating REST APIs
+* Backend input validation
+* Data visualization
+* Integrating ML with a web application
+* Building a responsive frontend
+* Writing automated tests
+
+---
+
+## 🤖 Machine Learning Workflow
+
+The complete workflow is:
+
+```text
+Housing Dataset
+      ↓
+Data Preprocessing
+      ↓
+One-Hot Encoding
+      ↓
+Train/Test Split
+      ↓
+Linear Regression
+      ↓
+Random Forest Regressor
+      ↓
+Model Evaluation
+      ↓
+Best Model Selection
+      ↓
+Joblib Model Saving
+      ↓
+Flask Integration
+      ↓
+User Input
+      ↓
+House Price Prediction
+```
+
+---
+
+## 📊 Dataset
+
+The project contains **3,500 property records** covering 8 Pakistani cities:
+
+* Islamabad
+* Lahore
+* Karachi
+* Rawalpindi
+* Peshawar
+* Faisalabad
+* Multan
+* Gujranwala
+
+### Features
+
+| Feature     | Description                  |
+| ----------- | ---------------------------- |
+| `sqft`      | Property area in square feet |
+| `bedrooms`  | Number of bedrooms           |
+| `bathrooms` | Number of bathrooms          |
+| `location`  | Property location            |
+| `price`     | Target property price in PKR |
+
+---
+
+## 🧠 Models Used
+
+Two regression models were trained and compared:
+
+### 1. Linear Regression
+
+Used as the baseline regression model.
+
+### 2. Random Forest Regressor
+
+A tree-based ensemble model used to capture more complex relationships between property features and price.
+
+The best-performing model was automatically selected and saved.
+
+---
+
+## 🏆 Model Performance
+
+The models were evaluated using an **80/20 train-test split**.
+
+| Model                |   R² Score |                  MAE |                 RMSE |
+| -------------------- | ---------: | -------------------: | -------------------: |
+| **Random Forest** 🏆 | **0.9858** | **PKR 1,368,815.90** | **PKR 2,179,529.75** |
+| Linear Regression    |     0.9400 |     PKR 2,847,212.01 |     PKR 4,483,444.72 |
+
+### Best Model
+
+**Random Forest Regressor**
+
+**R² Score: 0.9858**
+
+The Random Forest model was saved using Joblib and deployed in the Flask application.
+
+> The reported performance is based on the synthetic dataset used for this educational project and should not be interpreted as real-world property-market accuracy.
+
+---
+
+## 🔄 Data Preprocessing
+
+The project uses a Scikit-learn preprocessing pipeline.
+
+### Numerical Features
+
+* Square feet
+* Bedrooms
+* Bathrooms
+
+These are processed using `StandardScaler`.
+
+### Categorical Feature
+
+`location`
+
+is processed using:
+
+```python
+OneHotEncoder(handle_unknown="ignore")
+```
+
+The preprocessing and trained model are combined into a single Scikit-learn Pipeline.
+
+This ensures that the exact same preprocessing is applied during prediction.
+
+---
+
+## 💾 Model Persistence
+
+Instead of retraining the model every time the Flask application starts, the complete trained pipeline is saved using Joblib.
+
+```text
+models/
+└── house_price_model.joblib
+```
+
+Flask loads the saved model and uses it directly for predictions.
+
+---
+
+## 🌐 Flask Web Application
+
+The Machine Learning model is integrated into a Flask web application.
+
+### Main Pages
+
+* 🏠 Home
+* 💰 Property Valuation
+* ⚙️ How It Works
+* 📊 Model Insights
+* 📈 Market Trends
+* 🔌 REST API
+* ℹ️ About
+
+The application provides a premium real-estate inspired responsive interface.
+
+---
+
+## 🔌 REST API
+
+The project also exposes a prediction API.
+
+### Endpoint
+
+```text
+POST /api/predict
+```
+
+### Example Request
+
+```json
+{
+    "sqft": 1800,
+    "bedrooms": 3,
+    "bathrooms": 2,
+    "location": "Lahore"
+}
+```
+
+### Example Response
+
+```json
+{
+    "success": true,
+    "predicted_price": 18500000,
+    "currency": "PKR"
+}
+```
+
+The API includes backend validation for:
+
+* Missing fields
+* Invalid values
+* Negative values
+* Unsupported locations
+* Invalid property inputs
+
+---
+
+## 💰 PKR Price Formatting
+
+Predicted property values are displayed using Pakistani currency formatting.
+
+Examples:
+
+```text
+PKR 18,500,000
+```
+
+and:
+
+```text
+PKR 1.85 Crore
+```
+
+The application also supports Lacs-based formatting where appropriate.
+
+---
+
+## 📈 Data Visualization
+
+The project includes visual analytics generated using Matplotlib and Seaborn.
+
+Charts include:
+
+* Model Comparison
+* Price vs Square Feet
+* Price by Location
+* Price Distribution
+
+These visualizations are available through the **Model Insights** and **Market Trends** sections.
+
+---
+
+## 🧪 Testing
+
+Automated tests were implemented using Flask's testing utilities.
+
+### Test Coverage
+
+* Home route
+* Insights route
+* Prediction form
+* API prediction
+* Missing API fields
+* Negative values
+* Unsupported locations
+* Currency formatting
+* 404 handling
+
+### Result
+
+```text
+10 tests passed
+```
+
+✅ All tests passed successfully.
+<img width="1350" height="635" alt="house 1" src="https://github.com/user-attachments/assets/ccbb6bee-c636-4779-adee-2819425f82b7" />
 
 ---
 
 ## 🛠️ Tech Stack
 
-| Domain | Technologies & Libraries |
-|---|---|
-| **Backend & Web Framework** | Python 3.14+, Flask 3.0+ |
-| **Machine Learning** | Scikit-Learn, Joblib, NumPy |
-| **Data Processing & Analytics** | Pandas, Matplotlib, Seaborn |
-| **Frontend UI/UX** | HTML5, Modern CSS (Glassmorphism), JavaScript (ES6+), FontAwesome |
-| **Data Science Exploration** | Jupyter Notebook (`model_analysis.ipynb`) |
-
----
-
-## 📊 Dataset & Model Performance
-
-### Dataset Information
-- **Location**: `data/housing_data.csv`
-- **Volume**: 3,500 records
-- **Features**: `sqft` (Covered Area), `bedrooms`, `bathrooms`, `location` (City)
-- **Target**: `price` (Valuation in Pakistani Rupees - PKR)
-- **Covered Cities**: Islamabad, Lahore, Karachi, Rawalpindi, Peshawar, Faisalabad, Multan, Gujranwala.
-
-> **Note on Dataset**: The dataset in `data/housing_data.csv` was programmatically generated to model realistic Pakistani urban property pricing dynamics (including city-tier premiums and non-linear land/construction scaling) for educational, demonstration, and portfolio benchmarking purposes.
-
-### Model Benchmark Results (80% Train / 20% Test Split)
-
-| Model Architecture | $R^2$ Score (Accuracy) | Mean Absolute Error (MAE) | Root Mean Squared Error (RMSE) | Status |
-|---|---|---|---|---|
-| **Random Forest Regressor** | **0.9858** | **PKR 1,368,815.90** | **PKR 2,179,529.75** | 🏆 **Deployed Pipeline** |
-| **Linear Regression** | 0.9400 | PKR 2,847,212.01 | PKR 4,483,444.72 | Baseline Candidate |
-
-*The model with the highest $R^2$ score is automatically selected and saved to `models/house_price_model.joblib`.*
-
----
-
-## 🔄 Machine Learning Workflow
-
 ```text
-       CSV Dataset (data/housing_data.csv)
-                      ↓
-  Data Cleaning & Train/Test Split (80/20)
-                      ↓
-  ColumnTransformer (StandardScaler + OneHotEncoder)
-                      ↓
-  Multi-Model Training (Linear Regression & Random Forest)
-                      ↓
-  Model Evaluation (R², MAE, RMSE)
-                      ↓
-  Automated Selection of Best Model
-                      ↓
-  Model Pipeline Export (models/house_price_model.joblib)
-                      ↓
-  Flask Web App & REST API (Loads Pipeline Once into Memory)
+Python
+Flask
+Pandas
+NumPy
+Scikit-learn
+Random Forest
+Linear Regression
+Joblib
+Matplotlib
+Seaborn
+HTML5
+CSS3
+JavaScript
+REST API
+Jupyter Notebook
 ```
 
 ---
@@ -78,185 +337,147 @@ Built with **Python, Flask, Scikit-learn, Pandas, NumPy, Matplotlib, Seaborn, an
 ```text
 house-price-predictor/
 │
-├── app.py                      # Flask application (Routes, API, Validation, Formatting)
-├── train_model.py              # ML Pipeline training, benchmarking, chart generation & serialization
-├── requirements.txt            # Python dependencies
-├── README.md                   # Project documentation
+├── app.py
+├── train_model.py
+├── test_app.py
+├── requirements.txt
+├── README.md
 │
 ├── data/
-│   └── housing_data.csv        # Housing dataset (3,500 records)
+│   └── housing_data.csv
 │
 ├── models/
-│   ├── house_price_model.joblib # Serialized Scikit-Learn Pipeline
-│   └── model_metadata.json     # Saved metrics, features, and locations
+│   ├── house_price_model.joblib
+│   └── model_metadata.json
 │
 ├── templates/
-│   ├── base.html               # Master layout with navigation & footer
-│   ├── index.html              # Landing page, hero, valuation form & API docs
-│   ├── result.html             # Valuation result view with specifications breakdown
-│   ├── insights.html           # Model insights, performance table & charts
-│   ├── 404.html                # Custom 404 Not Found page
-│   └── 500.html                # Custom 500 Internal Server Error page
+│   ├── base.html
+│   ├── index.html
+│   ├── valuation.html
+│   ├── result.html
+│   ├── insights.html
+│   ├── market_trends.html
+│   ├── api.html
+│   ├── about.html
+│   ├── 404.html
+│   └── 500.html
 │
 ├── static/
 │   ├── css/
-│   │   └── style.css           # Premium real estate & AI glassmorphic styling
+│   │   └── style.css
 │   ├── js/
-│   │   └── script.js           # Marla presets, form validation & instant AJAX valuation
+│   │   └── script.js
 │   └── images/
-│       └── charts/             # Generated Matplotlib/Seaborn analytics plots
-│           ├── model_comparison.png
-│           ├── price_vs_sqft.png
-│           ├── price_by_location.png
-│           └── price_distribution.png
+│       └── charts/
 │
 └── notebooks/
-    └── model_analysis.ipynb    # Jupyter Notebook for EDA & model experimentation
+    └── model_analysis.ipynb
 ```
 
 ---
 
-## 🚀 Installation & Quickstart
+## ⚙️ Installation
 
-### 1. Clone the Repository
+Clone the repository:
+
 ```bash
-git clone https://github.com/your-username/house-price-predictor.git
+git clone <your-repository-url>
 cd house-price-predictor
 ```
 
-### 2. Create and Activate a Virtual Environment
-```bash
-# Windows
-python -m venv venv
-venv\Scripts\activate
+Create a virtual environment:
 
-# macOS / Linux
-python3 -m venv venv
-source venv/bin/activate
+```bash
+python -m venv venv
 ```
 
-### 3. Install Dependencies
+Activate it on Windows:
+
+```bash
+venv\Scripts\activate
+```
+
+Install dependencies:
+
 ```bash
 pip install -r requirements.txt
 ```
 
-### 4. Train the ML Model & Generate Visualizations
+---
+
+## 🧠 Train the Model
+
+Run:
+
 ```bash
 python train_model.py
 ```
 
-*Terminal Output:*
-```text
-========================================
-HOUSE PRICE MODEL TRAINING
-========================================
+This will:
 
-Dataset loaded successfully
-Records: 3500
+1. Generate/load the dataset
+2. Preprocess the data
+3. Train the models
+4. Evaluate model performance
+5. Select the best model
+6. Save the trained pipeline
+7. Generate analytics charts
+8. Save model metadata
 
-Training samples: 2800
-Testing samples: 700
+---
 
-Model Performance
-----------------------------------------
-Linear Regression
-R²   : 0.9400
-MAE  : 2,847,212.01 PKR
-RMSE : 4,483,444.72 PKR
+## 🚀 Run the Application
 
-Random Forest
-R²   : 0.9858
-MAE  : 1,368,815.90 PKR
-RMSE : 2,179,529.75 PKR
+Start Flask:
 
-Best Model: Random Forest
-
-Model saved successfully:
-models/house_price_model.joblib
-========================================
-```
-
-### 5. Launch the Flask Application
 ```bash
 python app.py
 ```
-Open your browser and navigate to: **`http://localhost:5000`**
 
----
+Then open:
 
-## 🌐 API Documentation
-
-### Predict House Price Endpoint
-
-- **Endpoint**: `/api/predict`
-- **Method**: `POST`
-- **Headers**: `Content-Type: application/json`
-
-#### Request Payload
-```json
-{
-  "sqft": 1800,
-  "bedrooms": 3,
-  "bathrooms": 2,
-  "location": "Lahore"
-}
-```
-
-#### Successful Response (`200 OK`)
-```json
-{
-  "currency": "PKR",
-  "formatted_crore": "PKR 1.85 Crore",
-  "formatted_price": "PKR 18,500,000",
-  "input": {
-    "bathrooms": 2,
-    "bedrooms": 3,
-    "location": "Lahore",
-    "sqft": 1800.0
-  },
-  "model": "Random Forest",
-  "predicted_price": 18500000.0,
-  "price_per_sqft": 10277.78,
-  "r2_score": 0.9858164442791897,
-  "success": true
-}
-```
-
-#### Error Response (`400 Bad Request`)
-```json
-{
-  "error": "Location 'UnknownCity' is unsupported. Allowed locations: Faisalabad, Gujranwala, Islamabad, Karachi, Lahore, Multan, Peshawar, Rawalpindi",
-  "success": false
-}
-```
-
-#### cURL Example
-```bash
-curl -X POST http://localhost:5000/api/predict \
-  -H "Content-Type: application/json" \
-  -d '{"sqft": 1800, "bedrooms": 3, "bathrooms": 2, "location": "Lahore"}'
+```text
+http://127.0.0.1:5000
 ```
 
 ---
 
-## 📸 Application Preview
+## 💡 Future Improvements
 
-*(Screenshots can be added here upon deployment)*
-- **Landing Page & Valuation Form**: Modern dark SaaS theme with real-time Marla converter.
-- **Valuation Result Screen**: Price breakdown, price/sqft metric, and model confidence stats.
-- **Model Insights Dashboard**: Multi-model comparison table and generated visual diagnostics.
+Possible future improvements include:
+
+* Real-world property datasets
+* More advanced regression algorithms
+* XGBoost / Gradient Boosting
+* Hyperparameter optimization
+* Property image analysis
+* Map-based property selection
+* Live real-estate market data
+* User accounts and saved valuations
+* Cloud deployment
+* Advanced model explainability
+* Property recommendation system
 
 ---
 
-## 🔮 Future Enhancements
+## 📚 Python Journey — Day 81
 
-- [ ] Add historical price trend analysis and time-series forecasting.
-- [ ] Incorporate additional property features (e.g., plot vs. built house, floor number, year built).
-- [ ] Add interactive Leaflet/Mapbox maps displaying neighborhood price heatmaps.
-- [ ] Containerize application with Docker & deploy to AWS / Render / Hugging Face Spaces.
+This project was an important milestone in my **Python Development Journey** because it brought together multiple concepts I have been learning throughout my **100 Days of Code** journey.
+
+Instead of stopping at a Machine Learning model, I focused on turning the model into a complete application that users can actually interact with.
+
+### Day 81 Focus:
+
+**Machine Learning → Flask → REST API → Data Visualization → Full-Stack Integration**
 
 ---
 
-## 📄 License
+## 🚀 Progress Continues
 
-This project is licensed under the MIT License - feel free to use it for educational and portfolio purposes.
+**Day 81 / 100 Days of Code 🐍**
+
+Another project completed. Another step forward.
+
+> **Keep building. Keep learning. Keep shipping. 🚀**
+
+#Python #100DaysOfCode #MachineLearning #Flask #ScikitLearn #DataScience #PythonDevelopment #ArtificialIntelligence
