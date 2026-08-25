@@ -1,0 +1,152 @@
+{% extends "base.html" %}
+
+{% block title %}Pakistan Property Market Trends | PropVal.AI{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 space-y-12">
+
+    <!-- Page Header -->
+    <div class="border-b border-slate-800/80 pb-6 space-y-2.5">
+        <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-amber-500/10 text-amber-400 border border-amber-500/20">
+            <i class="fa-solid fa-arrow-trend-up"></i> Market Analytics & Trends
+        </span>
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">Pakistan Property Market Insights</h1>
+        <p class="text-xs sm:text-sm text-slate-400 max-w-3xl leading-relaxed">
+            Exploratory urban pricing statistics, city tier comparisons, and square footage rate benchmarks.
+        </p>
+    </div>
+
+    <!-- Synthetic Dataset Disclosure Alert -->
+    <div class="p-4 sm:p-5 rounded-2xl bg-amber-950/40 border border-amber-500/30 text-amber-200 text-xs sm:text-sm space-y-1">
+        <div class="flex items-center gap-2 font-bold text-amber-400">
+            <i class="fa-solid fa-triangle-exclamation text-base"></i> Dataset-Based Market Insights Disclosure
+        </div>
+        <p class="text-slate-300 text-xs leading-relaxed">
+            The statistics and visualizations on this page are generated from our dataset of 3,500 records across 8 major Pakistani cities. This data is synthetically calibrated for machine-learning demonstration and portfolio benchmarking purposes and should not be used as official financial real-estate advice.
+        </p>
+    </div>
+
+    <!-- Overview Statistics Cards -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        <div class="calculator-card p-5 rounded-2xl border border-slate-800/80 bg-slate-900/70">
+            <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400 block mb-1">Cities Analyzed</span>
+            <span class="text-2xl font-black text-white font-mono">8 Urban Markets</span>
+            <span class="text-[11px] text-emerald-400 block mt-1">Islamabad, Lahore, Karachi, etc.</span>
+        </div>
+
+        <div class="calculator-card p-5 rounded-2xl border border-slate-800/80 bg-slate-900/70">
+            <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400 block mb-1">Mean Property Price</span>
+            <span class="text-2xl font-black text-white font-mono">PKR 2.44 Crore</span>
+            <span class="text-[11px] text-slate-400 block mt-1">Across all plot dimensions</span>
+        </div>
+
+        <div class="calculator-card p-5 rounded-2xl border border-slate-800/80 bg-slate-900/70">
+            <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400 block mb-1">Median Property Price</span>
+            <span class="text-2xl font-black text-white font-mono">PKR 1.86 Crore</span>
+            <span class="text-[11px] text-slate-400 block mt-1">Typical 5-7 Marla house</span>
+        </div>
+
+        <div class="calculator-card p-5 rounded-2xl border border-slate-800/80 bg-slate-900/70">
+            <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400 block mb-1">Top Tier Rate</span>
+            <span class="text-2xl font-black text-emerald-400 font-mono">~11,500 PKR/sqft</span>
+            <span class="text-[11px] text-slate-400 block mt-1">Islamabad urban center</span>
+        </div>
+    </div>
+
+    <!-- City Tier Benchmarks Table -->
+    <div class="calculator-card rounded-2xl border border-slate-800/80 bg-slate-900/80 p-6 space-y-4">
+        <h2 class="text-base font-bold text-white flex items-center gap-2">
+            <i class="fa-solid fa-building text-amber-400"></i> City Pricing Tier Benchmarks
+        </h2>
+        <div class="overflow-x-auto rounded-xl border border-slate-800/80">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th style="width: 20%;">City</th>
+                        <th style="width: 22%;">Market Classification</th>
+                        <th style="width: 20%;">Est. Rate per Sqft</th>
+                        <th style="width: 19%;">5 Marla Approx Value</th>
+                        <th class="text-right" style="width: 19%;">1 Kanal Approx Value</th>
+                    </tr>
+                </thead>
+                <tbody class="font-mono text-xs">
+                    <tr>
+                        <td class="font-bold text-white font-sans">Islamabad</td>
+                        <td class="text-emerald-400 font-sans">Tier 1 Premium</td>
+                        <td class="font-bold">~11,500 PKR</td>
+                        <td class="text-slate-200">PKR 1.55 Crore</td>
+                        <td class="text-right text-slate-200">PKR 5.60 Crore</td>
+                    </tr>
+                    <tr>
+                        <td class="font-bold text-white font-sans">Lahore</td>
+                        <td class="text-emerald-400 font-sans">Tier 1 Premium</td>
+                        <td class="font-bold">~9,800 PKR</td>
+                        <td class="text-slate-200">PKR 1.36 Crore</td>
+                        <td class="text-right text-slate-200">PKR 4.80 Crore</td>
+                    </tr>
+                    <tr>
+                        <td class="font-bold text-white font-sans">Karachi</td>
+                        <td class="text-emerald-400 font-sans">Tier 1 Metro</td>
+                        <td class="font-bold">~9,200 PKR</td>
+                        <td class="text-slate-200">PKR 1.28 Crore</td>
+                        <td class="text-right text-slate-200">PKR 4.50 Crore</td>
+                    </tr>
+                    <tr>
+                        <td class="font-bold text-white font-sans">Rawalpindi</td>
+                        <td class="text-cyan-400 font-sans">Tier 2 Urban</td>
+                        <td class="font-bold">~7,200 PKR</td>
+                        <td class="text-slate-200">PKR 1.02 Crore</td>
+                        <td class="text-right text-slate-200">PKR 3.50 Crore</td>
+                    </tr>
+                    <tr>
+                        <td class="font-bold text-white font-sans">Peshawar</td>
+                        <td class="text-cyan-400 font-sans">Tier 2 Regional</td>
+                        <td class="font-bold">~6,200 PKR</td>
+                        <td class="text-slate-200">PKR 88 Lacs</td>
+                        <td class="text-right text-slate-200">PKR 3.00 Crore</td>
+                    </tr>
+                    <tr>
+                        <td class="font-bold text-white font-sans">Faisalabad</td>
+                        <td class="text-slate-400 font-sans">Industrial Center</td>
+                        <td class="font-bold">~5,800 PKR</td>
+                        <td class="text-slate-200">PKR 82 Lacs</td>
+                        <td class="text-right text-slate-200">PKR 2.80 Crore</td>
+                    </tr>
+                    <tr>
+                        <td class="font-bold text-white font-sans">Multan</td>
+                        <td class="text-slate-400 font-sans">Regional Center</td>
+                        <td class="font-bold">~5,200 PKR</td>
+                        <td class="text-slate-200">PKR 75 Lacs</td>
+                        <td class="text-right text-slate-200">PKR 2.50 Crore</td>
+                    </tr>
+                    <tr>
+                        <td class="font-bold text-white font-sans">Gujranwala</td>
+                        <td class="text-slate-400 font-sans">Industrial Center</td>
+                        <td class="font-bold">~4,800 PKR</td>
+                        <td class="text-slate-200">PKR 68 Lacs</td>
+                        <td class="text-right text-slate-200">PKR 2.30 Crore</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Visual Charts Gallery -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="calculator-card p-5 rounded-2xl border border-slate-800/80 bg-slate-900/60 space-y-3">
+            <h3 class="text-xs font-bold text-white">Average Valuation by City</h3>
+            <div class="rounded-xl overflow-hidden border border-slate-800/80 bg-slate-950/60 p-2">
+                <img src="{{ url_for('static', filename='images/charts/price_by_location.png') }}" alt="Price by Location" class="w-full h-auto object-contain rounded-lg">
+            </div>
+        </div>
+
+        <div class="calculator-card p-5 rounded-2xl border border-slate-800/80 bg-slate-900/60 space-y-3">
+            <h3 class="text-xs font-bold text-white">Property Price vs. Square Footage</h3>
+            <div class="rounded-xl overflow-hidden border border-slate-800/80 bg-slate-950/60 p-2">
+                <img src="{{ url_for('static', filename='images/charts/price_vs_sqft.png') }}" alt="Price vs Square Footage" class="w-full h-auto object-contain rounded-lg">
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

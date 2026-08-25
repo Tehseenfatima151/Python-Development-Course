@@ -1,0 +1,306 @@
+{% extends "base.html" %}
+
+{% block title %}PropVal.AI | AI-Powered Real Estate Intelligence in Pakistan{% endblock %}
+
+{% block content %}
+<div class="relative w-full overflow-hidden">
+
+    <!-- Hero Section Container -->
+    <section class="hero-section relative pt-10 pb-12 lg:pt-14 lg:pb-16">
+        
+        <!-- Architectural House Background Layer -->
+        <div class="hero-bg-image-wrapper" aria-hidden="true">
+            <img src="{{ url_for('static', filename='images/hero-house.jpg') }}" alt="Modern Luxury Architecture" class="hero-bg-image">
+            <div class="hero-bg-overlay"></div>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
+                
+                <!-- Hero Left: Marketing Message & Primary CTA (7 cols) -->
+                <div class="lg:col-span-7 space-y-6">
+                    
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold tracking-wider uppercase bg-indigo-950/70 border border-indigo-500/30 text-indigo-300 shadow-sm shadow-indigo-500/10">
+                        <span class="text-indigo-400">✦</span> AI REAL ESTATE ENGINE V2.0
+                    </div>
+
+                    <div class="space-y-1.5">
+                        <h1 class="text-3xl sm:text-4xl lg:text-[2.85rem] font-extrabold tracking-tight text-white leading-[1.18]">
+                            <span class="block">AI-Powered</span>
+                            <span class="block bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 via-teal-300 to-emerald-500">
+                                House Price
+                            </span>
+                            <span class="block bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 via-indigo-400 to-purple-400">
+                                Prediction
+                            </span>
+                        </h1>
+                    </div>
+
+                    <p class="text-sm sm:text-base text-slate-300/90 leading-relaxed font-normal max-w-lg">
+                        Get an intelligent estimate of any property in Pakistan using advanced machine learning trained on verified market data from 8 major cities.
+                    </p>
+
+                    <!-- Prominent Hero CTAs with Bigger Valuation Button -->
+                    <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 pt-1">
+                        <a href="{{ url_for('valuation') }}" class="btn-primary-gradient px-8 py-4 rounded-xl font-extrabold text-sm uppercase tracking-wider text-white text-center shadow-xl shadow-emerald-500/25 hover:shadow-emerald-500/40 transition-all flex items-center justify-center gap-3 group">
+                            <span>Start Property Valuation</span>
+                            <i class="fa-solid fa-arrow-right text-xs group-hover:translate-x-1.5 transition-transform"></i>
+                        </a>
+
+                        <a href="{{ url_for('how_it_works') }}" class="px-6 py-4 rounded-xl text-xs sm:text-sm font-semibold text-slate-300 bg-slate-800/80 hover:bg-slate-700/80 hover:text-white border border-slate-700/80 text-center transition-all flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-brain text-xs text-teal-400"></i>
+                            <span>Explore How It Works</span>
+                        </a>
+                    </div>
+
+                    <!-- Trust indicators -->
+                    <div class="flex flex-wrap items-center gap-5 text-xs text-slate-400 pt-3 border-t border-slate-800/80">
+                        <span class="flex items-center gap-1.5"><i class="fa-solid fa-shield-check text-emerald-400"></i> 100% Data-Driven</span>
+                        <span class="flex items-center gap-1.5"><i class="fa-solid fa-bolt text-amber-400"></i> Sub-Second Inference</span>
+                        <span class="flex items-center gap-1.5"><i class="fa-solid fa-coins text-cyan-400"></i> Native PKR Support</span>
+                    </div>
+
+                </div>
+
+                <!-- Hero Right: Small, Compact Property Visual Preview Card (5 cols) -->
+                <div class="lg:col-span-5">
+                    <div class="property-preview-card calculator-card rounded-2xl p-3.5 sm:p-4 border border-slate-700/70 shadow-2xl relative overflow-hidden bg-slate-900/90 space-y-3 max-w-md mx-auto lg:ml-auto">
+                        
+                        <div class="relative rounded-xl overflow-hidden border border-slate-800/90 shadow-md">
+                            <img src="{{ url_for('static', filename='images/hero-house.jpg') }}" alt="Luxury Architecture" class="w-full h-40 sm:h-44 object-cover object-center filter brightness-90 hover:scale-105 transition-transform duration-700">
+                            
+                            <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/25 to-transparent"></div>
+
+                            <!-- Overlaid Valuation Badges (Compact) -->
+                            <div class="absolute top-2.5 left-2.5">
+                                <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-950/90 text-emerald-400 border border-emerald-500/30 backdrop-blur-md">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
+                                    AI Valuation Active
+                                </span>
+                            </div>
+
+                            <div class="absolute top-2.5 right-2.5">
+                                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-mono font-medium bg-slate-950/80 text-slate-300 border border-slate-800 backdrop-blur-md">
+                                    8 Cities
+                                </span>
+                            </div>
+
+                            <!-- Bottom Price Tag inside Image (Compact) -->
+                            <div class="absolute bottom-2.5 left-2.5 right-2.5">
+                                <div class="p-2 rounded-lg bg-slate-950/90 border border-slate-800/90 backdrop-blur-md flex items-center justify-between">
+                                    <div>
+                                        <span class="text-[9.5px] text-slate-400 block font-mono uppercase">Sample Valuation</span>
+                                        <div class="flex items-baseline gap-1">
+                                            <span class="text-sm font-black text-white font-mono">PKR 18,500,000</span>
+                                            <span class="text-[11px] text-emerald-400 font-bold">(1.85 Cr)</span>
+                                        </div>
+                                    </div>
+                                    <span class="text-[11px] text-slate-300 font-mono bg-slate-900 px-1.5 py-0.5 rounded border border-slate-800">
+                                        Lahore • 5M
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Card Footer Info Row -->
+                        <div class="flex items-center justify-between text-xs px-1 pt-0.5">
+                            <div class="flex items-center gap-1.5 text-slate-400 text-[11px]">
+                                <i class="fa-solid fa-microchip text-emerald-400 text-xs"></i>
+                                <span class="font-mono">Random Forest (98.5% R²)</span>
+                            </div>
+                            <a href="{{ url_for('valuation') }}" class="text-[11px] font-bold text-emerald-400 hover:text-emerald-300 inline-flex items-center gap-1">
+                                Calculator <i class="fa-solid fa-arrow-right text-[9px]"></i>
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </section>
+
+    <!-- Platform Statistics Panel -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
+        <div class="stats-panel-strip">
+            <div class="stat-item">
+                <div class="stat-icon text-emerald-400"><i class="fa-solid fa-house-chimney text-sm"></i></div>
+                <div class="stat-val font-mono">3,500+</div>
+                <div class="stat-lbl">Properties Analyzed</div>
+            </div>
+
+            <div class="stat-item">
+                <div class="stat-icon text-indigo-400"><i class="fa-solid fa-city text-sm"></i></div>
+                <div class="stat-val font-mono">8</div>
+                <div class="stat-lbl">Major Cities</div>
+            </div>
+
+            <div class="stat-item">
+                <div class="stat-icon text-cyan-400"><i class="fa-solid fa-chart-line text-sm"></i></div>
+                <div class="stat-val font-mono">98.5%</div>
+                <div class="stat-lbl">Model Accuracy (R²)</div>
+            </div>
+
+            <div class="stat-item">
+                <div class="stat-icon text-amber-400"><i class="fa-solid fa-stopwatch text-sm"></i></div>
+                <div class="stat-val font-mono">&lt; 0.5s</div>
+                <div class="stat-lbl">Prediction Speed</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Feature Preview Grid -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        <!-- Clean Left-Aligned Section Header -->
+        <div class="border-b border-slate-800/80 pb-5 mb-8 space-y-2">
+            <span class="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-emerald-400 bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20">
+                <i class="fa-solid fa-microchip text-[11px]"></i> End-to-End Intelligence
+            </span>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">Why Use PropVal.AI?</h2>
+            <p class="text-slate-400 text-xs sm:text-sm leading-relaxed max-w-2xl">
+                Built specifically for Pakistani property metrics, Marla/Kanal conversions, and multi-city pricing tiers.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+            <!-- Feature 1 -->
+            <div class="calculator-card p-5 rounded-2xl border border-slate-800/80 bg-slate-900/60 space-y-3 hover:border-slate-700 transition-all">
+                <div class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center justify-center text-base">
+                    <i class="fa-solid fa-calculator"></i>
+                </div>
+                <h3 class="text-sm font-bold text-white">AI Property Valuation</h3>
+                <p class="text-xs text-slate-400 leading-relaxed">
+                    Dedicated valuation app supporting Marla, Kanal, and Square Feet inputs with instant Random Forest prediction.
+                </p>
+                <a href="{{ url_for('valuation') }}" class="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-400 hover:text-emerald-300">
+                    Launch Calculator <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                </a>
+            </div>
+
+            <!-- Feature 2 -->
+            <div class="calculator-card p-5 rounded-2xl border border-slate-800/80 bg-slate-900/60 space-y-3 hover:border-slate-700 transition-all">
+                <div class="w-10 h-10 rounded-xl bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 flex items-center justify-center text-base">
+                    <i class="fa-solid fa-chart-pie"></i>
+                </div>
+                <h3 class="text-sm font-bold text-white">Model Insights</h3>
+                <p class="text-xs text-slate-400 leading-relaxed">
+                    Transparent regression benchmarking comparing Linear Regression vs Random Forest with R², MAE, and RMSE metrics.
+                </p>
+                <a href="{{ url_for('insights') }}" class="inline-flex items-center gap-1.5 text-xs font-bold text-cyan-400 hover:text-cyan-300">
+                    View Diagnostics <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                </a>
+            </div>
+
+            <!-- Feature 3 -->
+            <div class="calculator-card p-5 rounded-2xl border border-slate-800/80 bg-slate-900/60 space-y-3 hover:border-slate-700 transition-all">
+                <div class="w-10 h-10 rounded-xl bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 flex items-center justify-center text-base">
+                    <i class="fa-solid fa-code"></i>
+                </div>
+                <h3 class="text-sm font-bold text-white">Developer REST API</h3>
+                <p class="text-xs text-slate-400 leading-relaxed">
+                    Integrate instant property valuation endpoints into mobile apps, CRMs, or portals via `POST /api/predict`.
+                </p>
+                <a href="{{ url_for('api_docs') }}" class="inline-flex items-center gap-1.5 text-xs font-bold text-indigo-400 hover:text-indigo-300">
+                    API Documentation <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works & Market Trends Previews (Compact 2-Col) -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            
+            <!-- How It Works Card Preview -->
+            <div class="calculator-card p-6 rounded-2xl border border-slate-800/80 bg-slate-900/70 space-y-4">
+                <span class="text-[11px] font-bold uppercase tracking-wider text-teal-400 bg-teal-500/10 px-2.5 py-0.5 rounded-full border border-teal-500/20">
+                    ML Workflow
+                </span>
+                <h3 class="text-lg font-extrabold text-white">How PropVal.AI Operates</h3>
+                <p class="text-xs text-slate-400 leading-relaxed">
+                    From feature scaling via Scikit-Learn `ColumnTransformer` to Random Forest ensemble prediction, explore our machine learning pipeline.
+                </p>
+
+                <div class="grid grid-cols-3 gap-2.5 pt-1">
+                    <div class="p-2.5 rounded-xl bg-slate-950 border border-slate-800 text-center">
+                        <span class="text-xs font-bold text-white block">1. Input</span>
+                        <span class="text-[10px] text-slate-500 font-mono">Area & City</span>
+                    </div>
+                    <div class="p-2.5 rounded-xl bg-slate-950 border border-slate-800 text-center">
+                        <span class="text-xs font-bold text-teal-400 block">2. Encoding</span>
+                        <span class="text-[10px] text-slate-500 font-mono">Pipeline</span>
+                    </div>
+                    <div class="p-2.5 rounded-xl bg-slate-950 border border-slate-800 text-center">
+                        <span class="text-xs font-bold text-emerald-400 block">3. Result</span>
+                        <span class="text-[10px] text-slate-500 font-mono">PKR Value</span>
+                    </div>
+                </div>
+
+                <div>
+                    <a href="{{ url_for('how_it_works') }}" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider bg-slate-800 hover:bg-slate-700 text-white border border-slate-700 transition-all">
+                        <span>Explore How It Works</span>
+                        <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Market Trends Card Preview -->
+            <div class="calculator-card p-6 rounded-2xl border border-slate-800/80 bg-slate-900/70 space-y-4">
+                <span class="text-[11px] font-bold uppercase tracking-wider text-amber-400 bg-amber-500/10 px-2.5 py-0.5 rounded-full border border-amber-500/20">
+                    Market Analytics
+                </span>
+                <h3 class="text-lg font-extrabold text-white">Pakistani Real Estate Trends</h3>
+                <p class="text-xs text-slate-400 leading-relaxed">
+                    Compare average price per square foot across Islamabad, Lahore, Karachi, Rawalpindi, Peshawar, Faisalabad, Multan, and Gujranwala.
+                </p>
+
+                <div class="grid grid-cols-2 gap-2.5 text-xs font-mono pt-1">
+                    <div class="p-2.5 rounded-xl bg-slate-950 border border-slate-800 flex justify-between items-center">
+                        <span class="text-slate-400">Islamabad</span>
+                        <span class="text-emerald-400 font-bold text-[11px]">~11,500/sqft</span>
+                    </div>
+                    <div class="p-2.5 rounded-xl bg-slate-950 border border-slate-800 flex justify-between items-center">
+                        <span class="text-slate-400">Lahore</span>
+                        <span class="text-emerald-400 font-bold text-[11px]">~9,800/sqft</span>
+                    </div>
+                </div>
+
+                <div>
+                    <a href="{{ url_for('market_trends') }}" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider bg-slate-800 hover:bg-slate-700 text-white border border-slate-700 transition-all">
+                        <span>Explore Market Trends</span>
+                        <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Final Call to Action Banner (Compact, Sleek & Modern) -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        <div class="calculator-card rounded-2xl p-6 sm:p-10 border border-slate-700/80 bg-slate-900/90 relative overflow-hidden shadow-2xl" style="text-align: center;">
+            <div class="space-y-3" style="max-width: 560px; margin: 0 auto; text-align: center;">
+                <div style="display: flex; justify-content: center;">
+                    <span class="text-[11px] font-bold uppercase tracking-wider text-emerald-400 bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20">
+                        Ready to value your property?
+                    </span>
+                </div>
+                <h2 class="text-2xl sm:text-3xl font-black text-white" style="text-align: center;">Get Instant AI Valuation in PKR</h2>
+                <p class="text-sm text-slate-300 leading-relaxed" style="text-align: center;">
+                    Input your property area in Marla, Kanal, or Sqft and get a real-time machine learning valuation calibrated for Pakistani urban centers.
+                </p>
+            </div>
+
+            <div style="margin-top: 1.5rem; display: flex; justify-content: center;">
+                <a href="{{ url_for('valuation') }}" class="btn-primary-gradient inline-flex items-center gap-2.5 px-8 py-4 rounded-xl text-sm font-extrabold uppercase tracking-wider text-white shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/35 transition-all group">
+                    <span>Start Property Valuation</span>
+                    <i class="fa-solid fa-arrow-right text-xs group-hover:translate-x-1 transition-transform"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+</div>
+{% endblock %}

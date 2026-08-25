@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}PropVal.AI | AI-Powered Real Estate Intelligence{% endblock %}
+</title>
+    <!-- Google Fonts: Plus Jakarta Sans & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome 6 Pro/Free Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Custom Design System CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    {% block extra_head %}{% endblock %}
+</head>
+<body class="bg-midnight text-slate-100 antialiased min-h-screen flex flex-col selection:bg-emerald-500 selection:text-white">
+    
+    <!-- Ambient Radial Glows -->
+    <div class="ambient-glow glow-top-left" aria-hidden="true"></div>
+    <div class="ambient-glow glow-top-right" aria-hidden="true"></div>
+    <div class="ambient-glow glow-center" aria-hidden="true"></div>
+
+    <!-- Navigation Header -->
+    <header class="navbar-wrapper sticky top-0 z-50 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            
+            <!-- Brand Logo -->
+            <a href="{{ url_for('index') }}" class="brand-logo group flex items-center gap-3">
+                <div class="logo-icon-box">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="text-emerald-400 group-hover:scale-110 transition-transform">
+                        <path d="M3 10.5L12 3L21 10.5V20C21 20.5523 20.5523 21 20 21H4C3.44772 21 3 20.5523 3 20V10.5Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M7 16L10.5 12.5L13.5 15.5L17 11.5" stroke="#34d399" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M14.5 11.5H17V14" stroke="#34d399" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <div class="flex flex-col">
+                    <span class="brand-title">
+                        PropVal<span class="brand-ai-dot">.AI</span>
+                    </span>
+                    <span class="brand-subtitle">PKR REAL ESTATE INTELLIGENCE</span>
+                </div>
+            </a>
+
+            <!-- Multi-Page Navigation Bar -->
+            <nav class="nav-menu">
+                <a href="{{ url_for('index') }}" class="nav-item flex items-center gap-1.5 {% if request.path == '/' %}active{% endif %}">
+                    <span>Home</span>
+                </a>
+                <a href="{{ url_for('valuation') }}" class="nav-item flex items-center gap-1.5 {% if request.path == '/valuation' %}active{% endif %}">
+                    <i class="fa-solid fa-calculator text-xs text-emerald-400"></i>
+                    <span>Valuation</span>
+                </a>
+                <a href="{{ url_for('how_it_works') }}" class="nav-item flex items-center gap-1.5 {% if request.path == '/how-it-works' %}active{% endif %}">
+                    <i class="fa-solid fa-brain text-xs text-teal-400"></i>
+                    <span>How It Works</span>
+                </a>
+                <a href="{{ url_for('insights') }}" class="nav-item flex items-center gap-1.5 {% if request.path == '/insights' %}active{% endif %}">
+                    <i class="fa-solid fa-chart-line text-xs text-cyan-400"></i>
+                    <span>Insights</span>
+                </a>
+                <a href="{{ url_for('market_trends') }}" class="nav-item flex items-center gap-1.5 {% if request.path == '/market-trends' %}active{% endif %}">
+                    <i class="fa-solid fa-arrow-trend-up text-xs text-amber-400"></i>
+                    <span>Market Trends</span>
+                </a>
+                <a href="{{ url_for('api_docs') }}" class="nav-item flex items-center gap-1.5 {% if request.path in ['/api-docs', '/api'] %}active{% endif %}">
+                    <i class="fa-solid fa-code text-xs text-indigo-400"></i>
+                    <span>REST API</span>
+                </a>
+                <a href="{{ url_for('about') }}" class="nav-item flex items-center gap-1.5 {% if request.path == '/about' %}active{% endif %}">
+                    <i class="fa-solid fa-circle-info text-xs text-slate-400"></i>
+                    <span>About</span>
+                </a>
+            </nav>
+
+            <!-- Status Indicator Badge & Mobile Toggle Button -->
+            <div class="flex items-center gap-4">
+                <div class="ml-status-pill">
+                    <span class="ml-status-dot"></span>
+                    <span class="ml-status-text">ML Engine Active</span>
+                </div>
+
+                <button id="mobile-menu-toggle" class="text-slate-200 hover:text-white p-2 rounded-lg bg-slate-800/80 border border-slate-700/80 focus:outline-none" aria-label="Toggle Navigation">
+                    <i class="fa-solid fa-bars-staggered text-lg"></i>
+                </button>
+            </div>
+
+        </div>
+
+        <!-- Mobile Navigation Menu -->
+        <div id="mobile-menu" class="hidden bg-slate-900/98 border-b border-slate-800 px-6 py-5 backdrop-blur-2xl transition-all space-y-3">
+            <a href="{{ url_for('index') }}" class="flex items-center gap-2 text-sm font-bold text-white hover:text-emerald-400 py-1.5">
+                <i class="fa-solid fa-house text-slate-400"></i> Home
+            </a>
+            <a href="{{ url_for('valuation') }}" class="flex items-center gap-2 text-sm font-bold text-white hover:text-emerald-400 py-1.5">
+                <i class="fa-solid fa-calculator text-emerald-400"></i> Valuation
+            </a>
+            <a href="{{ url_for('how_it_works') }}" class="flex items-center gap-2 text-sm font-bold text-white hover:text-teal-400 py-1.5">
+                <i class="fa-solid fa-brain text-teal-400"></i> How It Works
+            </a>
+            <a href="{{ url_for('insights') }}" class="flex items-center gap-2 text-sm font-bold text-white hover:text-cyan-400 py-1.5">
+                <i class="fa-solid fa-chart-line text-cyan-400"></i> Model Insights
+            </a>
+            <a href="{{ url_for('market_trends') }}" class="flex items-center gap-2 text-sm font-bold text-white hover:text-amber-400 py-1.5">
+                <i class="fa-solid fa-arrow-trend-up text-amber-400"></i> Market Trends
+            </a>
+            <a href="{{ url_for('api_docs') }}" class="flex items-center gap-2 text-sm font-bold text-white hover:text-indigo-400 py-1.5">
+                <i class="fa-solid fa-code text-indigo-400"></i> REST API
+            </a>
+            <a href="{{ url_for('about') }}" class="flex items-center gap-2 text-sm font-bold text-white hover:text-slate-300 py-1.5">
+                <i class="fa-solid fa-circle-info text-slate-400"></i> About
+            </a>
+        </div>
+    </header>
+
+    <!-- Flash Messages Container -->
+    <main class="flex-grow pt-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="flash-alert flash-{{ category }} mb-6 p-4 rounded-xl flex items-center justify-between border shadow-lg animate-fade-in">
+                            <div class="flex items-center gap-3">
+                                <i class="fa-solid fa-circle-exclamation text-lg"></i>
+                                <span class="text-sm font-medium">{{ message }}</span>
+                            </div>
+                            <button onclick="this.parentElement.remove()" class="text-slate-400 hover:text-white" aria-label="Close Alert">
+                                <i class="fa-solid fa-xmark"></i>
+                            </button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        </div>
+
+        <div class="page-content-spacer"></div>
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Shared Multi-Page Footer (Refined & Balanced) -->
+    <footer class="footer-wrapper mt-16 relative border-t border-slate-800/80 bg-slate-950">
+        <div class="footer-skyline-bg" aria-hidden="true"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 relative z-10 space-y-8">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-8 border-b border-slate-800/80 pb-8">
+                
+                <!-- Col 1: Brand Info (4 cols) -->
+                <div class="lg:col-span-4 space-y-3">
+                    <div class="flex items-center gap-2.5">
+                        <div class="w-7 h-7 rounded-lg bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
+                            <i class="fa-solid fa-house-laptop text-xs"></i>
+                        </div>
+                        <span class="font-extrabold text-base text-white">PropVal<span class="text-emerald-400">.AI</span></span>
+                    </div>
+                    <p class="text-xs text-slate-400 leading-relaxed max-w-sm">
+                        Machine learning valuation platform for Pakistani real estate. Powered by Scikit-learn regressors and preprocessing pipelines.
+                    </p>
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-900 border border-slate-800 text-[11px] text-amber-400 font-medium">
+                        <i class="fa-solid fa-triangle-exclamation text-[10px]"></i> Synthetic Dataset — Educational / Demonstration Use
+                    </div>
+                </div>
+
+                <!-- Col 2: Core Platform (3 cols) -->
+                <div class="lg:col-span-3 space-y-2.5">
+                    <h4 class="text-xs font-bold uppercase tracking-wider text-slate-300">Platform</h4>
+                    <ul class="space-y-2 text-xs text-slate-400 list-none p-0 m-0">
+                        <li><a href="{{ url_for('index') }}" class="footer-link">Home Page</a></li>
+                        <li><a href="{{ url_for('valuation') }}" class="footer-link">AI Property Valuation</a></li>
+                        <li><a href="{{ url_for('how_it_works') }}" class="footer-link">How It Works</a></li>
+                        <li><a href="{{ url_for('about') }}" class="footer-link">About Project</a></li>
+                    </ul>
+                </div>
+
+                <!-- Col 3: Analytics & API (2 cols) -->
+                <div class="lg:col-span-2 space-y-2.5">
+                    <h4 class="text-xs font-bold uppercase tracking-wider text-slate-300">Analytics & API</h4>
+                    <ul class="space-y-2 text-xs text-slate-400 list-none p-0 m-0">
+                        <li><a href="{{ url_for('insights') }}" class="footer-link">Model Insights</a></li>
+                        <li><a href="{{ url_for('market_trends') }}" class="footer-link">Market Trends</a></li>
+                        <li><a href="{{ url_for('api_docs') }}" class="footer-link">Developer REST API</a></li>
+                    </ul>
+                </div>
+
+                <!-- Col 4: ML Valuation Engine (3 cols) -->
+                <div class="lg:col-span-3 space-y-2.5">
+                    <h4 class="text-xs font-bold uppercase tracking-wider text-slate-300">ML Valuation Engine</h4>
+                    <p class="text-xs text-slate-400 leading-relaxed">
+                        Random Forest Regressor (R² ≈ 98.5% accuracy benchmark on 8 Pakistani city tiers).
+                    </p>
+                    <span class="inline-block font-mono text-emerald-400 text-[11px] font-semibold px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20">
+                        ⚡ PKR Rupee Engine
+                    </span>
+                </div>
+
+            </div>
+
+            <div class="flex flex-col sm:flex-row items-center justify-between text-xs text-slate-400 gap-3">
+                <span>© 2026 PropVal.AI • All Rights Reserved. Built with Python, Flask & Scikit-Learn.</span>
+                <span>PKR Real Estate Intelligence Platform</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Core Scripts -->
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    {% block extra_scripts %}{% endblock %}
+</body>
+</html>
