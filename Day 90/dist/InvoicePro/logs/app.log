@@ -1,0 +1,21 @@
+2026-08-19 15:27:27,761 [INFO] InvoicePro: Starting InvoicePro v1.0.0
+2026-08-19 15:27:27,899 [INFO] InvoicePro: Loaded custom stylesheet theme.qss.
+2026-08-19 15:27:27,968 [INFO] app.database.db: Initialized default Company profile.
+2026-08-19 15:27:27,976 [INFO] app.database.db: Initialized default Customer.
+2026-08-19 15:27:27,998 [INFO] app.database.db: Initialized reference demo invoice #468.
+2026-08-19 15:27:27,998 [INFO] InvoicePro: Database initialized successfully.
+2026-08-19 15:37:48,719 [INFO] app.services.pdf_service: Successfully generated invoice PDF at: C:\Users\HP\Desktop\invoice generator\dist\InvoicePro\exports\Invoice_469.pdf
+2026-08-19 16:21:31,614 [INFO] InvoicePro: Starting InvoicePro v1.0.0
+2026-08-19 16:21:31,742 [INFO] InvoicePro: Loaded custom stylesheet theme.qss.
+2026-08-19 16:21:31,914 [INFO] InvoicePro: Database initialized successfully.
+2026-08-19 16:23:04,616 [INFO] app.services.pdf_service: Successfully generated invoice PDF at: C:\Users\HP\Desktop\invoice generator\dist\InvoicePro\exports\Invoice_469.pdf
+2026-08-19 16:25:41,894 [INFO] InvoicePro: Starting InvoicePro v1.0.0
+2026-08-19 16:25:42,054 [INFO] InvoicePro: Database initialized successfully.
+2026-08-19 17:05:15,455 [INFO] app.services.pdf_service: Successfully generated invoice PDF at: C:\Users\HP\Desktop\invoice generator\dist\InvoicePro\exports\Invoice_469.pdf
+2026-08-19 17:05:28,551 [WARNING] app.utils.helpers: Direct print failed (No module named 'win32api'). Falling back to opening file viewer.
+2026-08-19 17:45:15,398 [INFO] InvoicePro: Starting InvoicePro v1.0.0
+2026-08-19 17:45:15,685 [INFO] InvoicePro: Database initialized successfully.
+2026-08-19 18:28:08,510 [INFO] InvoicePro: Starting InvoicePro v1.0.0
+2026-08-19 18:28:08,862 [INFO] InvoicePro: Database initialized successfully.
+2026-08-19 20:24:38,225 [INFO] InvoicePro: Starting InvoicePro v1.0.0
+2026-08-19 20:24:38,477 [INFO] InvoicePro: Database initialized successfully.

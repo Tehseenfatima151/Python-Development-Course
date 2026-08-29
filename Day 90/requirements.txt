@@ -1,0 +1,8 @@
+PySide6>=6.6.0
+SQLAlchemy>=2.0.0
+reportlab>=4.0.0
+Pillow>=10.0.0
+python-dateutil>=2.8.2
+num2words>=0.5.13
+pytest>=8.0.0
+pyinstaller>=6.0.0
