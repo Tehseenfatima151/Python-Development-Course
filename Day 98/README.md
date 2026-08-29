@@ -1,4 +1,4 @@
-# Day 82— Python Scripting Portfolio Project: Automatic File Organizer
+# Day 98 - Python Scripting Portfolio Project: Automatic File Organizer
 
 Part of my [100 Days of Code — Python Bootcamp](https://github.com/Tehseenfatima151) journey (Angela Yu).
 
