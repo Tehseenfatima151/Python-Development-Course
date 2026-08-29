@@ -1,4 +1,4 @@
-# Sales Data Analyzer
+# Day 99-Sales Data Analyzer
 
 A production-grade, workflow-centric Python application and interactive analytics dashboard that transforms raw sales CSV transactional data into verified datasets, business KPIs, interactive visualizations, linear regression sales forecasts, and publication-ready executive PDF business reports.
 
