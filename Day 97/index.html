@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tehseen Fatima — Software Engineer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0B0F19;
+    --surface:#131826;
+    --surface-2:#1B2233;
+    --border:#262E42;
+    --text:#E7EAF3;
+    --text-muted:#8B93A8;
+    --accent:#5EEAD4;
+    --accent-amber:#FBBF24;
+    --radius:10px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Inter',sans-serif;
+    line-height:1.6;
+  }
+  h1,h2,h3{font-family:'Space Grotesk',sans-serif;}
+  .mono{font-family:'JetBrains Mono',monospace;}
+  a{color:inherit;text-decoration:none;}
+  :focus-visible{outline:2px solid var(--accent);outline-offset:3px;}
+  .container{max-width:1080px;margin:0 auto;padding:0 24px;}
+
+  /* ===== NAV — editor tab bar ===== */
+  .navbar{
+    position:sticky;top:0;z-index:50;
+    background:rgba(11,15,25,0.85);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--border);
+  }
+  .nav-inner{
+    max-width:1080px;margin:0 auto;padding:0 24px;
+    display:flex;align-items:center;justify-content:space-between;
+    height:56px;
+  }
+  .logo{font-family:'JetBrains Mono',monospace;font-weight:600;font-size:0.95rem;color:var(--text);}
+  .logo .dot{color:var(--accent);}
+  .tabs{display:flex;gap:2px;}
+  .tab{
+    font-family:'JetBrains Mono',monospace;font-size:0.82rem;
+    color:var(--text-muted);
+    padding:8px 16px;border-bottom:2px solid transparent;
+    transition:color .15s ease, border-color .15s ease;
+  }
+  .tab:hover{color:var(--text);border-color:var(--border);}
+  .tab.active{color:var(--accent);border-color:var(--accent);}
+  @media (max-width:700px){ .tabs{display:none;} }
+
+  /* ===== HERO — terminal window ===== */
+  .hero{padding:90px 0 70px;}
+  .hero-grid{display:grid;grid-template-columns:1.1fr 0.9fr;gap:48px;align-items:center;}
+  @media (max-width:860px){ .hero-grid{grid-template-columns:1fr;} }
+
+  .eyebrow{
+    font-family:'JetBrains Mono',monospace;font-size:0.78rem;color:var(--accent);
+    letter-spacing:0.06em;margin-bottom:18px;display:flex;align-items:center;gap:8px;
+  }
+  .eyebrow::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--accent);
+    box-shadow:0 0 0 3px rgba(94,234,212,0.15);}
+
+  .hero h1{font-size:2.6rem;font-weight:700;line-height:1.15;margin-bottom:18px;}
+  .hero h1 .cursor{
+    display:inline-block;width:3px;height:1em;background:var(--accent-amber);
+    margin-left:4px;vertical-align:-0.1em;animation:blink 1s step-end infinite;
+  }
+  @keyframes blink{50%{opacity:0;}}
+
+  .hero p.sub{color:var(--text-muted);font-size:1.05rem;max-width:520px;margin-bottom:32px;}
+
+  .btn-row{display:flex;gap:14px;flex-wrap:wrap;}
+  .btn{
+    font-family:'JetBrains Mono',monospace;font-size:0.85rem;font-weight:500;
+    padding:12px 22px;border-radius:8px;border:1px solid transparent;
+    transition:transform .15s ease, box-shadow .15s ease, background .15s ease;
+    display:inline-flex;align-items:center;gap:8px;
+  }
+  .btn-primary{background:var(--accent);color:#08141A;}
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 22px rgba(94,234,212,0.25);}
+  .btn-ghost{border-color:var(--border);color:var(--text);}
+  .btn-ghost:hover{border-color:var(--accent);color:var(--accent);}
+
+  /* terminal card */
+  .terminal{
+    background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+    overflow:hidden;box-shadow:0 20px 50px rgba(0,0,0,0.35);
+  }
+  .terminal-bar{
+    display:flex;align-items:center;gap:8px;padding:11px 14px;
+    background:var(--surface-2);border-bottom:1px solid var(--border);
+  }
+  .terminal-dot{width:11px;height:11px;border-radius:50%;}
+  .terminal-body{padding:22px 20px;font-family:'JetBrains Mono',monospace;font-size:0.86rem;}
+  .terminal-line{margin-bottom:10px;color:var(--text-muted);}
+  .terminal-line .prompt{color:var(--accent);}
+  .terminal-line .out{color:var(--text);}
+  .terminal-line .key{color:var(--accent-amber);}
+
+  /* ===== SECTION shared ===== */
+  section{padding:64px 0;border-top:1px solid var(--border);}
+  .section-head{margin-bottom:36px;}
+  .section-tag{font-family:'JetBrains Mono',monospace;font-size:0.78rem;color:var(--accent-amber);margin-bottom:8px;}
+  .section-head h2{font-size:1.7rem;}
+
+  /* ===== ABOUT ===== */
+  .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;}
+  @media (max-width:760px){ .about-grid{grid-template-columns:1fr;} }
+  .about-grid p{color:var(--text-muted);margin-bottom:14px;}
+  .stack-list{list-style:none;}
+  .stack-list li{
+    display:flex;justify-content:space-between;padding:10px 0;
+    border-bottom:1px solid var(--border);font-size:0.92rem;
+  }
+  .stack-list li span:first-child{color:var(--text-muted);}
+  .stack-list li span:last-child{font-family:'JetBrains Mono',monospace;color:var(--accent);}
+
+  /* ===== SKILLS ===== */
+  .skill-groups{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+  @media (max-width:760px){ .skill-groups{grid-template-columns:1fr;} }
+  .skill-card{
+    background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+    padding:22px;
+  }
+  .skill-card h3{font-size:1rem;margin-bottom:14px;color:var(--accent);}
+  .skill-card ul{list-style:none;}
+  .skill-card li{
+    font-family:'JetBrains Mono',monospace;font-size:0.82rem;color:var(--text-muted);
+    padding:5px 0;
+  }
+  .skill-card li::before{content:"› ";color:var(--accent-amber);}
+
+  /* ===== PROJECTS ===== */
+  .project-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;}
+  @media (max-width:760px){ .project-grid{grid-template-columns:1fr;} }
+  .project-card{
+    background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+    padding:24px;transition:border-color .15s ease, transform .15s ease;
+  }
+  .project-card:hover{border-color:var(--accent);transform:translateY(-3px);}
+  .project-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;}
+  .project-card h3{font-size:1.05rem;}
+  .project-links{display:flex;gap:10px;font-family:'JetBrains Mono',monospace;font-size:0.78rem;}
+  .project-links a{color:var(--text-muted);}
+  .project-links a:hover{color:var(--accent);}
+  .project-card p{color:var(--text-muted);font-size:0.9rem;margin-bottom:14px;}
+  .tag-row{display:flex;gap:8px;flex-wrap:wrap;}
+  .tag{
+    font-family:'JetBrains Mono',monospace;font-size:0.72rem;color:var(--accent-amber);
+    background:rgba(251,191,36,0.08);border:1px solid rgba(251,191,36,0.25);
+    padding:3px 9px;border-radius:20px;
+  }
+
+  /* ===== CONTACT ===== */
+  .contact-box{
+    background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+    padding:40px;text-align:center;
+  }
+  .contact-box h2{font-size:1.6rem;margin-bottom:12px;}
+  .contact-box p{color:var(--text-muted);margin-bottom:26px;}
+  .contact-links{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;}
+
+  footer{
+    padding:28px 0;text-align:center;color:var(--text-muted);
+    font-family:'JetBrains Mono',monospace;font-size:0.78rem;border-top:1px solid var(--border);
+  }
+</style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="navbar">
+    <div class="nav-inner">
+      <div class="logo">tehseen<span class="dot">.</span>dev</div>
+      <div class="tabs">
+        <a class="tab active" href="#about">about.md</a>
+        <a class="tab" href="#skills">skills.json</a>
+        <a class="tab" href="#projects">projects/</a>
+        <a class="tab" href="#contact">contact.sh</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="container hero-grid">
+      <div>
+        <div class="eyebrow">AVAILABLE FOR OPPORTUNITIES</div>
+        <h1>Building software that thinks a little.<span class="cursor"></span></h1>
+        <p class="sub">
+          I'm Tehseen — a Software Engineering student and full-stack developer
+          shipping web, mobile, and AI-powered projects, with 14+ builds behind me
+          and a growing focus on ML.
+        </p>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="#projects">View Projects →</a>
+          <a class="btn btn-ghost" href="#contact">Get in Touch</a>
+        </div>
+      </div>
+
+      <div class="terminal">
+        <div class="terminal-bar">
+          <span class="terminal-dot" style="background:#FF5F56"></span>
+          <span class="terminal-dot" style="background:#FFBD2E"></span>
+          <span class="terminal-dot" style="background:#27C93F"></span>
+        </div>
+        <div class="terminal-body">
+          <div class="terminal-line"><span class="prompt">$</span> whoami</div>
+          <div class="terminal-line"><span class="out">tehseen_fatima</span></div>
+          <div class="terminal-line"><span class="prompt">$</span> cat role.txt</div>
+          <div class="terminal-line"><span class="out">Software Engineering Student @ COMSATS</span></div>
+          <div class="terminal-line"><span class="prompt">$</span> ls skills/</div>
+          <div class="terminal-line"><span class="key">python</span>&nbsp; <span class="key">flask</span>&nbsp; <span class="key">react</span>&nbsp; <span class="key">sql</span>&nbsp; <span class="key">ml</span></div>
+          <div class="terminal-line"><span class="prompt">$</span> echo $STATUS</div>
+          <div class="terminal-line"><span class="out">Shipping project #15...</span></div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="container">
+      <div class="section-head">
+        <div class="section-tag">01 — ABOUT</div>
+        <h2>A bit about how I build.</h2>
+      </div>
+      <div class="about-grid">
+        <div>
+          <p>
+            I'm currently pursuing a BS in Software Engineering at COMSATS University
+            Islamabad, and spend most of my time outside class shipping full-stack
+            and AI-leaning projects — from Flask APIs to small ML experiments.
+          </p>
+          <p>
+            I care about writing production-ready code: clean architecture, sensible
+            defaults, and things that actually run — not just work on my machine.
+            14+ shipped projects across web, mobile, desktop, and AI so far.
+          </p>
+        </div>
+        <ul class="stack-list">
+          <li><span>Focus</span><span>Full-Stack + AI/ML</span></li>
+          <li><span>Currently</span><span>BS Software Engineering</span></li>
+          <li><span>Based in</span><span>Pakistan</span></li>
+          <li><span>Shipped</span><span>14+ projects</span></li>
+          <li><span>GitHub</span><span>Tehseenfatima151</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills">
+    <div class="container">
+      <div class="section-head">
+        <div class="section-tag">02 — SKILLS</div>
+        <h2>What's in the toolbox.</h2>
+      </div>
+      <div class="skill-groups">
+        <div class="skill-card">
+          <h3>Languages</h3>
+          <ul>
+            <li>Python</li>
+            <li>JavaScript</li>
+            <li>SQL</li>
+            <li>HTML / CSS</li>
+          </ul>
+        </div>
+        <div class="skill-card">
+          <h3>Frameworks & Tools</h3>
+          <ul>
+            <li>Flask</li>
+            <li>React</li>
+            <li>SQLAlchemy</li>
+            <li>Git & GitHub</li>
+          </ul>
+        </div>
+        <div class="skill-card">
+          <h3>Growing Into</h3>
+          <ul>
+            <li>Machine Learning</li>
+            <li>Data Analysis (Pandas)</li>
+            <li>REST API Design</li>
+            <li>Cloud Deployment</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects">
+    <div class="container">
+      <div class="section-head">
+        <div class="section-tag">03 — PROJECTS</div>
+        <h2>Selected work.</h2>
+      </div>
+      <div class="project-grid">
+
+        <div class="project-card">
+          <div class="project-head">
+            <h3>Cafe & Wifi Finder</h3>
+            <div class="project-links"><a href="#">code</a><a href="#">live</a></div>
+          </div>
+          <p>Flask app with WTForms-driven listings for cafes rated by wifi, seating, and power outlet availability.</p>
+          <div class="tag-row"><span class="tag">Flask</span><span class="tag">SQLAlchemy</span><span class="tag">WTForms</span></div>
+        </div>
+
+        <div class="project-card">
+          <div class="project-head">
+            <h3>Top 10 Movies Tracker</h3>
+            <div class="project-links"><a href="#">code</a><a href="#">live</a></div>
+          </div>
+          <p>Personal movie ranking app pulling live data from the TMDB API, with auto-ranking by rating.</p>
+          <div class="tag-row"><span class="tag">Flask</span><span class="tag">REST API</span><span class="tag">SQLite</span></div>
+        </div>
+
+        <div class="project-card">
+          <div class="project-head">
+            <h3>Cafe REST API</h3>
+            <div class="project-links"><a href="#">code</a><a href="#">docs</a></div>
+          </div>
+          <p>A JSON-only backend with full CRUD, proper HTTP verbs, and API-key-protected delete endpoints.</p>
+          <div class="tag-row"><span class="tag">REST</span><span class="tag">Flask</span><span class="tag">JSON</span></div>
+        </div>
+
+        <div class="project-card">
+          <div class="project-head">
+            <h3>Multi-User Blog</h3>
+            <div class="project-links"><a href="#">code</a><a href="#">live</a></div>
+          </div>
+          <p>Blog capstone with authentication, admin-only publishing rights, and a full comment system.</p>
+          <div class="tag-row"><span class="tag">Flask-Login</span><span class="tag">Auth</span><span class="tag">SQLAlchemy</span></div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="container">
+      <div class="contact-box">
+        <h2>Let's build something.</h2>
+        <p>Open to internships, junior roles, and collaborative projects.</p>
+        <div class="contact-links">
+          <a class="btn btn-primary" href="https://github.com/Tehseenfatima151" target="_blank" rel="noopener">GitHub →</a>
+          <a class="btn btn-ghost" href="https://tehseencv.vercel.app" target="_blank" rel="noopener">Portfolio Site</a>
+          <a class="btn btn-ghost" href="#">LinkedIn</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    built by tehseen fatima · day 83 of #100DaysOfCode
+  </footer>
+
+</body>
+</html>
