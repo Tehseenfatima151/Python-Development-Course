@@ -9,8 +9,8 @@ A desktop GUI application built with **Tkinter** — generates strong random pas
 ---
 
 ## 🖼️ Verified Output
+<img width="669" height="448" alt="image" src="https://github.com/user-attachments/assets/b588853e-629b-4dfa-9875-d3a5fa248c84" />
 
-![Uploading image.png…]()
 
 
 ---
