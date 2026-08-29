@@ -1,4 +1,4 @@
-# Day 91 — Personal Portfolio Project: GitHub Stats Dashboard
+# Day 96 — Personal Portfolio Project: GitHub Stats Dashboard
 
 Part of my [100 Days of Code — Python Bootcamp](https://github.com/Tehseenfatima151) journey (Angela Yu).
 
