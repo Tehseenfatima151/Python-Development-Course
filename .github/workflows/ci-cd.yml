@@ -1,27 +1,29 @@
 # ---------------------------------------------------------------------------
-# CI/CD Pipeline — Dockerized Flask Application
+# CI/CD Pipeline - Dockerized Flask Application
 #
 # This workflow lives at the repository root (.github/workflows/ci-cd.yml)
 # so that GitHub Actions can detect it. All commands operate inside the
-# project subdirectory: dockerized-flask-cicd/
+# project subdirectory: "docker app/"
 #
 # Pipeline stages:
-#   1. test         — install Python deps, run pytest
-#   2. docker-build — build Docker image (only after tests pass)
-#   3. deploy       — trigger Render deployment (only on main, after build)
+#   1. test         - install Python deps, run pytest
+#   2. docker-build - build Docker image (only after tests pass)
+#   3. deploy       - trigger Render deployment (only on main, after build)
 # ---------------------------------------------------------------------------
 
 name: CI/CD Pipeline
 
 on:
   push:
-    branches: ["**"]        # Run tests + build on every branch push
+    branches: ["**"]          # Run tests + build on every branch push
     paths:
-      - "dockerized-flask-cicd/**"   # Only trigger when project files change
+      - "docker app/**"                 # Trigger when project files change
+      - ".github/workflows/ci-cd.yml"  # Also trigger when this workflow changes
   pull_request:
-    branches: [main]        # Run tests + build on PRs targeting main
+    branches: [main]          # Run tests + build on PRs targeting main
     paths:
-      - "dockerized-flask-cicd/**"
+      - "docker app/**"
+      - ".github/workflows/ci-cd.yml"
 
 jobs:
   # -------------------------------------------------------------------------
@@ -33,7 +35,7 @@ jobs:
 
     defaults:
       run:
-        working-directory: dockerized-flask-cicd   # All run steps use this dir
+        working-directory: "docker app"   # All run steps operate inside this dir
 
     steps:
       - name: Checkout repository
@@ -43,13 +45,14 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-          cache: "pip"          # Cache pip dependencies between runs
+          cache: "pip"
+          cache-dependency-path: "docker app/requirements.txt"
 
       - name: Install dependencies
-        run: pip install -r requirements.txt
+        run: pip install -r requirements.txt   # resolves to: docker app/requirements.txt
 
       - name: Run pytest
-        run: pytest -v
+        run: pytest -v                         # runs inside: docker app/
 
   # -------------------------------------------------------------------------
   # Job 2: Build and validate the Docker image
@@ -57,7 +60,7 @@ jobs:
   docker-build:
     name: Build Docker Image
     runs-on: ubuntu-latest
-    needs: test             # Only runs if the test job succeeds
+    needs: test               # Only runs if the test job succeeds
 
     steps:
       - name: Checkout repository
@@ -69,16 +72,17 @@ jobs:
       - name: Build Docker image
         uses: docker/build-push-action@v6
         with:
-          context: ./dockerized-flask-cicd   # Build context is the project subdir
-          push: false          # Build and validate only; no registry push required
+          context: "./docker app"              # Build context is the project subdir
+          file: "./docker app/Dockerfile"      # Explicit Dockerfile path
+          push: false                          # Build and validate only
           tags: dockerized-flask-cicd:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
       - name: Smoke-test the container
         run: |
-          # Build a local image for the smoke test using the project subdir as context
-          docker build -t flask-smoke-test ./dockerized-flask-cicd
+          # Build using the project subdir as context (quotes handle the space)
+          docker build -t flask-smoke-test "./docker app"
 
           # Start the container in detached mode with a safe test secret
           docker run -d \
@@ -121,8 +125,8 @@ jobs:
   # Triggered only when pushing to the main branch AND both previous jobs pass.
   #
   # Required GitHub Secret:
-  #   RENDER_DEPLOY_HOOK_URL — the deploy hook URL from your Render service.
-  #   Add it at: Settings → Secrets and variables → Actions → New repository secret
+  #   RENDER_DEPLOY_HOOK_URL - the deploy hook URL from your Render service.
+  #   Add it at: Settings -> Secrets and variables -> Actions -> New repository secret
   # -------------------------------------------------------------------------
   deploy:
     name: Deploy to Render
