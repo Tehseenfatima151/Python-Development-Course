@@ -1,172 +1,217 @@
-# Sales Data Analyzer
+# 📊 Day 99 — Data Science | Customer Sales Insights Analyzer
 
-A production-grade, workflow-centric Python application and interactive analytics dashboard that transforms raw sales CSV transactional data into verified datasets, business KPIs, interactive visualizations, linear regression sales forecasts, and publication-ready executive PDF business reports.
+A practical Data Science project built with Python to analyze customer sales data, discover business insights, and visualize important sales trends.
 
-The application features a **dual operating architecture**:
-1. **Interactive Web Application** (`streamlit run dashboard.py`) built around a clean User Upload &rarr; Validate &rarr; Clean &rarr; Analyze &rarr; Predict &rarr; PDF Export workflow.
-2. **Terminal-Based CLI** (`python main.py`) for automated, scriptable, or local command-line operations.
+## 🎯 Project Overview
 
----
+Businesses generate large amounts of sales data every day, but raw data alone doesn't provide useful insights.
 
-## What Problem Does This Solve?
+This project transforms raw customer and sales data into meaningful information by performing:
 
-Retail enterprises and businesses frequently store sales history in messy, disparate CSV files containing missing values, duplicate records, unformatted date columns, or inconsistent schemas. Making sense of this raw data usually requires tedious manual spreadsheet manipulation.
+* 🧹 Data cleaning
+* 🔍 Exploratory Data Analysis (EDA)
+* 📊 Statistical analysis
+* 📈 Data visualization
+* 👥 Customer analysis
+* 💰 Revenue analysis
+* 📅 Sales trend analysis
+* 💡 Business insights generation
 
-**Sales Data Analyzer** automates the complete data intelligence lifecycle:
+The goal is to understand **what is selling, who the customers are, and where the business is generating the most revenue.**
+
+## ✨ Features
+
+* 📥 Loads sales data using Pandas
+* 🧹 Handles missing and duplicate values
+* 🔢 Performs numerical analysis
+* 👥 Analyzes customer purchasing behavior
+* 💰 Calculates total revenue
+* 📦 Analyzes product performance
+* 📅 Identifies monthly/periodic sales trends
+* 🌍 Compares sales across regions
+* 📊 Creates informative visualizations
+* 💡 Generates actionable business insights
+
+## 🛠️ Technologies Used
+
+* **Python**
+* **Pandas** — Data manipulation and analysis
+* **NumPy** — Numerical operations
+* **Matplotlib** — Data visualization
+* **Seaborn** — Statistical visualization
+* **Jupyter Notebook** — Data Science workflow
+
+## 📂 Data Science Workflow
+
 ```text
-User Uploads CSV 
-       ↓
-Automatic Schema & Column Validation
-       ↓
-Data Cleaning & Missing Value Imputation
-       ↓
-Executive KPIs, Trends & Correlations
-       ↓
-Machine Learning Next-Month Sales Forecast
-       ↓
-Downloadable Cleaned CSV & Professional PDF Business Report
+Raw Dataset
+     ↓
+Data Loading
+     ↓
+Data Cleaning
+     ↓
+Exploratory Data Analysis
+     ↓
+Statistical Analysis
+     ↓
+Data Visualization
+     ↓
+Business Insights
+     ↓
+Final Conclusions
 ```
 
----
+## 🧹 Data Cleaning
 
-## Features
+The dataset is prepared before analysis by:
 
-- **User-Centric Web Workflow (`dashboard.py`)**:
-  - **Welcome Screen**: Communicates features with a value checklist and an intuitive file uploader (`.csv`).
-  - **Demo Benchmark Dataset**: 1-click **"Try Demo Dataset"** option to explore the entire tool without needing a file on hand.
-  - **Raw Data Overview & Pre-Cleaning Preview**: Inspects rows, columns, data types, missing cells, duplicate records, and displays the first 15 rows before cleaning.
-  - **Data Cleaning Audit**: Interactive cleaning pipeline with missing-value imputation (median/mode), duplicate removal, invalid date pruning, and immediate download of the cleaned CSV.
-  - **Executive Summary Dashboard**: Live KPI cards (Revenue, Units, Orders, Average Order Value, Top Performers, Sales Trend indicator).
-  - **Dynamic Date Filtering**: Custom date range selection with quick presets (**Full Dataset**, **Last 2 Years**, **Last 1 Year**).
-  - **Interactive Visualizations (Plotly)**:
-    - Chronological Monthly Sales Trend line chart.
-    - Quarterly revenue breakdown bar chart.
-    - Top 5 Best-Selling Products horizontal leaderboard.
-    - Category market share donut chart.
-    - Regional territory volume chart (gracefully skipped if no region column exists).
-    - Numerical correlation matrix with dynamic natural language insights.
-  - **Basic Machine Learning Forecast**: Ordinary Least Squares Simple Linear Regression forecasting next month's sales, with $R^2$ score, slope, equation, interactive plot, and explicit methodology disclaimer.
-  - **Executive PDF Report Generator**: Compiles a 12-section publication-ready PDF report containing company KPIs, tables, and high-resolution charts tailored to the uploaded dataset.
-  - **Reset / New File**: Clean state reset button to upload and analyze new datasets seamlessly.
+* Checking missing values
+* Removing duplicate records
+* Converting columns into appropriate data types
+* Checking inconsistent values
+* Handling invalid records
+* Creating useful calculated columns
 
-- **Preserved Headless & Terminal CLI (`main.py`)**:
-  - Full interactive menu (`python main.py`).
-  - Automated batch execution flags (`--auto`, `--start-date`, `--end-date`, `--no-pdf`).
+## 📊 Key Analysis
 
----
+### 💰 Revenue Analysis
 
-## CSV Dataset Flexibility & Supported Formats
+Calculate important business metrics such as:
 
-The analyzer accepts CSV files with flexible column naming conventions:
+* Total Revenue
+* Average Order Value
+* Total Orders
+* Revenue by Product
+* Revenue by Region
 
-| Standard Field | Accepted Column Name Variations | Description |
-| :--- | :--- | :--- |
-| **Date** *(Required)* | `Date`, `Order Date`, `Order_Date`, `Sales_Date`, `Sale Date` | Transaction date (YYYY-MM-DD or parseable format) |
-| **Product** *(Required)* | `Product`, `Product Name`, `Product_Name`, `Item`, `Item_Name` | Product SKU or description |
-| **Quantity** *(Required)* | `Quantity`, `Qty`, `Units`, `Units Sold` | Non-negative units purchased |
-| **Price / Sales** *(Required)* | `Unit_Price`, `Price`, `Sales`, `Revenue`, `Total_Sales`, `Amount` | If only one is present, the other is automatically calculated (`Sales = Qty * Price`) |
-| **Category** *(Optional)* | `Category`, `Product Category`, `Product_Category` | Merchandise category (defaults to `General` if omitted) |
-| **Region** *(Optional)* | `Region`, `Territory`, `Location`, `Area` | Sales territory (regional analytics gracefully adapts if omitted) |
+### 👥 Customer Analysis
 
----
+Analyze:
 
-## Installation & Setup
+* Number of customers
+* Customer purchase frequency
+* Customer spending patterns
+* Top customers
+* Average customer spending
 
-### 1. Clone or Open the Repository
+### 📦 Product Analysis
+
+Identify:
+
+* Best-selling products
+* Lowest-performing products
+* Product-wise revenue
+* Product demand patterns
+
+### 📅 Sales Trends
+
+Analyze sales over time to identify:
+
+* Monthly trends
+* Growth patterns
+* Peak sales periods
+* Low-performing periods
+
+## 📈 Visualizations
+
+The project uses visualizations to make the data easier to understand.
+
+Examples include:
+
+* 📊 Bar Charts
+* 📈 Line Charts
+* 🥧 Pie Charts
+* 🔥 Heatmaps
+* 📦 Distribution Plots
+* 📉 Trend Analysis
+
+## 💡 Business Insights
+
+The analysis can help answer questions such as:
+
+* Which product generates the highest revenue?
+* Which customers contribute the most sales?
+* Which region performs best?
+* When are sales at their highest?
+* Which products need improvement?
+* What patterns can be found in customer behavior?
+
+## 📁 Project Structure
+
+```text
+Day-99/
+│
+├── data/
+│   └── sales_data.csv
+│
+├── customer_sales_analysis.ipynb
+│
+├── visualizations/
+│   ├── sales_trend.png
+│   ├── product_sales.png
+│   └── regional_sales.png
+│
+└── README.md
+```
+
+## ▶️ How to Run
+
+Install the required libraries:
+
 ```bash
-cd "sales-data-analyzer"
+pip install pandas numpy matplotlib seaborn jupyter
 ```
 
-### 2. Create and Activate Virtual Environment
+Start Jupyter Notebook:
 
-**Windows:**
-```powershell
-python -m venv venv
-venv\Scripts\activate
-```
-
-**macOS / Linux:**
 ```bash
-python3 -m venv venv
-source venv/bin/activate
+jupyter notebook
 ```
 
-### 3. Install Dependencies
-```bash
-pip install -r requirements.txt
+Then open:
+
+```text
+customer_sales_analysis.ipynb
 ```
+
+and run the cells sequentially.
+
+## 🧠 Key Concepts Learned
+
+* Data preprocessing
+* Exploratory Data Analysis (EDA)
+* Pandas DataFrames
+* Data aggregation
+* GroupBy operations
+* Statistical analysis
+* Data visualization
+* Identifying trends and patterns
+* Extracting business insights from raw data
+
+## 🚀 Real-World Applications
+
+The same Data Science workflow can be applied to:
+
+* 🛒 E-commerce analytics
+* 🏪 Retail businesses
+* 💳 Financial analysis
+* 📦 Inventory management
+* 📈 Marketing analytics
+* 👥 Customer segmentation
+* 🏢 Business intelligence
+
+## 🎓 Day 99 Takeaway
+
+> **Data Science is not just about analyzing numbers — it's about turning raw data into meaningful insights that can support better decisions.**
+
+Day 99 focused on the complete Data Science workflow, from **raw data to actionable business insights**.
+
+## 📚 Python 100 Days of Code
+
+**Day 99 of my Python learning journey**
+
+Part of my ongoing **Python Development Pro Bootcamp / 100 Days of Code** journey.
 
 ---
 
-## Usage
-
-### 1. Interactive Web Dashboard (Recommended)
-
-```bash
-streamlit run dashboard.py
-```
-
-1. Open the local browser URL (typically `http://localhost:8501`).
-2. Upload your own sales CSV or click **"Try Demo Dataset"**.
-3. Review the raw data preview and click **"Clean & Analyze Data"**.
-4. Adjust the date range filter and explore interactive charts.
-5. Click **"Generate Executive PDF Report"** to download the business report.
-
----
-
-### 2. Command-Line Interface (CLI)
-
-#### Interactive Terminal Menu
-```bash
-python main.py
-```
-
-#### Automated Headless Batch Execution
-```bash
-# Run full dataset analysis and export PDF
-python main.py --auto
-
-# Run custom date slice
-python main.py --start-date 2023-01-01 --end-date 2024-12-31
-
-# Run fast terminal analysis without PDF
-python main.py --auto --no-pdf
-```
-
----
-
-## Machine Learning & Forecasting Methodology
-
-The forecasting module (`src/prediction.py`) fits an **Ordinary Least Squares (OLS) Simple Linear Regression** model on sequential monthly revenue:
-
-$$\hat{y}_t = \beta_1 \cdot t + \beta_0$$
-
-Where $t \in \{1, 2, \dots, N\}$ represents the chronological month index.
-
-> [!WARNING]
-> **Methodology Disclaimer**: Simple Linear Regression provides a baseline linear trend estimate. It assumes constant trajectory and does not account for complex non-linear seasonality, inventory stockouts, marketing promotions, or macroeconomic shifts.
-
----
-
-## Running Automated Tests
-
-Run the full test suite with Pytest:
-```bash
-pytest -v
-```
-
-Tests include coverage for:
-- Column normalization and schema validation
-- Duplicate detection and removal
-- Missing value imputation (median/mode) and invalid date pruning
-- Multi-year monthly and quarterly aggregations
-- Top 5 products ranking
-- CSVs without a Region column
-- Small datasets with insufficient monthly data (< 3 months)
-- Single-product and single-category datasets
-
----
-
-## License
-
-MIT License. Designed and engineered for production-grade retail data analytics.
+⭐ One step closer to completing the Python journey — learning, analyzing, and building practical projects every day.

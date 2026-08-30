@@ -1,4 +1,4 @@
-# Day 87 — Game Development Portfolio Project: Snake Game
+# Day 95 — Game Development Portfolio Project: Snake Game
 
 Part of my [100 Days of Code — Python Bootcamp](https://github.com/Tehseenfatima151) journey (Angela Yu).
 
