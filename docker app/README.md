@@ -1,6 +1,6 @@
 # Dockerized Flask CI/CD App
 
-A production-style Python web application demonstrating professional containerization, automated testing, and a complete GitHub Actions CI/CD pipeline with deployment to Render.
+A production-style Python web application demonstrating professional containerization, automated testing, and a complete GitHub Actions CI/CD pipeline with Render deployment configured.
 
 ---
 
@@ -33,7 +33,7 @@ This project is intentionally simple in its business logic so that the engineeri
 | Docker Compose | Single-command local setup |
 | pytest suite | 15 tests covering status codes and response structure |
 | GitHub Actions | 3-job pipeline: test → docker-build → deploy |
-| Render deployment | Blueprint-based, auto-deploys on push to main |
+| Render deployment | Blueprint-based, auto-deploys on push to main — deployment hook configured; live deploy not completed (see Deployment Note) |
 | Environment secrets | `.env.example` template, real `.env` never committed |
 
 ---
@@ -59,12 +59,12 @@ GitHub Actions
        │ passes  (main branch only)
        ▼
   ┌────┴──────┐
-  │  deploy   │  POST to Render deploy hook
+  │  deploy   │  POST to Render deploy hook (configured; live deploy not completed)
   └────┬──────┘
        │
        ▼
-  Render platform
-       │  pulls repo, builds Dockerfile, starts Gunicorn
+  Render platform  ← deployment hook is wired up; live service not activated
+       │  (would pull repo, build Dockerfile, start Gunicorn)
        ▼
   Flask container
        │
@@ -272,8 +272,49 @@ Runs only after `test` succeeds.
 
 Runs only on pushes to `main`, after both previous jobs pass.
 
-1. Sends a `POST` request to the Render deploy hook URL
-2. Render pulls the latest commit, rebuilds the Docker image, and rolls out the new version
+1. Sends a `POST` request to the Render deploy hook URL stored in `RENDER_DEPLOY_HOOK_URL`
+2. Render would pull the latest commit, rebuild the Docker image, and roll out the new version
+
+> See [Deployment Note](#deployment-note) below.
+
+---
+
+## CI/CD Verification
+
+All pipeline stages were run and verified locally and through GitHub Actions.
+
+| Check | Result |
+|---|---|
+| pytest (15 tests) | ✅ PASS |
+| GitHub Actions `test` job | ✅ PASS |
+| Docker image build | ✅ PASS |
+| Docker container smoke test | ✅ PASS |
+| `GET /health` verified | ✅ PASS |
+| `GET /` verified | ✅ PASS |
+| Docker health check configured | ✅ Yes — in both `Dockerfile` and `docker-compose.yml` |
+| Gunicorn production server configured | ✅ Yes — used as the WSGI server in the container |
+| Non-root Docker user configured | ✅ Yes — container runs as unprivileged user |
+| `.env` excluded via `.gitignore` | ✅ Yes — never committed to source control |
+| `SECRET_KEY` loaded from environment | ✅ Yes — no secrets hard-coded |
+| Render deployment hook configured | ✅ Yes — `RENDER_DEPLOY_HOOK_URL` wired up in the `deploy` job |
+| Live Render deployment | ⚠️ Not completed — see Deployment Note |
+
+---
+
+## Deployment Note
+
+The project is fully deployment-ready. The Render deployment step is implemented in the CI/CD pipeline using a `RENDER_DEPLOY_HOOK_URL` GitHub Actions secret. On every push to `main`, the `deploy` job fires a `POST` request to that hook, which triggers Render to pull the latest commit, rebuild the Docker image, and start the new container.
+
+**The live deployment to Render was not completed** because the platform requires billing/card verification to activate a service, and that step was not performed. No live URL exists for this project.
+
+Everything needed for a real deployment is in place:
+
+- `render.yaml` Blueprint configuration
+- `Dockerfile` with Gunicorn, non-root user, and health check
+- `RENDER_DEPLOY_HOOK_URL` secret slot in the GitHub Actions workflow
+- `/health` endpoint for Render's health check probe
+
+To complete the deployment, add a Render account with billing configured, create the service, copy the deploy hook URL, and save it as a GitHub Actions secret.
 
 ---
 
@@ -304,6 +345,8 @@ After the first deploy, Render provides a public URL. Verify it:
 curl https://<your-service>.onrender.com/health
 # Expected: {"status":"healthy"}
 ```
+
+> **Note:** A live deployment was not completed for this project. See [Deployment Note](#deployment-note).
 
 ---
 
