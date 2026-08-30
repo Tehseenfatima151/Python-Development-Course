@@ -1,0 +1,35 @@
+services:
+  web:
+    # Build the image from the local Dockerfile.
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    # Map host port 5000 → container port 5000.
+    ports:
+      - "5000:5000"
+
+    # Load environment variables from .env (never committed to Git).
+    # The .env.example file documents the required keys and safe defaults.
+    env_file:
+      - .env
+
+    # Automatically restart the container if it exits unexpectedly.
+    # 'unless-stopped' means it restarts on crashes but stays stopped
+    # if you explicitly run `docker compose down`.
+    restart: unless-stopped
+
+    # Health check mirrors the HEALTHCHECK instruction in the Dockerfile.
+    # Docker Compose surfaces health status in `docker compose ps` output.
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "python",
+          "-c",
+          "import urllib.request; urllib.request.urlopen('http://localhost:5000/health')",
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s

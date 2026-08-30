@@ -1,0 +1,41 @@
+# Version control
+.git
+.github
+
+# Python artifacts
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+*.egg-info
+dist
+build
+
+# Virtual environments
+.venv
+venv
+env
+
+# Test artifacts and cache
+.pytest_cache
+tests
+htmlcov
+.coverage
+
+# Environment files — never bake secrets into the image
+.env
+.env.local
+.env.*.local
+
+# IDE / editor files
+.vscode
+.idea
+*.swp
+*.swo
+
+# OS artifacts
+.DS_Store
+Thumbs.db
+
+# Documentation (not needed at runtime)
+README.md

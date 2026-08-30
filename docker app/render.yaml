@@ -1,0 +1,48 @@
+# ---------------------------------------------------------------------------
+# Render Blueprint Configuration
+#
+# This file lets Render auto-configure your service when you connect the
+# GitHub repository via "New → Blueprint" in the Render dashboard.
+#
+# Environment variables marked `generateValue: true` are auto-generated
+# by Render (safe and random).  Variables marked `sync: false` must be
+# set manually in the Render dashboard — never store them here.
+#
+# Docs: https://render.com/docs/blueprint-spec
+# ---------------------------------------------------------------------------
+
+services:
+  - type: web
+    name: dockerized-flask-cicd
+    runtime: docker           # Use the Dockerfile in the repo root
+    dockerfilePath: ./Dockerfile
+
+    # Region closest to your users; options: oregon, frankfurt, singapore, ohio
+    region: oregon
+
+    # Free tier plan — upgrade to 'starter' or higher for production traffic
+    plan: free
+
+    # Render injects PORT automatically; the app and Gunicorn must bind to it.
+    # The value below matches our Dockerfile EXPOSE and Gunicorn --bind setting.
+    healthCheckPath: /health
+
+    # Auto-deploy whenever new commits are pushed to the main branch
+    autoDeploy: true
+
+    envVars:
+      # Flask environment — set to 'production' on Render
+      - key: FLASK_ENV
+        value: production
+
+      # The port Render routes traffic to (Render also sets this automatically)
+      - key: PORT
+        value: 10000           # Render's default for web services
+
+      # Secret key — auto-generated per deployment (safe, never committed)
+      - key: SECRET_KEY
+        generateValue: true
+
+      # Optional: override the app name shown in the root JSON response
+      # - key: APP_NAME
+      #   value: Dockerized Flask CI/CD App
