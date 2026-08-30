@@ -1,226 +1,343 @@
-# Dockerized Flask CI/CD App
+# 🐳 Dockerized Flask CI/CD App
 
-A production-style Python web application demonstrating professional containerization, automated testing, and a complete GitHub Actions CI/CD pipeline with Render deployment configured.
+[![CI/CD
+Pipeline](https://github.com/Tehseenfatima151/Python-Development-Course/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/Tehseenfatima151/Python-Development-Course/actions/workflows/ci-cd.yml)
+![Python](https://img.shields.io/badge/Python-3.12-blue)
+![Flask](https://img.shields.io/badge/Flask-3.x-black)
+![Docker](https://img.shields.io/badge/Docker-Containerized-blue)
+![Pytest](https://img.shields.io/badge/Tests-15%20passed-success)
 
----
+A production-style Flask web application demonstrating **Docker
+containerization, automated testing, Docker health checks, and a GitHub
+Actions CI/CD pipeline** with Render deployment integration.
 
-## Project Overview
+> **Deployment status:** CI/CD and Docker validation are working. The
+> Render live deployment was not completed because Render required
+> billing/card verification.
 
-This project is intentionally simple in its business logic so that the engineering practices take centre stage. It shows how a real team would structure, test, containerize, and continuously deploy a Flask service.
+------------------------------------------------------------------------
 
-**What it demonstrates:**
+## 🚀 Project Overview
 
-- Flask API using the **application factory pattern**
-- **Docker** multi-stage build with a non-root user
-- **Docker Compose** for a one-command local developer experience
-- **Automated tests** with pytest and Flask's test client
-- **GitHub Actions** CI/CD pipeline (test → build → deploy)
-- **Health check endpoint** compatible with Docker, Render, and any monitoring tool
-- **Environment variable security** — secrets never committed to source control
-- **Production deployment** on Render using Gunicorn
+This project keeps the business logic intentionally simple so the
+engineering practices can take centre stage.
 
----
+### What it demonstrates
 
-## Features
+-   🧩 Flask application factory pattern
+-   🐳 Multi-stage Docker build
+-   🔐 Non-root Docker container user
+-   📦 Docker Compose for local development
+-   🧪 Automated testing with pytest
+-   ⚙️ GitHub Actions CI/CD pipeline
+-   ❤️ `/health` endpoint for container/monitoring checks
+-   🔑 Environment-variable based secret management
+-   🚀 Gunicorn production WSGI server
+-   ☁️ Render deployment configuration and deploy-hook integration
 
-| Feature | Detail |
-|---|---|
-| Flask REST API | `GET /` and `GET /health` endpoints |
-| Application factory | Clean, testable `create_app()` pattern |
-| Docker multi-stage build | Small final image, layer caching optimised |
-| Non-root container user | Security best practice |
-| Docker health check | Built into both Dockerfile and Compose |
-| Docker Compose | Single-command local setup |
-| pytest suite | 15 tests covering status codes and response structure |
-| GitHub Actions | 3-job pipeline: test → docker-build → deploy |
-| Render deployment | Blueprint-based, auto-deploys on push to main — deployment hook configured; live deploy not completed (see Deployment Note) |
-| Environment secrets | `.env.example` template, real `.env` never committed |
+------------------------------------------------------------------------
 
----
+## ✨ Features
 
-## Architecture
+  -----------------------------------------------------------------------
+  Feature                             Details
+  ----------------------------------- -----------------------------------
+  Flask REST API                      `GET /` and `GET /health` endpoints
 
+  Application Factory                 Clean, testable `create_app()`
+                                      pattern
+
+  Multi-stage Docker Build            Optimized image build with separate
+                                      stages
+
+  Non-root Container                  Runs as an unprivileged `appuser`
+
+  Docker Health Check                 Configured in both `Dockerfile` and
+                                      `docker-compose.yml`
+
+  Docker Compose                      One-command local container setup
+
+  pytest Suite                        15 automated tests
+
+  GitHub Actions                      `test → docker-build → deploy`
+                                      pipeline
+
+  Smoke Tests                         Validates `/health` and `/` inside
+                                      the CI container
+
+  Gunicorn                            Production WSGI server instead of
+                                      `flask run`
+
+  Secret Management                   `.env` ignored; production secrets
+                                      supplied through environment
+                                      variables
+
+  Render Integration                  `render.yaml` and deploy-hook
+                                      workflow configuration
+  -----------------------------------------------------------------------
+
+------------------------------------------------------------------------
+
+## 🏗️ Repository Structure
+
+This project is maintained inside the existing
+`Python-Development-Course` repository.
+
+``` text
+Python-Development-Course/
+│
+├── .github/
+│   └── workflows/
+│       └── ci-cd.yml
+│
+├── day-81/
+├── day-82/
+├── ...
+│
+└── docker app/
+    ├── app/
+    │   ├── __init__.py
+    │   ├── config.py
+    │   └── routes.py
+    │
+    ├── tests/
+    │   ├── __init__.py
+    │   └── test_app.py
+    │
+    ├── Dockerfile
+    ├── docker-compose.yml
+    ├── render.yaml
+    ├── requirements.txt
+    ├── .env.example
+    ├── .gitignore
+    ├── .dockerignore
+    ├── run.py
+    └── README.md
 ```
-Developer (git push)
-       │
-       ▼
-   GitHub repo
-       │
-       ▼
+
+The workflow is intentionally stored at the repository root because
+GitHub Actions discovers workflows from `.github/workflows/`.
+
+------------------------------------------------------------------------
+
+## 🔄 CI/CD Architecture
+
+``` text
+Developer
+   │
+   │ git push
+   ▼
+GitHub Repository
+   │
+   ▼
 GitHub Actions
-  ┌────┴─────┐
-  │  test    │  install deps, run pytest (15 tests)
-  └────┬─────┘
-       │ passes
-       ▼
-  ┌────┴──────────┐
-  │ docker-build  │  build image, smoke-test /health and /
-  └────┬──────────┘
-       │ passes  (main branch only)
-       ▼
-  ┌────┴──────┐
-  │  deploy   │  POST to Render deploy hook (configured; live deploy not completed)
-  └────┬──────┘
-       │
-       ▼
-  Render platform  ← deployment hook is wired up; live service not activated
-       │  (would pull repo, build Dockerfile, start Gunicorn)
-       ▼
-  Flask container
-       │
-       ├── GET /        → {"status":"running", ...}
-       └── GET /health  → {"status":"healthy"}
+   │
+   ├── 1. TEST
+   │      ├── Python 3.12
+   │      ├── Install dependencies
+   │      └── Run 15 pytest tests
+   │
+   ├── 2. DOCKER BUILD
+   │      ├── Build Docker image
+   │      ├── Start container
+   │      ├── Test /health
+   │      └── Test /
+   │
+   └── 3. DEPLOY
+          └── Trigger Render Deploy Hook
+              │
+              ▼
+          Render deployment
 ```
 
----
+The `deploy` job runs only for a **push to `main`** and only after both
+`test` and `docker-build` succeed.
 
-## Tech Stack
+------------------------------------------------------------------------
 
-| Technology | Purpose |
-|---|---|
-| Python 3.12 | Runtime |
-| Flask 3.x | Web framework |
-| Gunicorn | Production WSGI server |
-| Docker | Container runtime |
-| Docker Compose | Local orchestration |
-| GitHub Actions | CI/CD pipeline |
-| pytest | Automated testing |
-| Render | Cloud deployment platform |
+## 🛠️ Tech Stack
 
----
+  Technology       Purpose
+  ---------------- ------------------------
+  Python 3.12      Runtime
+  Flask 3.x        Web framework
+  Gunicorn         Production WSGI server
+  Docker           Containerization
+  Docker Compose   Local orchestration
+  GitHub Actions   CI/CD automation
+  pytest           Automated testing
+  Render           Deployment integration
 
-## Prerequisites
+------------------------------------------------------------------------
 
-- [Python 3.12+](https://www.python.org/downloads/)
-- [Docker Desktop](https://www.docker.com/products/docker-desktop/) (includes Docker Compose)
-- [Git](https://git-scm.com/)
-- A [GitHub](https://github.com) account
-- A [Render](https://render.com) account (free tier works)
+## 📋 Prerequisites
 
----
+### Required for development/testing
 
-## Local Setup
+-   Python 3.12+
+-   Git
+-   GitHub account
 
-### 1. Clone the repository
+### Optional for local Docker execution
 
-```bash
-git clone https://github.com/<your-username>/dockerized-flask-cicd.git
-cd dockerized-flask-cicd
+-   Docker Desktop
+
+> Docker Desktop is **not required to validate the CI Docker build**
+> because GitHub Actions runs the Docker build and smoke tests on its
+> hosted runner. It is required if you want to build and run the
+> containers locally with Docker Compose.
+
+------------------------------------------------------------------------
+
+## ⚙️ Local Setup
+
+From the repository root:
+
+``` bash
+cd "docker app"
 ```
 
-### 2. Create your local environment file
+### 1. Create the environment file
 
-```bash
+``` bash
+# macOS/Linux
 cp .env.example .env
+
+# Windows PowerShell
+Copy-Item .env.example .env
 ```
 
-Open `.env` and update `SECRET_KEY` with a real random value:
+Generate a strong secret:
 
-```bash
-# Generate a strong key
+``` bash
 python -c "import secrets; print(secrets.token_hex(32))"
 ```
 
-Your `.env` should look like:
+Update `.env`:
 
-```env
+``` env
 FLASK_ENV=development
 SECRET_KEY=<your-generated-key>
 PORT=5000
+APP_NAME=Dockerized Flask CI/CD App
 ```
 
-> **Important:** `.env` is listed in `.gitignore`. Never commit it.
+> 🔐 **Never commit `.env`.** The real `.env` file is excluded through
+> `.gitignore`. Only `.env.example` is committed.
 
----
+------------------------------------------------------------------------
 
-## Run Without Docker
+## 🐍 Run Without Docker
 
-Useful for rapid iteration during development.
+Useful for rapid development and testing.
 
-```bash
-# Create and activate a virtual environment
+From inside `docker app`:
+
+``` bash
 python -m venv .venv
-source .venv/bin/activate      # macOS/Linux
-.venv\Scripts\activate         # Windows
+```
 
-# Install dependencies
+### Windows
+
+``` bash
+.venv\Scripts\activate
+```
+
+### macOS/Linux
+
+``` bash
+source .venv/bin/activate
+```
+
+Install dependencies:
+
+``` bash
 pip install -r requirements.txt
+```
 
-# Start the development server
+Run the development server:
+
+``` bash
 python run.py
 ```
 
-Visit:
-- http://localhost:5000/
-- http://localhost:5000/health
+Verify:
 
----
+``` text
+http://localhost:5000/
+http://localhost:5000/health
+```
 
-## Run With Docker
+------------------------------------------------------------------------
 
-### Build the image
+## 🐳 Run With Docker Compose
 
-```bash
+Docker Desktop must be installed and running for this section.
+
+From inside `docker app`:
+
+### Build
+
+``` bash
 docker compose build
 ```
 
-### Start the container
+### Start
 
-```bash
+``` bash
 docker compose up
 ```
 
-The application is available at:
-- http://localhost:5000/
-- http://localhost:5000/health
+### Check health
 
-### Check container health
-
-```bash
+``` bash
 docker compose ps
 ```
 
-The `STATUS` column will show `healthy` once the health check passes (allow ~15 seconds after startup).
+Wait for the container status to become `healthy`.
 
-### Stop the container
+### Stop
 
-```bash
+``` bash
 docker compose down
 ```
 
----
+------------------------------------------------------------------------
 
-## Testing
+## 🧪 Testing
 
-Run the full pytest suite (no Docker or running server needed):
+From inside `docker app`:
 
-```bash
+``` bash
 pytest -v
 ```
 
-Expected output:
+### Verified result
 
-```
-tests/test_app.py::TestRootEndpoint::test_root_returns_200 PASSED
-tests/test_app.py::TestRootEndpoint::test_root_returns_json PASSED
-...
-tests/test_app.py::TestHealthEndpoint::test_health_status_is_healthy PASSED
-tests/test_app.py::TestNotFound::test_unknown_route_returns_404 PASSED
-
-15 passed in Xs
+``` text
+15 passed
 ```
 
----
+The test suite covers:
 
-## API Endpoints
+-   Root endpoint status
+-   Root endpoint JSON response
+-   Health endpoint status
+-   Health response structure
+-   Invalid/unknown routes
+-   Application behavior and configuration
+
+------------------------------------------------------------------------
+
+## 🔌 API Endpoints
 
 ### `GET /`
 
-Returns application information.
+Returns basic application information.
 
-**Response `200 OK`:**
+**Response:**
 
-```json
+``` json
 {
   "application": "Dockerized Flask CI/CD App",
   "status": "running",
@@ -229,242 +346,248 @@ Returns application information.
 }
 ```
 
----
-
 ### `GET /health`
 
-Lightweight health probe used by Docker, Render, and monitoring tools.
+Lightweight health endpoint used by Docker and monitoring/deployment
+systems.
 
-**Response `200 OK`:**
+**Response:**
 
-```json
+``` json
 {
   "status": "healthy"
 }
 ```
 
----
+------------------------------------------------------------------------
 
-## CI/CD Pipeline
+## 🔐 Security
 
-The pipeline is defined in `.github/workflows/ci-cd.yml` and has three jobs.
+Security considerations implemented in the project:
 
-### Job 1 — `test`
+-   `.env` is excluded from Git through `.gitignore`
+-   `SECRET_KEY` is loaded from an environment variable
+-   No production secret is hard-coded in source code
+-   Docker runs the application as a non-root `appuser`
+-   CI smoke tests use a dedicated non-production test secret
+-   Render deployment credentials are expected through GitHub Actions
+    Secrets
 
-Triggered on every push and pull request.
+### GitHub Actions Secret
 
-1. Checks out the repository
-2. Sets up Python 3.12 with pip caching
-3. Installs `requirements.txt`
-4. Runs `pytest -v` — the pipeline fails if any test fails
+The deployment job expects:
 
-### Job 2 — `docker-build`
+``` text
+RENDER_DEPLOY_HOOK_URL
+```
+
+This should be stored under:
+
+**GitHub → Repository Settings → Secrets and variables → Actions**
+
+Never place the deploy-hook URL directly inside `ci-cd.yml`.
+
+------------------------------------------------------------------------
+
+## ⚙️ GitHub Actions CI/CD
+
+Workflow:
+
+``` text
+.github/workflows/ci-cd.yml
+```
+
+### Job 1 --- `test`
+
+Runs on project changes pushed to branches and on pull requests
+targeting `main`.
+
+Steps:
+
+1.  Checkout repository
+2.  Set up Python 3.12
+3.  Restore pip cache
+4.  Install `docker app/requirements.txt`
+5.  Run `pytest -v`
+
+### Job 2 --- `docker-build`
 
 Runs only after `test` succeeds.
 
-1. Sets up Docker Buildx
-2. Builds the Docker image (with GitHub Actions cache for speed)
-3. Starts the container and waits for it to accept requests
-4. Asserts `GET /health` returns `{"status":"healthy"}`
-5. Asserts `GET /` returns `{"status":"running"}`
+Steps:
 
-### Job 3 — `deploy`
+1.  Set up Docker Buildx
+2.  Build the Docker image
+3.  Start a test container
+4.  Wait for the application
+5.  Verify `/health`
+6.  Verify `/`
+7.  Remove the test container
 
-Runs only on pushes to `main`, after both previous jobs pass.
+### Job 3 --- `deploy`
 
-1. Sends a `POST` request to the Render deploy hook URL stored in `RENDER_DEPLOY_HOOK_URL`
-2. Render would pull the latest commit, rebuild the Docker image, and roll out the new version
+Runs only when:
 
-> See [Deployment Note](#deployment-note) below.
-
----
-
-## CI/CD Verification
-
-All pipeline stages were run and verified locally and through GitHub Actions.
-
-| Check | Result |
-|---|---|
-| pytest (15 tests) | ✅ PASS |
-| GitHub Actions `test` job | ✅ PASS |
-| Docker image build | ✅ PASS |
-| Docker container smoke test | ✅ PASS |
-| `GET /health` verified | ✅ PASS |
-| `GET /` verified | ✅ PASS |
-| Docker health check configured | ✅ Yes — in both `Dockerfile` and `docker-compose.yml` |
-| Gunicorn production server configured | ✅ Yes — used as the WSGI server in the container |
-| Non-root Docker user configured | ✅ Yes — container runs as unprivileged user |
-| `.env` excluded via `.gitignore` | ✅ Yes — never committed to source control |
-| `SECRET_KEY` loaded from environment | ✅ Yes — no secrets hard-coded |
-| Render deployment hook configured | ✅ Yes — `RENDER_DEPLOY_HOOK_URL` wired up in the `deploy` job |
-| Live Render deployment | ⚠️ Not completed — see Deployment Note |
-
----
-
-## Deployment Note
-
-The project is fully deployment-ready. The Render deployment step is implemented in the CI/CD pipeline using a `RENDER_DEPLOY_HOOK_URL` GitHub Actions secret. On every push to `main`, the `deploy` job fires a `POST` request to that hook, which triggers Render to pull the latest commit, rebuild the Docker image, and start the new container.
-
-**The live deployment to Render was not completed** because the platform requires billing/card verification to activate a service, and that step was not performed. No live URL exists for this project.
-
-Everything needed for a real deployment is in place:
-
-- `render.yaml` Blueprint configuration
-- `Dockerfile` with Gunicorn, non-root user, and health check
-- `RENDER_DEPLOY_HOOK_URL` secret slot in the GitHub Actions workflow
-- `/health` endpoint for Render's health check probe
-
-To complete the deployment, add a Render account with billing configured, create the service, copy the deploy hook URL, and save it as a GitHub Actions secret.
-
----
-
-## Deployment to Render
-
-### Option A — Render Blueprint (recommended)
-
-1. Push this repository to GitHub.
-2. Log in to [Render](https://render.com).
-3. Click **New → Blueprint**.
-4. Connect your GitHub account and select this repository.
-5. Render reads `render.yaml` and creates the service automatically.
-6. Set any environment variables that are marked `sync: false` in the Render dashboard.
-
-### Option B — Manual service setup
-
-1. Click **New → Web Service**.
-2. Connect your GitHub repository.
-3. Set **Runtime** to **Docker**.
-4. Set **Dockerfile path** to `./Dockerfile`.
-5. Set **Health check path** to `/health`.
-6. Add the environment variables listed below.
-7. Click **Create Web Service**.
-
-After the first deploy, Render provides a public URL. Verify it:
-
-```bash
-curl https://<your-service>.onrender.com/health
-# Expected: {"status":"healthy"}
+``` text
+push → main
 ```
 
-> **Note:** A live deployment was not completed for this project. See [Deployment Note](#deployment-note).
+and both previous jobs succeed.
 
----
+It sends a `POST` request to the Render deploy hook stored in:
 
-## Environment Variables
+``` text
+RENDER_DEPLOY_HOOK_URL
+```
 
-### Local development
+------------------------------------------------------------------------
 
-| Variable | Description | Example |
-|---|---|---|
-| `FLASK_ENV` | Runtime environment | `development` |
-| `SECRET_KEY` | Session signing key | `<random hex>` |
-| `PORT` | Listening port | `5000` |
-| `APP_NAME` | Display name in root response | `Dockerized Flask CI/CD App` |
+## ✅ CI/CD Verification
 
-Copy `.env.example` to `.env` and fill in real values. Never commit `.env`.
+  Check                               Result
+  ----------------------------------- ---------------------------
+  pytest --- 15 tests                 ✅ PASS
+  GitHub Actions `test` job           ✅ PASS
+  Docker image build                  ✅ PASS
+  Docker smoke test                   ✅ PASS
+  `GET /health`                       ✅ PASS
+  `GET /`                             ✅ PASS
+  Docker health check                 ✅ Configured
+  Gunicorn                            ✅ Configured
+  Non-root Docker user                ✅ Configured
+  `.env` protection                   ✅ Configured
+  `SECRET_KEY` environment variable   ✅ Configured
+  Render integration                  ✅ Configured in workflow
+  Live Render deployment              ⚠️ Not completed
 
-### Production (Render)
+------------------------------------------------------------------------
 
-Set these in the Render dashboard under **Environment**:
+## ☁️ Deployment Status
 
-| Variable | Value |
-|---|---|
-| `FLASK_ENV` | `production` |
-| `SECRET_KEY` | A strong random value (Render can auto-generate) |
-| `PORT` | `10000` (Render's default; set automatically) |
+### Render Integration
 
-### GitHub Actions secrets
+The project includes:
 
-The deploy job requires one repository secret:
+-   `render.yaml` Blueprint configuration
+-   Dockerfile configured for production
+-   Gunicorn startup
+-   Docker health check
+-   `/health` endpoint
+-   GitHub Actions Render deploy-hook step
 
-| Secret | Where to get it |
-|---|---|
-| `RENDER_DEPLOY_HOOK_URL` | Render dashboard → your service → Settings → Deploy Hook |
+### Live deployment
 
-Add it at: **GitHub repo → Settings → Secrets and variables → Actions → New repository secret**
+The live Render deployment was **not completed** because Render required
+billing/card verification.
 
-#### Secret types explained
+No fake live URL is claimed.
 
-| Type | Where stored | Committed? | Use case |
-|---|---|---|---|
-| `.env.example` | Repository | ✅ Yes | Documents required keys with safe placeholder values |
-| `.env` | Local machine only | ❌ No | Real local development values |
-| GitHub Actions secrets | GitHub Settings | ❌ No | CI/CD credentials (deploy hooks, registry tokens) |
-| Render environment vars | Render dashboard | ❌ No | Production secrets (`SECRET_KEY`, API keys) |
+The CI/CD deployment step remains ready to trigger a Render deployment
+once a suitable Render service and deploy hook are available.
 
----
+------------------------------------------------------------------------
 
-## Troubleshooting
+## 🚀 How Deployment Would Work
+
+``` text
+1. Push code to main
+          ↓
+2. GitHub Actions runs tests
+          ↓
+3. Docker image builds
+          ↓
+4. Container smoke tests pass
+          ↓
+5. Deploy job runs
+          ↓
+6. Render Deploy Hook receives POST
+          ↓
+7. Render builds and starts the service
+```
+
+------------------------------------------------------------------------
+
+## 🐛 Troubleshooting
 
 ### Port 5000 already in use
 
-```bash
-# Find the process using port 5000
-# macOS/Linux:
-lsof -i :5000
-# Windows:
-netstat -ano | findstr :5000
+Windows:
 
-# Stop the container and restart
+``` bash
+netstat -ano | findstr :5000
+```
+
+Stop Docker services:
+
+``` bash
 docker compose down
-docker compose up
 ```
 
 ### Container exits immediately
 
-```bash
-# View container logs
-docker compose logs web
-
-# Check the container status
+``` bash
+docker compose logs
 docker compose ps
 ```
 
-### Tests fail with ImportError
+### Tests fail
 
-```bash
-# Make sure you are running pytest from the project root
-cd dockerized-flask-cicd
+Make sure you are inside the project directory:
+
+``` bash
+cd "docker app"
 pytest -v
 ```
 
-### Docker image build fails
+### Docker build fails
 
-```bash
-# Rebuild without cache to pick up fresh dependencies
+Try a clean rebuild:
+
+``` bash
 docker compose build --no-cache
 ```
 
-### Render deployment not triggering
+### Render deploy job fails
 
-1. Confirm `RENDER_DEPLOY_HOOK_URL` is saved in GitHub repository secrets (not environment variables).
-2. Check the Actions run log for the `deploy` job — look for the HTTP status code in the curl output.
-3. Verify the deploy hook URL is copied exactly from the Render dashboard (it starts with `https://api.render.com/deploy/...`).
+Check that:
 
-### `/health` returns a non-200 response after deploy
+``` text
+RENDER_DEPLOY_HOOK_URL
+```
 
-- Allow 2–3 minutes for the container to start on Render's free tier.
-- Check the Render service logs in the dashboard for startup errors.
-- Confirm `SECRET_KEY` is set in the Render environment variables.
+exists under:
 
----
+**GitHub → Settings → Secrets and variables → Actions**
 
-## Future Improvements
+Do not paste the secret into the workflow file.
 
-These are realistic next steps for a production-grade system — not implemented here to keep the project focused.
+------------------------------------------------------------------------
 
-- **Docker image registry** — push images to Docker Hub, GitHub Container Registry (GHCR), or AWS ECR for auditability and faster deploys
-- **Staging environment** — deploy feature branches to a staging Render service before merging to main
-- **PostgreSQL** — add a database tier with SQLAlchemy and Alembic migrations
-- **Redis** — add caching or a task queue (Celery)
-- **Structured logging** — replace print-style logs with JSON-formatted logs using `structlog`
-- **Monitoring & alerting** — integrate Sentry for error tracking or Prometheus + Grafana for metrics
-- **Automated rollback** — trigger a rollback deploy if the health check fails post-deployment
-- **Kubernetes** — migrate the Compose service definition to a Helm chart for larger-scale deployments
-- **Docker image scanning** — add Trivy or Snyk to the CI pipeline to catch vulnerable dependencies
+## 🔮 Future Improvements
 
----
+Possible production-level extensions:
 
-## License
+-   📦 Push images to GHCR, Docker Hub, or AWS ECR
+-   🌐 Add a staging environment
+-   🗄️ Add PostgreSQL with SQLAlchemy/Alembic
+-   ⚡ Add Redis and background task processing
+-   📊 Add structured logging
+-   🚨 Add monitoring and alerting
+-   🔄 Add automated rollback
+-   ☸️ Migrate to Kubernetes/Helm for larger deployments
+-   🛡️ Add Docker image vulnerability scanning with Trivy or Snyk
 
-MIT — see [LICENSE](LICENSE) for details.
+------------------------------------------------------------------------
+
+## 📄 License
+
+MIT --- see [LICENSE](LICENSE) for details.
+
+------------------------------------------------------------------------
+
+## 👩‍💻 Project Focus
+
+This project was built to demonstrate practical skills in:
+
+**Flask • Docker • Docker Compose • GitHub Actions • CI/CD • Testing •
+Security • Production Configuration**
