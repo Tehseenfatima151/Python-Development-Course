@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product — ShopFlask</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="container navbar-inner">
+    <a href="/index.html" class="navbar-brand">🛍️ <span>ShopFlask</span></a>
+    <ul class="navbar-nav">
+      <li><a href="/index.html" class="nav-link">Products</a></li>
+      <li><a href="/orders.html" class="nav-link" id="nav-orders">Orders</a></li>
+      <li><a href="/admin.html" class="nav-link hidden" id="nav-admin">Admin</a></li>
+      <li><a href="/cart.html" class="nav-link cart-link">🛒 Cart <span class="cart-badge hidden" id="cart-count">0</span></a></li>
+    </ul>
+    <div class="navbar-auth" id="navbar-auth">
+      <span id="nav-username"></span>
+      <a href="/login.html" class="btn btn-primary btn-sm" id="btn-login">Login</a>
+      <button class="btn btn-ghost btn-sm hidden" id="btn-logout">Logout</button>
+    </div>
+  </div>
+</nav>
+
+<main>
+  <div class="container">
+    <div id="product-detail-container">
+      <div class="loading-overlay">
+        <div class="spinner spinner-dark"></div>
+        <span>Loading product…</span>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer><div class="container">&copy; 2026 ShopFlask</div></footer>
+
+<script src="/js/api.js"></script>
+<script src="/js/auth.js"></script>
+<script src="/js/cart.js"></script>
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const productId = params.get('id');
+
+  async function loadProduct() {
+    const container = document.getElementById('product-detail-container');
+    if (!productId) {
+      container.innerHTML = '<div class="alert alert-danger">No product ID specified.</div>';
+      return;
+    }
+    try {
+      const data = await API.get(`/api/products/${productId}`);
+      const p = data.data.product;
+      document.title = `${p.name} — ShopFlask`;
+
+      const stockBadge = p.stock === 0
+        ? '<span class="badge badge-danger">Out of Stock</span>'
+        : p.stock < 5
+          ? `<span class="badge badge-warning">Only ${p.stock} left</span>`
+          : `<span class="badge badge-success">In Stock (${p.stock})</span>`;
+
+      container.innerHTML = `
+        <a href="/index.html" style="display:inline-flex;align-items:center;gap:.4rem;color:var(--gray-600);font-size:.9rem;margin-bottom:1.5rem;">
+          ← Back to Products
+        </a>
+        <div class="product-detail-grid">
+          <div class="product-detail-img">
+            ${p.image_url
+              ? `<img src="${p.image_url}" alt="${p.name}" onerror="this.parentElement.innerHTML='<div class=product-image-placeholder>🛒</div>'">`
+              : '<div class="product-image-placeholder" style="height:400px;">🛒</div>'}
+          </div>
+          <div>
+            <div class="product-detail-meta">
+              ${p.category ? `<span class="badge badge-primary">${p.category}</span>` : ''}
+              ${stockBadge}
+            </div>
+            <h1 style="font-size:1.75rem;margin:.5rem 0;">${p.name}</h1>
+            <div class="product-detail-price">$${p.price.toFixed(2)}</div>
+            <p class="product-detail-desc">${p.description || 'No description available.'}</p>
+
+            <div id="cart-message" class="mt-2"></div>
+
+            ${p.stock > 0 ? `
+            <div class="qty-selector">
+              <label class="form-label" style="margin:0;">Quantity:</label>
+              <button class="qty-btn" id="qty-dec">−</button>
+              <input type="number" class="form-control qty-input" id="qty-input" value="1" min="1" max="${p.stock}">
+              <button class="qty-btn" id="qty-inc">+</button>
+            </div>
+            <button class="btn btn-primary btn-lg" id="add-to-cart-btn" data-id="${p.id}">
+              🛒 Add to Cart
+            </button>
+            ` : '<button class="btn btn-ghost btn-lg" disabled>Out of Stock</button>'}
+          </div>
+        </div>`;
+
+      if (p.stock > 0) {
+        const qtyInput = document.getElementById('qty-input');
+        document.getElementById('qty-dec').onclick = () => { if (parseInt(qtyInput.value) > 1) qtyInput.value = parseInt(qtyInput.value) - 1; };
+        document.getElementById('qty-inc').onclick = () => { if (parseInt(qtyInput.value) < p.stock) qtyInput.value = parseInt(qtyInput.value) + 1; };
+        qtyInput.addEventListener('change', () => {
+          let v = parseInt(qtyInput.value);
+          if (isNaN(v) || v < 1) v = 1;
+          if (v > p.stock) v = p.stock;
+          qtyInput.value = v;
+        });
+
+        document.getElementById('add-to-cart-btn').addEventListener('click', async () => {
+          const qty = parseInt(qtyInput.value);
+          const msgEl = document.getElementById('cart-message');
+          try {
+            await Cart.addItem(p.id, qty);
+            msgEl.innerHTML = '<div class="alert alert-success" style="margin:0;">✅ Added to cart!</div>';
+            setTimeout(() => msgEl.innerHTML = '', 2500);
+          } catch (err) {
+            msgEl.innerHTML = `<div class="alert alert-danger" style="margin:0;">❌ ${err.message}</div>`;
+          }
+        });
+      }
+    } catch (err) {
+      container.innerHTML = `<div class="alert alert-danger">Failed to load product: ${err.message}</div>`;
+    }
+  }
+
+  loadProduct();
+</script>
+</body>
+</html>

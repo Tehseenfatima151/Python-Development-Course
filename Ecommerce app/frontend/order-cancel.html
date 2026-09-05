@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payment Cancelled — ShopFlask</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="container navbar-inner">
+    <a href="/index.html" class="navbar-brand">🛍️ <span>ShopFlask</span></a>
+  </div>
+</nav>
+
+<main>
+  <div class="container">
+    <div class="result-page">
+      <div class="result-icon">😕</div>
+      <h1 style="color:var(--warning);">Payment Cancelled</h1>
+      <p>
+        Your payment was cancelled. Your order is still <strong>pending</strong> and no charge has been made.<br>
+        You can retry checkout or continue browsing.
+      </p>
+
+      <div class="card" style="text-align:left;margin:1.5rem 0;">
+        <div class="card-body">
+          <div style="display:flex;gap:.5rem;align-items:center;margin-bottom:.75rem;">
+            <span class="badge badge-warning">PENDING</span>
+          </div>
+          <p id="order-info" class="text-muted" style="font-size:.88rem;"></p>
+          <p style="font-size:.88rem;color:var(--gray-600);margin-top:.5rem;">
+            No inventory has been reserved and no charge has been made.
+          </p>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
+        <a href="/cart.html" class="btn btn-primary">Return to Cart</a>
+        <a href="/index.html" class="btn btn-secondary">Continue Shopping</a>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer><div class="container">&copy; 2026 ShopFlask</div></footer>
+
+<script src="/js/api.js"></script>
+<script src="/js/auth.js"></script>
+<script src="/js/cart.js"></script>
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const orderId = params.get('order_id');
+  if (orderId) {
+    document.getElementById('order-info').textContent = `Order #${orderId} — pending, no payment taken.`;
+  }
+</script>
+</body>
+</html>

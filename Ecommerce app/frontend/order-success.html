@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payment Successful — ShopFlask</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="container navbar-inner">
+    <a href="/index.html" class="navbar-brand">🛍️ <span>ShopFlask</span></a>
+  </div>
+</nav>
+
+<main>
+  <div class="container">
+    <div class="result-page">
+      <div class="result-icon">🎉</div>
+      <h1 style="color:var(--success);">Payment Successful!</h1>
+      <p>
+        Your order has been confirmed and is being processed.<br>
+        A confirmation email will be sent to your inbox shortly.
+      </p>
+
+      <div class="card" style="text-align:left;margin:1.5rem 0;" id="success-details">
+        <div class="card-body">
+          <div style="display:flex;gap:.5rem;align-items:center;margin-bottom:.75rem;">
+            <span class="badge badge-success">✓ PAID</span>
+          </div>
+          <p id="session-info" class="text-muted" style="font-size:.88rem;"></p>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
+        <a href="/orders.html" class="btn btn-primary">View My Orders</a>
+        <a href="/index.html" class="btn btn-secondary">Continue Shopping</a>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer><div class="container">&copy; 2026 ShopFlask</div></footer>
+
+<script src="/js/api.js"></script>
+<script src="/js/auth.js"></script>
+<script src="/js/cart.js"></script>
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const sessionId = params.get('session_id');
+  if (sessionId) {
+    document.getElementById('session-info').textContent = `Stripe Session: ${sessionId}`;
+  }
+</script>
+</body>
+</html>

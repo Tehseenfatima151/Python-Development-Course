@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ShopFlask — Modern E-Commerce</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<!-- ===== NAVBAR ===== -->
+<nav class="navbar">
+  <div class="container navbar-inner">
+    <a href="/index.html" class="navbar-brand">🛍️ <span>ShopFlask</span></a>
+    <ul class="navbar-nav">
+      <li><a href="/index.html" class="nav-link active">Products</a></li>
+      <li><a href="/orders.html" class="nav-link" id="nav-orders">Orders</a></li>
+      <li><a href="/admin.html" class="nav-link hidden" id="nav-admin">Admin</a></li>
+      <li>
+        <a href="/cart.html" class="nav-link cart-link">
+          🛒 Cart <span class="cart-badge hidden" id="cart-count">0</span>
+        </a>
+      </li>
+    </ul>
+    <div class="navbar-auth" id="navbar-auth">
+      <span id="nav-username"></span>
+      <a href="/login.html" class="btn btn-primary btn-sm" id="btn-login">Login</a>
+      <a href="/register.html" class="btn btn-ghost btn-sm hidden" id="btn-register-nav">Register</a>
+      <button class="btn btn-ghost btn-sm hidden" id="btn-logout">Logout</button>
+    </div>
+  </div>
+</nav>
+
+<!-- ===== MAIN ===== -->
+<main>
+  <div class="container">
+
+    <!-- Hero Banner -->
+    <div class="card mb-4" style="background:linear-gradient(135deg,#4f46e5 0%,#0ea5e9 100%);border:none;color:#fff;padding:2.5rem 2rem;text-align:center;">
+      <h1 style="color:#fff;font-size:2.2rem;margin-bottom:.5rem;">Welcome to ShopFlask</h1>
+      <p style="opacity:.9;font-size:1.05rem;">Discover premium products with fast checkout and secure Stripe payments.</p>
+    </div>
+
+    <!-- Filters -->
+    <div class="filters-bar">
+      <input type="text" class="form-control" id="search-input" placeholder="🔍  Search products…">
+      <select class="form-control" id="category-filter" style="max-width:180px;">
+        <option value="">All Categories</option>
+      </select>
+      <select class="form-control" id="sort-select" style="max-width:180px;">
+        <option value="created_at:desc">Newest First</option>
+        <option value="created_at:asc">Oldest First</option>
+        <option value="price:asc">Price: Low → High</option>
+        <option value="price:desc">Price: High → Low</option>
+        <option value="name:asc">Name A→Z</option>
+      </select>
+      <span class="filter-count" id="filter-count"></span>
+    </div>
+
+    <!-- Flash message -->
+    <div class="alert alert-success flash-message" id="flash-success" role="alert">
+      <span class="alert-icon">✅</span>
+      <span id="flash-success-text"></span>
+    </div>
+    <div class="alert alert-danger flash-message" id="flash-error" role="alert">
+      <span class="alert-icon">❌</span>
+      <span id="flash-error-text"></span>
+    </div>
+
+    <!-- Products grid -->
+    <div id="products-container">
+      <div class="loading-overlay">
+        <div class="spinner spinner-dark"></div>
+        <span>Loading products…</span>
+      </div>
+    </div>
+
+    <!-- Pagination -->
+    <div class="pagination" id="pagination"></div>
+
+  </div>
+</main>
+
+<footer>
+  <div class="container">
+    &copy; 2026 ShopFlask — Built with Flask &amp; Stripe
+  </div>
+</footer>
+
+<script src="/js/api.js"></script>
+<script src="/js/auth.js"></script>
+<script src="/js/cart.js"></script>
+<script src="/js/products.js"></script>
+</body>
+</html>

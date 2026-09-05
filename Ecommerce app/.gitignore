@@ -1,0 +1,59 @@
+# ===== Python =====
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# ===== Virtual environments =====
+.venv/
+venv/
+env/
+ENV/
+
+# ===== Flask / SQLite =====
+instance/
+*.db
+*.sqlite
+*.sqlite3
+
+# ===== Migrations (keep the folder, ignore generated files selectively)
+# Uncomment if you prefer to regenerate migrations each time:
+# migrations/versions/
+
+# ===== Environment / secrets =====
+.env
+.env.*
+!.env.example
+
+# ===== Testing =====
+.pytest_cache/
+.coverage
+htmlcov/
+coverage.xml
+
+# ===== IDEs =====
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ===== OS =====
+.DS_Store
+Thumbs.db
+
+# ===== Logs =====
+*.log
+logs/
+
+# ===== Test output files =====
+test_run.txt
+test_results.txt
+
+# ===== Docker =====
+# (keep docker-compose.yml in repo but ignore local override files)
+docker-compose.override.yml

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout — ShopFlask</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="container navbar-inner">
+    <a href="/index.html" class="navbar-brand">🛍️ <span>ShopFlask</span></a>
+    <ul class="navbar-nav">
+      <li><a href="/index.html" class="nav-link">Products</a></li>
+      <li><a href="/cart.html" class="nav-link">← Back to Cart</a></li>
+    </ul>
+    <div class="navbar-auth" id="navbar-auth">
+      <span id="nav-username"></span>
+      <button class="btn btn-ghost btn-sm hidden" id="btn-logout">Logout</button>
+    </div>
+  </div>
+</nav>
+
+<main>
+  <div class="container">
+    <div class="page-header">
+      <h1>Checkout</h1>
+      <p>Review your order and proceed to secure payment.</p>
+    </div>
+
+    <div class="alert alert-danger flash-message" id="checkout-error" role="alert">
+      <span class="alert-icon">❌</span><span id="checkout-error-text"></span>
+    </div>
+
+    <div id="checkout-container">
+      <div class="loading-overlay"><div class="spinner spinner-dark"></div><span>Loading order summary…</span></div>
+    </div>
+  </div>
+</main>
+
+<footer><div class="container">&copy; 2026 ShopFlask — Payments secured by Stripe</div></footer>
+
+<script src="/js/api.js"></script>
+<script src="/js/auth.js"></script>
+<script src="/js/cart.js"></script>
+<script src="/js/checkout.js"></script>
+</body>
+</html>

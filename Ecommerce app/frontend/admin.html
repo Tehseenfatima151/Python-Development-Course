@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard — ShopFlask</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="container navbar-inner">
+    <a href="/index.html" class="navbar-brand">🛍️ <span>ShopFlask</span></a>
+    <ul class="navbar-nav">
+      <li><a href="/index.html" class="nav-link">Store</a></li>
+      <li><a href="/admin.html" class="nav-link active">Admin</a></li>
+    </ul>
+    <div class="navbar-auth" id="navbar-auth">
+      <span id="nav-username"></span>
+      <button class="btn btn-ghost btn-sm hidden" id="btn-logout">Logout</button>
+    </div>
+  </div>
+</nav>
+
+<main>
+  <div class="container">
+    <div class="page-header d-flex justify-between align-center" style="flex-wrap:wrap;gap:1rem;">
+      <div>
+        <h1>Admin Dashboard</h1>
+        <p>Manage products, orders, and inventory.</p>
+      </div>
+      <button class="btn btn-primary" id="btn-add-product">+ Add Product</button>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-grid" id="stats-grid">
+      <div class="stat-card"><div class="stat-label">Products</div><div class="stat-value" id="stat-products">—</div></div>
+      <div class="stat-card"><div class="stat-label">Total Orders</div><div class="stat-value" id="stat-orders">—</div></div>
+      <div class="stat-card"><div class="stat-label">Paid Orders</div><div class="stat-value" id="stat-paid">—</div></div>
+      <div class="stat-card"><div class="stat-label">Revenue</div><div class="stat-value" id="stat-revenue">—</div></div>
+      <div class="stat-card"><div class="stat-label">Users</div><div class="stat-value" id="stat-users">—</div></div>
+    </div>
+
+    <!-- Flash messages -->
+    <div class="alert alert-success flash-message" id="admin-success" role="alert">
+      <span class="alert-icon">✅</span><span id="admin-success-text"></span>
+    </div>
+    <div class="alert alert-danger flash-message" id="admin-error" role="alert">
+      <span class="alert-icon">❌</span><span id="admin-error-text"></span>
+    </div>
+
+    <!-- Tabs -->
+    <div class="admin-tabs">
+      <button class="tab-btn active" data-tab="products">Products</button>
+      <button class="tab-btn" data-tab="orders">Orders</button>
+    </div>
+
+    <!-- Products tab -->
+    <div class="tab-pane active" id="tab-products">
+      <div id="products-table-container">
+        <div class="loading-overlay"><div class="spinner spinner-dark"></div><span>Loading…</span></div>
+      </div>
+    </div>
+
+    <!-- Orders tab -->
+    <div class="tab-pane" id="tab-orders">
+      <div id="orders-table-container">
+        <div class="loading-overlay"><div class="spinner spinner-dark"></div><span>Loading…</span></div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- Product Modal -->
+<div class="modal-overlay" id="product-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title" id="product-modal-title">Add Product</span>
+      <button class="modal-close" onclick="closeProductModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <form id="product-form" novalidate>
+        <input type="hidden" id="product-id">
+        <div class="form-group">
+          <label class="form-label" for="p-name">Product Name *</label>
+          <input type="text" class="form-control" id="p-name" required>
+          <span class="form-error" id="p-name-error"></span>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="p-desc">Description</label>
+          <textarea class="form-control" id="p-desc" rows="3"></textarea>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+          <div class="form-group">
+            <label class="form-label" for="p-price">Price ($) *</label>
+            <input type="number" class="form-control" id="p-price" step="0.01" min="0.01" required>
+            <span class="form-error" id="p-price-error"></span>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="p-stock">Stock *</label>
+            <input type="number" class="form-control" id="p-stock" min="0" required>
+            <span class="form-error" id="p-stock-error"></span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="p-category">Category</label>
+          <input type="text" class="form-control" id="p-category" placeholder="e.g. Electronics">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="p-image">Image URL</label>
+          <input type="url" class="form-control" id="p-image" placeholder="https://...">
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeProductModal()">Cancel</button>
+      <button class="btn btn-primary" id="save-product-btn" onclick="saveProduct()">Save Product</button>
+    </div>
+  </div>
+</div>
+
+<!-- Stock Modal -->
+<div class="modal-overlay" id="stock-modal">
+  <div class="modal" style="max-width:360px;">
+    <div class="modal-header">
+      <span class="modal-title">Update Stock</span>
+      <button class="modal-close" onclick="closeStockModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <p id="stock-product-name" class="mb-2" style="font-weight:600;"></p>
+      <input type="hidden" id="stock-product-id">
+      <div class="form-group">
+        <label class="form-label" for="stock-value">New Stock Value</label>
+        <input type="number" class="form-control" id="stock-value" min="0">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeStockModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveStock()">Update Stock</button>
+    </div>
+  </div>
+</div>
+
+<footer><div class="container">&copy; 2026 ShopFlask</div></footer>
+
+<script src="/js/api.js"></script>
+<script src="/js/auth.js"></script>
+<script src="/js/cart.js"></script>
+<script src="/js/products.js"></script>
+<script>
+  // Guard: admin only
+  document.addEventListener('DOMContentLoaded', () => {
+    const user = Auth.getUser();
+    if (!user || user.role !== 'admin') {
+      window.location.href = '/index.html';
+    }
+    loadStats();
+    loadAdminProducts();
+    loadAdminOrders();
+  });
+
+  // Tab switching
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+    });
+  });
+
+  document.getElementById('btn-add-product').addEventListener('click', () => openProductModal());
+
+  async function loadStats() {
+    try {
+      const data = await API.get('/api/admin/stats');
+      const s = data.data;
+      document.getElementById('stat-products').textContent = s.total_products;
+      document.getElementById('stat-orders').textContent = s.total_orders;
+      document.getElementById('stat-paid').textContent = s.paid_orders;
+      document.getElementById('stat-revenue').textContent = '$' + s.total_revenue.toFixed(2);
+      document.getElementById('stat-users').textContent = s.total_users;
+    } catch (e) {}
+  }
+
+  async function loadAdminProducts() {
+    const container = document.getElementById('products-table-container');
+    try {
+      const data = await API.get('/api/products?per_page=100');
+      const products = data.data.products;
+      if (!products.length) {
+        container.innerHTML = '<p class="text-muted text-center mt-3">No products yet. Add one!</p>';
+        return;
+      }
+      container.innerHTML = `
+        <div class="table-wrap">
+          <table>
+            <thead><tr>
+              <th>ID</th><th>Name</th><th>Category</th>
+              <th>Price</th><th>Stock</th><th>Actions</th>
+            </tr></thead>
+            <tbody id="products-tbody">
+              ${products.map(p => `
+                <tr id="prod-row-${p.id}">
+                  <td>#${p.id}</td>
+                  <td><strong>${p.name}</strong></td>
+                  <td>${p.category ? `<span class="badge badge-primary">${p.category}</span>` : '—'}</td>
+                  <td>$${p.price.toFixed(2)}</td>
+                  <td>
+                    <span class="${p.stock === 0 ? 'badge badge-danger' : p.stock < 5 ? 'badge badge-warning' : 'badge badge-success'}">${p.stock}</span>
+                  </td>
+                  <td class="td-actions">
+                    <button class="btn btn-ghost btn-sm" onclick="openProductModal(${JSON.stringify(p).replace(/"/g,'&quot;')})">Edit</button>
+                    <button class="btn btn-ghost btn-sm" onclick="openStockModal(${p.id},'${p.name.replace(/'/g,"\\'")}',${p.stock})">Stock</button>
+                    <button class="btn btn-danger btn-sm" onclick="deleteProduct(${p.id})">Del</button>
+                  </td>
+                </tr>`).join('')}
+            </tbody>
+          </table>
+        </div>`;
+    } catch (e) {
+      container.innerHTML = `<div class="alert alert-danger">${e.message}</div>`;
+    }
+  }
+
+  async function loadAdminOrders() {
+    const container = document.getElementById('orders-table-container');
+    try {
+      const data = await API.get('/api/admin/orders?per_page=50');
+      const orders = data.data.orders;
+      if (!orders.length) {
+        container.innerHTML = '<p class="text-muted text-center mt-3">No orders yet.</p>';
+        return;
+      }
+      const statusBadge = s => {
+        const map = { paid:'badge-success', pending:'badge-warning', failed:'badge-danger', cancelled:'badge-secondary' };
+        return `<span class="badge ${map[s]||'badge-secondary'}">${s.toUpperCase()}</span>`;
+      };
+      container.innerHTML = `
+        <div class="table-wrap">
+          <table>
+            <thead><tr>
+              <th>Order ID</th><th>User</th><th>Total</th>
+              <th>Status</th><th>Date</th><th>Items</th>
+            </tr></thead>
+            <tbody>
+              ${orders.map(o => `
+                <tr>
+                  <td><strong>#${o.id}</strong></td>
+                  <td>${o.user_id}</td>
+                  <td><strong>$${o.total_amount.toFixed(2)}</strong></td>
+                  <td>${statusBadge(o.status)}</td>
+                  <td>${new Date(o.created_at).toLocaleDateString()}</td>
+                  <td>${o.items ? o.items.length + ' item(s)' : '—'}</td>
+                </tr>`).join('')}
+            </tbody>
+          </table>
+        </div>`;
+    } catch (e) {
+      container.innerHTML = `<div class="alert alert-danger">${e.message}</div>`;
+    }
+  }
+
+  // ---- Product Modal ----
+  function openProductModal(product = null) {
+    document.getElementById('product-id').value = product?.id || '';
+    document.getElementById('p-name').value = product?.name || '';
+    document.getElementById('p-desc').value = product?.description || '';
+    document.getElementById('p-price').value = product?.price || '';
+    document.getElementById('p-stock').value = product?.stock ?? '';
+    document.getElementById('p-category').value = product?.category || '';
+    document.getElementById('p-image').value = product?.image_url || '';
+    document.getElementById('product-modal-title').textContent = product ? 'Edit Product' : 'Add Product';
+    document.querySelectorAll('#product-form .form-error').forEach(e => { e.textContent=''; e.classList.remove('visible'); });
+    document.getElementById('product-modal').classList.add('open');
+  }
+  function closeProductModal() { document.getElementById('product-modal').classList.remove('open'); }
+
+  async function saveProduct() {
+    const id = document.getElementById('product-id').value;
+    const body = {
+      name: document.getElementById('p-name').value.trim(),
+      description: document.getElementById('p-desc').value.trim(),
+      price: parseFloat(document.getElementById('p-price').value),
+      stock: parseInt(document.getElementById('p-stock').value),
+      category: document.getElementById('p-category').value.trim(),
+      image_url: document.getElementById('p-image').value.trim(),
+    };
+    try {
+      if (id) {
+        await API.put(`/api/products/${id}`, body);
+        showSuccess('Product updated successfully.');
+      } else {
+        await API.post('/api/products', body);
+        showSuccess('Product created successfully.');
+      }
+      closeProductModal();
+      loadAdminProducts();
+      loadStats();
+    } catch (err) {
+      if (err.errors) {
+        Object.entries(err.errors).forEach(([f, m]) => {
+          const el = document.getElementById('p-' + f + '-error');
+          if (el) { el.textContent = m; el.classList.add('visible'); }
+        });
+      } else {
+        showAdminError(err.message);
+      }
+    }
+  }
+
+  async function deleteProduct(id) {
+    if (!confirm('Delete this product permanently?')) return;
+    try {
+      await API.delete(`/api/products/${id}`);
+      showSuccess('Product deleted.');
+      loadAdminProducts();
+      loadStats();
+    } catch (err) { showAdminError(err.message); }
+  }
+
+  // ---- Stock Modal ----
+  function openStockModal(id, name, currentStock) {
+    document.getElementById('stock-product-id').value = id;
+    document.getElementById('stock-product-name').textContent = name;
+    document.getElementById('stock-value').value = currentStock;
+    document.getElementById('stock-modal').classList.add('open');
+  }
+  function closeStockModal() { document.getElementById('stock-modal').classList.remove('open'); }
+
+  async function saveStock() {
+    const id = document.getElementById('stock-product-id').value;
+    const stock = parseInt(document.getElementById('stock-value').value);
+    try {
+      await API.patch(`/api/admin/products/${id}/stock`, { stock });
+      showSuccess('Stock updated.');
+      closeStockModal();
+      loadAdminProducts();
+      loadStats();
+    } catch (err) { showAdminError(err.message); }
+  }
+
+  function showSuccess(msg) {
+    const el = document.getElementById('admin-success');
+    document.getElementById('admin-success-text').textContent = msg;
+    el.classList.add('show');
+    setTimeout(() => el.classList.remove('show'), 3500);
+  }
+  function showAdminError(msg) {
+    const el = document.getElementById('admin-error');
+    document.getElementById('admin-error-text').textContent = msg;
+    el.classList.add('show');
+    setTimeout(() => el.classList.remove('show'), 5000);
+  }
+</script>
+</body>
+</html>

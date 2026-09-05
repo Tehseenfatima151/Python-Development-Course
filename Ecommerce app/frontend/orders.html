@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Orders — ShopFlask</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="container navbar-inner">
+    <a href="/index.html" class="navbar-brand">🛍️ <span>ShopFlask</span></a>
+    <ul class="navbar-nav">
+      <li><a href="/index.html" class="nav-link">Products</a></li>
+      <li><a href="/orders.html" class="nav-link active" id="nav-orders">Orders</a></li>
+      <li><a href="/admin.html" class="nav-link hidden" id="nav-admin">Admin</a></li>
+      <li><a href="/cart.html" class="nav-link cart-link">🛒 Cart <span class="cart-badge hidden" id="cart-count">0</span></a></li>
+    </ul>
+    <div class="navbar-auth" id="navbar-auth">
+      <span id="nav-username"></span>
+      <a href="/login.html" class="btn btn-primary btn-sm" id="btn-login">Login</a>
+      <button class="btn btn-ghost btn-sm hidden" id="btn-logout">Logout</button>
+    </div>
+  </div>
+</nav>
+
+<main>
+  <div class="container">
+    <div class="page-header">
+      <h1>My Orders</h1>
+      <p>Your complete order history.</p>
+    </div>
+    <div id="orders-container">
+      <div class="loading-overlay"><div class="spinner spinner-dark"></div><span>Loading orders…</span></div>
+    </div>
+  </div>
+</main>
+
+<!-- Order Detail Modal -->
+<div class="modal-overlay" id="order-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title" id="modal-title">Order Details</span>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body" id="modal-body"></div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal()">Close</button>
+    </div>
+  </div>
+</div>
+
+<footer><div class="container">&copy; 2026 ShopFlask</div></footer>
+
+<script src="/js/api.js"></script>
+<script src="/js/auth.js"></script>
+<script src="/js/cart.js"></script>
+<script src="/js/orders.js"></script>
+</body>
+</html>

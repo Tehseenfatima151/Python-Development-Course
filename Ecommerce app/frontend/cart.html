@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cart — ShopFlask</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="container navbar-inner">
+    <a href="/index.html" class="navbar-brand">🛍️ <span>ShopFlask</span></a>
+    <ul class="navbar-nav">
+      <li><a href="/index.html" class="nav-link">Products</a></li>
+      <li><a href="/orders.html" class="nav-link" id="nav-orders">Orders</a></li>
+      <li><a href="/admin.html" class="nav-link hidden" id="nav-admin">Admin</a></li>
+      <li><a href="/cart.html" class="nav-link cart-link active">🛒 Cart <span class="cart-badge hidden" id="cart-count">0</span></a></li>
+    </ul>
+    <div class="navbar-auth" id="navbar-auth">
+      <span id="nav-username"></span>
+      <a href="/login.html" class="btn btn-primary btn-sm" id="btn-login">Login</a>
+      <button class="btn btn-ghost btn-sm hidden" id="btn-logout">Logout</button>
+    </div>
+  </div>
+</nav>
+
+<main>
+  <div class="container">
+    <div class="page-header">
+      <h1>Your Cart</h1>
+    </div>
+
+    <div class="alert alert-danger flash-message" id="cart-error" role="alert">
+      <span class="alert-icon">❌</span><span id="cart-error-text"></span>
+    </div>
+    <div class="alert alert-success flash-message" id="cart-success" role="alert">
+      <span class="alert-icon">✅</span><span id="cart-success-text"></span>
+    </div>
+
+    <div id="cart-container">
+      <div class="loading-overlay"><div class="spinner spinner-dark"></div><span>Loading cart…</span></div>
+    </div>
+  </div>
+</main>
+
+<footer><div class="container">&copy; 2026 ShopFlask</div></footer>
+
+<script src="/js/api.js"></script>
+<script src="/js/auth.js"></script>
+<script src="/js/cart.js"></script>
+<script>
+  if (!Auth.isLoggedIn()) window.location.href = '/login.html';
+
+  async function renderCart() {
+    const container = document.getElementById('cart-container');
+    try {
+      const data = await API.get('/api/cart');
+      const cart = data.data.cart;
+
+      if (!cart.items || cart.items.length === 0) {
+        container.innerHTML = `
+          <div class="cart-empty">
+            <div class="cart-empty-icon">🛒</div>
+            <h3>Your cart is empty</h3>
+            <p>Browse our products and add some items to get started!</p>
+            <a href="/index.html" class="btn btn-primary mt-2">Shop Now</a>
+          </div>`;
+        return;
+      }
+
+      let itemsHtml = cart.items.map(item => `
+        <div class="cart-item" id="cart-item-${item.product_id}">
+          <img class="cart-item-img"
+               src="${item.product_image || ''}"
+               alt="${item.product_name}"
+               onerror="this.style.background='var(--gray-100)';this.src=''">
+          <div>
+            <div class="cart-item-name">${item.product_name}</div>
+            <div class="cart-item-price">$${item.price.toFixed(2)} each</div>
+          </div>
+          <div class="qty-control">
+            <button class="qty-btn" onclick="updateQty(${item.product_id}, ${item.quantity - 1})">−</button>
+            <span class="qty-value">${item.quantity}</span>
+            <button class="qty-btn" onclick="updateQty(${item.product_id}, ${item.quantity + 1})">+</button>
+          </div>
+          <div class="cart-item-subtotal">$${item.subtotal.toFixed(2)}</div>
+          <button class="btn btn-ghost btn-sm" onclick="removeItem(${item.product_id})" title="Remove">✕</button>
+        </div>`).join('');
+
+      container.innerHTML = `
+        <div class="card">
+          <div class="card-body">
+            ${itemsHtml}
+            <div class="cart-total-row">
+              <span class="cart-total-label">Total (${cart.item_count} item${cart.item_count !== 1 ? 's' : ''})</span>
+              <span class="cart-total-value">$${cart.total.toFixed(2)}</span>
+            </div>
+          </div>
+          <div class="card-footer d-flex justify-between align-center">
+            <button class="btn btn-ghost btn-sm" onclick="clearCart()">🗑 Clear Cart</button>
+            <a href="/checkout.html" class="btn btn-primary">Proceed to Checkout →</a>
+          </div>
+        </div>`;
+    } catch (err) {
+      container.innerHTML = `<div class="alert alert-danger">${err.message}</div>`;
+    }
+  }
+
+  async function updateQty(productId, qty) {
+    if (qty < 1) { removeItem(productId); return; }
+    try {
+      await Cart.updateItem(productId, qty);
+      renderCart();
+      Cart.refreshBadge();
+    } catch (err) { showError(err.message); }
+  }
+
+  async function removeItem(productId) {
+    try {
+      await Cart.removeItem(productId);
+      renderCart();
+      Cart.refreshBadge();
+    } catch (err) { showError(err.message); }
+  }
+
+  async function clearCart() {
+    if (!confirm('Clear your entire cart?')) return;
+    try {
+      await Cart.clearCart();
+      renderCart();
+      Cart.refreshBadge();
+    } catch (err) { showError(err.message); }
+  }
+
+  function showError(msg) {
+    const el = document.getElementById('cart-error');
+    document.getElementById('cart-error-text').textContent = msg;
+    el.classList.add('show');
+    setTimeout(() => el.classList.remove('show'), 4000);
+  }
+
+  renderCart();
+</script>
+</body>
+</html>

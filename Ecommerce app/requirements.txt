@@ -1,0 +1,36 @@
+# Core Flask
+Flask==3.0.3
+Flask-SQLAlchemy==3.1.1
+Flask-Migrate==4.0.7
+Flask-JWT-Extended==4.6.0
+Flask-CORS==4.0.1
+
+# Database drivers
+SQLAlchemy==2.0.31
+# PostgreSQL driver — required only for PostgreSQL (production / Docker).
+# LOCAL DEV with SQLite: leave commented out (no build tools needed).
+# DOCKER / PRODUCTION: uncomment before building the image.
+# NOTE: Python 3.14 on Windows has no pre-built wheel for psycopg2-binary 2.9.9.
+#       If you need PostgreSQL locally on Windows, install Python 3.11/3.12 instead,
+#       or use Docker Compose which runs inside Linux where the wheel exists.
+# psycopg2-binary==2.9.9
+
+# Stripe
+stripe==10.5.0
+
+# Celery + Redis
+celery==5.4.0
+redis==5.0.8
+
+# Password hashing (ships with Flask via Werkzeug)
+Werkzeug==3.0.3
+
+# Environment variables
+python-dotenv==1.0.1
+
+# Testing
+pytest==8.3.2
+pytest-flask==1.3.0
+
+# Production WSGI server
+gunicorn==22.0.0
